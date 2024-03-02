@@ -1,0 +1,38 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NoteSHR.ViewModels"
+             xmlns:models="clr-namespace:NoteSHR.Core.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="NoteSHR.Views.BoardView"
+             x:DataType="vm:BoardViewModel">
+
+    <Design.DataContext>
+        <vm:BoardViewModel />
+    </Design.DataContext>
+
+    <ItemsControl x:Name="NoteItemsControl">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <i:Interaction.Behaviors>
+                        <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
+                            <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding CreateNoteCommand}" />
+                        </ia:EventTriggerBehavior>
+                    </i:Interaction.Behaviors>
+                </Canvas>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Note">
+                <Grid Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}">
+                    <TextBlock Text="{Binding Id}" Foreground="Black" />
+                </Grid>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+</UserControl>
