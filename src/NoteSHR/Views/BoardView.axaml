@@ -33,6 +33,12 @@
                 </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemContainerTheme>
+            <ControlTheme TargetType="ContentPresenter" x:DataType="models:Note">
+                <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}" />
+                <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}" />
+            </ControlTheme>
+        </ItemsControl.ItemContainerTheme>
     </ItemsControl>
 
 </UserControl>
