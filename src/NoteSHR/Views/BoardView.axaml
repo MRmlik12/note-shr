@@ -8,7 +8,7 @@
              xmlns:models="clr-namespace:NoteSHR.Core.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
-             x:DataType="vm:BoardViewModel">
+             x:CompileBindings="False">
 
     <Design.DataContext>
         <vm:BoardViewModel />
@@ -29,7 +29,10 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="models:Note">
                 <Grid Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}">
-                    <TextBlock Text="{Binding Id}" Foreground="Black" />
+                    <StackPanel>
+                        <Button Foreground="Red" HorizontalAlignment="Right" Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}" CommandParameter="{Binding Id}">X</Button>
+                        <TextBlock Text="{Binding Id}" Foreground="Black" />
+                    </StackPanel>
                 </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
