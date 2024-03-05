@@ -28,8 +28,8 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="models:Note">
-                <Grid Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}">
-                    <StackPanel>
+                <Grid x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" PointerPressed="NoteItemsControl_PointerPressed" PointerMoved="NoteItemsControl_PointerMoved" PointerReleased="NoteItemsControl_PointerReleased">
+                    <StackPanel PointerPressed="NoteItemsControl_PointerPressed" PointerMoved="NoteItemsControl_PointerMoved" PointerReleased="NoteItemsControl_PointerReleased">
                         <Button Foreground="Red" HorizontalAlignment="Right" Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}" CommandParameter="{Binding Id}">X</Button>
                         <TextBlock Text="{Binding Id}" Foreground="Black" />
                     </StackPanel>

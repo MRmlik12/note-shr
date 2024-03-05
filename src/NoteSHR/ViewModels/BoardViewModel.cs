@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using Avalonia.Controls;
 using Avalonia.Input;
 using NoteSHR.Core.Models;
 using ReactiveUI;
@@ -20,6 +21,11 @@ public class BoardViewModel : ViewModelBase
     {
         CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
         {
+            if (args.Source is Grid)
+            {
+                return;
+            }
+            
             var note = new Note(Guid.NewGuid(), args.GetPosition(null).X, args.GetPosition(null).Y);
             Notes = [..Notes, note];
         });
