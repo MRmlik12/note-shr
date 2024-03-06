@@ -16,6 +16,7 @@ public class BoardViewModel : ViewModelBase
     
     public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }
+    public ReactiveCommand<PointerReleasedEventArgs, Unit> UpdateNoteLocation { get; set; }
 
     public BoardViewModel()
     {
@@ -33,6 +34,21 @@ public class BoardViewModel : ViewModelBase
         RemoveNote = ReactiveCommand.Create((Guid id) =>
         {
             Notes = Notes.Where(note => note.Id != id).ToList();
+        });
+
+        UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
+        {
+            var id = ((args.Source as Grid)?.DataContext as Note)?.Id;
+            if (id == null)
+            {
+                return;
+            }
+
+            var noteIndex = Notes.FindIndex(x => x.Id == id);
+            Notes[noteIndex].X = args.GetPosition(null).X;
+            Notes[noteIndex].Y = args.GetPosition(null).Y;
+            
+            Notes = [..Notes];
         });
     }
 }
