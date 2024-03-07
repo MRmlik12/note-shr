@@ -7,7 +7,7 @@ using Avalonia.ReactiveUI;
 namespace NoteSHR.Android;
 
 [Activity(
-    Label = "NoteSHR.Android",
+    Label = "NoteSHR",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
