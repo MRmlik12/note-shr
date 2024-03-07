@@ -31,12 +31,12 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="models:Note">
-                <Grid x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}">
-                    <StackPanel>
-                        <Button Foreground="Red" HorizontalAlignment="Right" Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}" CommandParameter="{Binding Id}">X</Button>
-                        <TextBlock Text="{Binding Id}" Foreground="Black" />
-                    </StackPanel>
-                </Grid>
+                <StackPanel x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" MinWidth="200" MaxWidth="600">
+                        <StackPanel x:Name="Header">
+                            <Button Foreground="Red" HorizontalAlignment="Right" Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}" CommandParameter="{Binding Id}">X</Button>
+                        </StackPanel>
+                        <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="{Binding Text}" AcceptsReturn="True" TextWrapping="Wrap" />
+                </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemContainerTheme>

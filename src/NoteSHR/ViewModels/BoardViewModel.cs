@@ -22,7 +22,7 @@ public class BoardViewModel : ViewModelBase
     {
         CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
         {
-            if (args.Source is Grid)
+            if (args.Source is StackPanel)
             {
                 return;
             }
@@ -38,7 +38,7 @@ public class BoardViewModel : ViewModelBase
 
         UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
         {
-            var id = ((args.Source as Grid)?.DataContext as Note)?.Id;
+            var id = ((args.Source as StackPanel)?.DataContext as Note)?.Id;
             if (id == null)
             {
                 return;
