@@ -5,9 +5,12 @@
     <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia.iOS" Version="11.0.9" />
+    <PackageReference Include="Avalonia.iOS" Version="11.0.10" />
   </ItemGroup>
 
   <ItemGroup>
