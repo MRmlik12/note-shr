@@ -6,6 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:NoteSHR.ViewModels"
              xmlns:models="clr-namespace:NoteSHR.Core.Models"
+             xmlns:noteNode="clr-namespace:NoteSHR.Components.NoteNode"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              x:CompileBindings="False">
@@ -23,7 +24,8 @@
                             <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding CreateNoteCommand}" />
                         </ia:EventTriggerBehavior>
                         <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
-                            <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding UpdateNoteLocation}" />
+                            <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                    Command="{Binding UpdateNoteLocation}" />
                         </ia:EventTriggerBehavior>
                     </i:Interaction.Behaviors>
                 </Canvas>
@@ -31,11 +33,17 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="models:Note">
-                <StackPanel x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" MinWidth="200" MaxWidth="600">
-                        <StackPanel x:Name="Header">
-                            <Button Foreground="Red" HorizontalAlignment="Right" Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}" CommandParameter="{Binding Id}">X</Button>
-                        </StackPanel>
-                        <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="{Binding Text}" AcceptsReturn="True" TextWrapping="Wrap" />
+                <StackPanel x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"
+                            MinWidth="200" MaxWidth="600">
+                    <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch">
+                        <Button Foreground="Green" HorizontalAlignment="Right"
+                                Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"
+                                CommandParameter="{Binding Id}">+</Button>
+                        <Button Foreground="Red" HorizontalAlignment="Right"
+                                Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
+                                CommandParameter="{Binding Id}">X</Button>
+                    </StackPanel>
+                    <noteNode:NoteNodeComponent Nodes="{Binding Nodes}" />
                 </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
