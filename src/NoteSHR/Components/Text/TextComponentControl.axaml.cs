@@ -5,8 +5,9 @@ namespace NoteSHR.Components.Text;
 
 public partial class TextComponentControl : UserControl, INode
 {
-    public TextComponentControl()
+    public TextComponentControl(TextComponentViewModel vm)
     {
         InitializeComponent();
+        DataContext = vm;
     }
 }

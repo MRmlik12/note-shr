@@ -2,9 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:text="clr-namespace:NoteSHR.Components.Text"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="NoteSHR.Components.Text.TextComponentControl">
+             x:Class="NoteSHR.Components.Text.TextComponentControl"
+             x:DataType="text:TextComponentViewModel">
     
-    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" TextWrapping="Wrap" />
+    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Text}" />
     
 </UserControl>

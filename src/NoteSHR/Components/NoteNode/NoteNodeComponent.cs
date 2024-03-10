@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Threading;
+using Avalonia.Media;
 using NoteSHR.Core.Models;
 
 namespace NoteSHR.Components.NoteNode;
 
-public class NoteNodeComponent : ContentControl
+public class NoteNodeComponent : UserControl
 {
     public static readonly StyledProperty<List<INode?>> NodesProperty = AvaloniaProperty.Register<NoteNodeComponent, List<INode?>>(nameof(Nodes), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
     
@@ -19,31 +20,22 @@ public class NoteNodeComponent : ContentControl
     }
 
     private StackPanel _stackPanel;
-    
+
     public NoteNodeComponent()
     {
-        Height = 100;
         _stackPanel = new StackPanel
         {
+            Name = "Node",
+            Orientation = Orientation.Vertical,
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            VerticalAlignment = VerticalAlignment.Stretch,
-            Height = 100
+            VerticalAlignment = VerticalAlignment.Stretch
         };
         
         Content = _stackPanel;
     }
-    
+
     protected override void OnInitialized()
     {
-        // var stackPanel = new StackPanel
-        // {
-        //     Orientation = Orientation.Vertical,
-        //     HorizontalAlignment = HorizontalAlignment.Stretch,
-        //     VerticalAlignment = VerticalAlignment.Stretch
-        // };
-        //
-        // stackPanel.Children.AddRange(Nodes.Select(x => x.GetXamlCode()).ToList());
-        // Content = stackPanel;
         _stackPanel.Children.AddRange(Nodes.Select(x => (Control)x).ToList());
         Content = _stackPanel;
     }

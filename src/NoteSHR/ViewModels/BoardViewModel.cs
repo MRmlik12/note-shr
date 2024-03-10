@@ -56,7 +56,7 @@ public class BoardViewModel : ViewModelBase
         AddNoteNodeCommand = ReactiveCommand.Create((Guid id) =>
         {
             var noteIndex = Notes.FindIndex(x => x.Id == id);
-            Notes[noteIndex].Nodes.Add(new TextComponentControl());
+            Notes[noteIndex].Nodes.Add(new TextComponentControl(new TextComponentViewModel()));
 
             Notes = [..Notes];
         });
