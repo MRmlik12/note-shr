@@ -11,6 +11,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     {
         InitializeComponent();
         DataContext = new BoardViewModel();
+        
         this.WhenActivated(disposable =>
         {
             this.OneWayBind(ViewModel, vm => vm.Notes, v => v.NoteItemsControl.ItemsSource)

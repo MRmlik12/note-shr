@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Avalonia.Media;
-using NoteSHR.Core.Models;
+using NoteSHR.ViewModels;
 
 namespace NoteSHR.Components.NoteNode;
 
 public class NoteNodeComponent : UserControl
 {
-    public static readonly StyledProperty<List<INode?>> NodesProperty = AvaloniaProperty.Register<NoteNodeComponent, List<INode?>>(nameof(Nodes), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
+    public static readonly StyledProperty<List<(Type, ViewModelBase)>> NodesProperty = AvaloniaProperty.Register<NoteNodeComponent, List<(Type, ViewModelBase)>>(nameof(Nodes), defaultBindingMode: Avalonia.Data.BindingMode.TwoWay);
     
-    public List<INode?> Nodes
+    public List<(Type, ViewModelBase)> Nodes
     {
         get => GetValue(NodesProperty);
         set => SetValue(NodesProperty, value);
@@ -33,10 +31,14 @@ public class NoteNodeComponent : UserControl
         
         Content = _stackPanel;
     }
-
+    
     protected override void OnInitialized()
     {
-        _stackPanel.Children.AddRange(Nodes.Select(x => (Control)x).ToList());
+        foreach (var (type, vm) in Nodes)
+        {
+            _stackPanel.Children.Add((Control)Activator.CreateInstance(type, args: new [] { vm }));
+        }
+        
         Content = _stackPanel;
     }
 }
