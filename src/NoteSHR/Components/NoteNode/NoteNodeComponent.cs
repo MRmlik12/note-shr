@@ -21,6 +21,7 @@ public class NoteNodeComponent : UserControl
 
     public NoteNodeComponent()
     {
+        MinHeight = 200;
         _stackPanel = new StackPanel
         {
             Name = "Node",
