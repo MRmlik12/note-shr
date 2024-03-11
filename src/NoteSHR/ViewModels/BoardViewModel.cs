@@ -14,6 +14,8 @@ namespace NoteSHR.ViewModels;
 public class BoardViewModel : ViewModelBase
 {
     [Reactive] public List<Note> Notes { get; set; } = [];
+    [Reactive] public double ZoomX { get; set; } = 1d;
+    [Reactive] public double ZoomY { get; set; } = 1d;
     
     public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }

@@ -18,7 +18,7 @@
     <ItemsControl x:Name="NoteItemsControl">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" PointerWheelChanged="Board_OnPointerWheelChanged">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
                             <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding CreateNoteCommand}" />
@@ -28,6 +28,9 @@
                                                     Command="{Binding UpdateNoteLocation}" />
                         </ia:EventTriggerBehavior>
                     </i:Interaction.Behaviors>
+                    <Canvas.RenderTransform>
+                        <ScaleTransform ScaleX="{Binding ZoomX}" ScaleY="{Binding ZoomY}" />
+                    </Canvas.RenderTransform>
                 </Canvas>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
