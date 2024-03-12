@@ -40,10 +40,12 @@
                             MinWidth="200" MaxWidth="600">
                     <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch">
                         <Button Foreground="Green" HorizontalAlignment="Right"
+                                Cursor="Hand"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"
                                 CommandParameter="{Binding Id}">+</Button>
                         <Button Foreground="Red" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
+                                Cursor="Hand"
                                 CommandParameter="{Binding Id}">X</Button>
                     </StackPanel>
                     <noteNode:NoteNodeComponent Nodes="{Binding Nodes}" />

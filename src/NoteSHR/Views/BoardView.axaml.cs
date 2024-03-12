@@ -1,7 +1,5 @@
 ﻿using System.Reactive.Disposables;
-using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using NoteSHR.ViewModels;
 using ReactiveUI;
