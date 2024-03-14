@@ -61,11 +61,19 @@ public class NoteNodeComponent : UserControl
     {
         foreach (var (id, type, vm) in Nodes)
         {
-            var stackPanel = new StackPanel
+            var stackPanel = new Grid
             {
-                Orientation = Orientation.Horizontal,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
+                ColumnDefinitions = new ()
+                {
+                    new (20.0, GridUnitType.Auto),
+                    new (GridLength.Star)
+                },
+                RowDefinitions = new ()
+                {
+                    new (GridLength.Auto)
+                }
             };
             
             if (DeleteMode)
@@ -76,14 +84,17 @@ public class NoteNodeComponent : UserControl
                     DataContext = (id, type, vm)
                 };
                 
+                Grid.SetColumn(deleteButton, 0);
+                
                 deleteButton.Click += (sender, args) => RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, id));
                 stackPanel.Children.Add(deleteButton);
             }
 
             var node = (Control)Activator.CreateInstance(type, args: new[] { vm });
-            
-            node.VerticalAlignment = VerticalAlignment.Stretch;
             node.HorizontalAlignment = HorizontalAlignment.Stretch;
+            node.VerticalAlignment = VerticalAlignment.Stretch;
+            Grid.SetColumn(node, 1);
+
             
             stackPanel.Children.Add(node);
             _stackPanel.Children.Add(stackPanel);
