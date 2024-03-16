@@ -43,6 +43,9 @@
                                 Cursor="Hand"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"
                                 CommandParameter="{Binding Id}">+</Button>
+                        <Button Foreground="GhostWhite" HorizontalAlignment="Right"
+                                Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
+                                Cursor="Hand">E</Button>
                         <Button Foreground="Red" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
                                 Cursor="Hand">D</Button>
@@ -54,10 +57,14 @@
                     <noteNode:NoteNodeComponent 
                         Nodes="{Binding Nodes}"
                         NoteId="{Binding Id}"
-                        DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}">
+                        DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
+                        EditMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).EditMode}">
                         <i:Interaction.Behaviors>
                             <ia:EventTriggerBehavior EventName="DeleteNode">
                                 <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}"  />
+                            </ia:EventTriggerBehavior>
+                            <ia:EventTriggerBehavior EventName="MoveNode">
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}"  />
                             </ia:EventTriggerBehavior>
                         </i:Interaction.Behaviors>
                     </noteNode:NoteNodeComponent>

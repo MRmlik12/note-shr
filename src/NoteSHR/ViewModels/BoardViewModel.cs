@@ -18,6 +18,7 @@ public class BoardViewModel : ViewModelBase
     [Reactive] public double ZoomX { get; set; } = 1d;
     [Reactive] public double ZoomY { get; set; } = 1d;
     [Reactive] public bool DeleteMode { get; set; }
+    [Reactive] public bool EditMode { get; set; }
     
     public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }
@@ -25,12 +26,14 @@ public class BoardViewModel : ViewModelBase
     public ReactiveCommand<Guid, Unit> AddNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeDeleteModeStateCommand { get; set; }
     public ReactiveCommand<DeleteNodeEventArgs, Unit> DeleteNoteNodeCommand { get; set; }
-
+    public ReactiveCommand<Unit, Unit> ChangeEditModeStateCommand { get; set; }
+    public ReactiveCommand<MoveNodeEventArgs, Unit> MoveNoteNodeCommand { get; set; }
+    
     public BoardViewModel()
     {
         CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
         {
-            if (args.Source is StackPanel)
+            if (args.Source is not Canvas)
             {
                 return;
             }
@@ -86,11 +89,29 @@ public class BoardViewModel : ViewModelBase
             DeleteMode = !DeleteMode;
             Notes = [..Notes];
         });
+        
+        ChangeEditModeStateCommand = ReactiveCommand.Create(() =>
+        {
+            EditMode = !EditMode;
+            Notes = [..Notes];
+        });
 
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
         {
             var noteIndex = Notes.FindIndex(x => x.Id == args.NoteId);
             Notes[noteIndex].Nodes = Notes[noteIndex].Nodes.Where(x => x.Item1 != args.NodeId).ToList();
+            Notes = [..Notes];
+        });
+
+        MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>
+        {
+            var sourceNoteIndex = Notes.FindIndex(x => x.Id == args.NoteId);
+            var sourceNodeIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Item1 == args.SourceNodeId);
+            var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Item1 == args.NodeToMoveId);
+            var sourceNode = Notes[sourceNoteIndex].Nodes[sourceNodeIndex];
+            Notes[sourceNodeIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
+            Notes[sourceNoteIndex].Nodes[nodeToMoveIndex] = sourceNode;
+
             Notes = [..Notes];
         });
     }
