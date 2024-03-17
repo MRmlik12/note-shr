@@ -106,10 +106,16 @@ public class BoardViewModel : ViewModelBase
         MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>
         {
             var sourceNoteIndex = Notes.FindIndex(x => x.Id == args.NoteId);
-            var sourceNodeIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Item1 == args.SourceNodeId);
             var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Item1 == args.NodeToMoveId);
+            var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
+            
+            if (sourceNodeIndex > Notes[sourceNoteIndex].Nodes.Count - 1 || sourceNodeIndex < 0)
+            {
+                return;
+            }
+            
             var sourceNode = Notes[sourceNoteIndex].Nodes[sourceNodeIndex];
-            Notes[sourceNodeIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
+            Notes[sourceNoteIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
             Notes[sourceNoteIndex].Nodes[nodeToMoveIndex] = sourceNode;
 
             Notes = [..Notes];
