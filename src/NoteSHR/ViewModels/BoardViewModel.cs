@@ -61,17 +61,17 @@ public class BoardViewModel : ViewModelBase
             {
                 return;
             }
-            
-            if (!args.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
+
+            var pointerPoint = args.GetCurrentPoint(null);
+            if (pointerPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonReleased)
             {
                 return;
             }
             
-            var position = args.GetPosition(null);
 
             var noteIndex = Notes.FindIndex(x => x.Id == id);
-            Notes[noteIndex].X = position.X;
-            Notes[noteIndex].Y = position.Y;
+            Notes[noteIndex].X = pointerPoint.Position.X;
+            Notes[noteIndex].Y = pointerPoint.Position.Y;
             
             Notes = [..Notes];
         });
