@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using Avalonia.Controls;
 using Avalonia.Input;
+using NoteSHR.Components.Node.Add.EventArgs;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
 using NoteSHR.Core.Models;
@@ -23,7 +24,7 @@ public class BoardViewModel : ViewModelBase
     public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }
     public ReactiveCommand<PointerReleasedEventArgs, Unit> UpdateNoteLocation { get; set; }
-    public ReactiveCommand<Guid, Unit> AddNoteNodeCommand { get; set; }
+    public ReactiveCommand<CreateNodeEventArgs, Unit> AddNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeDeleteModeStateCommand { get; set; }
     public ReactiveCommand<DeleteNodeEventArgs, Unit> DeleteNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeEditModeStateCommand { get; set; }
@@ -76,11 +77,11 @@ public class BoardViewModel : ViewModelBase
             Notes = [..Notes];
         });
 
-        AddNoteNodeCommand = ReactiveCommand.Create((Guid id) =>
+        AddNoteNodeCommand = ReactiveCommand.Create((CreateNodeEventArgs arg) =>
         {
-            var noteIndex = Notes.FindIndex(x => x.Id == id);
+            var noteIndex = Notes.FindIndex(x => x.Id == arg.NoteId);
             Notes[noteIndex].Nodes.Add((Guid.NewGuid(), typeof(TextComponentControl), new TextComponentViewModel()));
-
+            
             Notes = [..Notes];
         });
         

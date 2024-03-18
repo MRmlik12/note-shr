@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:NoteSHR.ViewModels"
              xmlns:models="clr-namespace:NoteSHR.Core.Models"
              xmlns:noteNode="clr-namespace:NoteSHR.Components.NoteNode"
+             xmlns:add="clr-namespace:NoteSHR.Components.Node.Add"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              x:CompileBindings="False">
@@ -41,8 +42,20 @@
                     <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch">
                         <Button Foreground="Green" HorizontalAlignment="Right"
                                 Cursor="Hand"
-                                Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"
-                                CommandParameter="{Binding Id}">+</Button>
+                                CommandParameter="{Binding Id}">
+                            +
+                            <Button.Flyout>
+                                <Flyout>
+                                    <add:AddNodeOptions NoteId="{Binding Id}">
+                                        <i:Interaction.Behaviors>
+                                            <ia:EventTriggerBehavior EventName="CreateNode">
+                                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"  />
+                                            </ia:EventTriggerBehavior>
+                                        </i:Interaction.Behaviors>
+                                    </add:AddNodeOptions>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                         <Button Foreground="GhostWhite" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
                                 Cursor="Hand">E</Button>
@@ -67,7 +80,7 @@
                                 <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}"  />
                             </ia:EventTriggerBehavior>
                         </i:Interaction.Behaviors>
-                    </noteNode:NoteNodeComponent>
+                    </noteNode:NoteNodeComponent> 
                 </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
