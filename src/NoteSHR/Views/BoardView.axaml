@@ -7,7 +7,6 @@
              xmlns:vm="clr-namespace:NoteSHR.ViewModels"
              xmlns:models="clr-namespace:NoteSHR.Core.Models"
              xmlns:noteNode="clr-namespace:NoteSHR.Components.NoteNode"
-             xmlns:add="clr-namespace:NoteSHR.Components.Node.Add"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              x:CompileBindings="False">
@@ -45,15 +44,16 @@
                                 CommandParameter="{Binding Id}">
                             +
                             <Button.Flyout>
-                                <Flyout>
-                                    <add:AddNodeOptions NoteId="{Binding Id}">
-                                        <i:Interaction.Behaviors>
-                                            <ia:EventTriggerBehavior EventName="CreateNode">
-                                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"  />
-                                            </ia:EventTriggerBehavior>
-                                        </i:Interaction.Behaviors>
-                                    </add:AddNodeOptions>
-                                </Flyout>
+                                    <MenuFlyout>
+                                        <MenuItem Header="Text" CommandParameter="{Binding Id}">
+                                            <MenuItem.Styles>
+                                                <Style Selector="MenuItem.SubItems MenuItem">
+                                                    <Setter Property="Command" Value="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"/>
+                                                    <Setter Property="CommandParameter" Value="{Binding Id}"/>
+                                                </Style>
+                                            </MenuItem.Styles>
+                                        </MenuItem>
+                                    </MenuFlyout>
                             </Button.Flyout>
                         </Button>
                         <Button Foreground="GhostWhite" HorizontalAlignment="Right"
@@ -67,7 +67,7 @@
                                 Cursor="Hand"
                                 CommandParameter="{Binding Id}">X</Button>
                     </StackPanel>
-                    <noteNode:NoteNodeComponent 
+                    <noteNode:NoteNodeComponent
                         Nodes="{Binding Nodes}"
                         NoteId="{Binding Id}"
                         DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
