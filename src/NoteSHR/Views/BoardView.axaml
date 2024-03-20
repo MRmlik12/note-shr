@@ -38,7 +38,7 @@
             <DataTemplate x:DataType="models:Note">
                 <StackPanel x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"
                             MinWidth="200" MaxWidth="600">
-                    <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch">
+                    <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Right">
                         <Button Foreground="Green" HorizontalAlignment="Right"
                                 Cursor="Hand"
                                 CommandParameter="{Binding Id}">
