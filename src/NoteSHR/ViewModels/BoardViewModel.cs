@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using NoteSHR.Components.Image;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
 using NoteSHR.Core.Models;
@@ -15,11 +15,15 @@ namespace NoteSHR.ViewModels;
 
 public class BoardViewModel : ViewModelBase
 {
+    private const double Tolerance = 0.5d;
+    
     [Reactive] public List<Note> Notes { get; set; } = [];
     [Reactive] public double ZoomX { get; set; } = 1d;
     [Reactive] public double ZoomY { get; set; } = 1d;
     [Reactive] public bool DeleteMode { get; set; }
     [Reactive] public bool EditMode { get; set; }
+    
+    private Point LastMousePosition { get; set; }
     
     public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }
@@ -34,6 +38,7 @@ public class BoardViewModel : ViewModelBase
     {
         CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
         {
+            LastMousePosition = args.GetPosition(null);
             if (args.Source is not Canvas)
             {
                 return;
@@ -65,6 +70,12 @@ public class BoardViewModel : ViewModelBase
 
             var pointerPoint = args.GetCurrentPoint(null);
             if (pointerPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonReleased)
+            {
+                return;
+            }
+            
+            if (Math.Abs(pointerPoint.Position.X - LastMousePosition.X) < Tolerance 
+                && Math.Abs(pointerPoint.Position.Y - LastMousePosition.Y) < Tolerance)
             {
                 return;
             }
