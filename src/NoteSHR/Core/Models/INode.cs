@@ -1,6 +1,4 @@
-﻿using Avalonia.Controls;
-
-namespace NoteSHR.Core.Models;
+﻿namespace NoteSHR.Core.Models;
 
 public interface INode
 {

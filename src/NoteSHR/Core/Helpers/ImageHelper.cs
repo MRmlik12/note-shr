@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 
 namespace NoteSHR.Core.Helpers;
 

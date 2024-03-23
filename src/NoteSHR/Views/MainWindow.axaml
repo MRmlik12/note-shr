@@ -7,7 +7,7 @@
         x:Class="NoteSHR.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="NoteSHR">
-        
-        <views:MainView />
-        
+
+    <views:MainView />
+
 </Window>

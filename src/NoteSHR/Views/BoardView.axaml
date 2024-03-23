@@ -18,7 +18,8 @@
     <ItemsControl x:Name="NoteItemsControl">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" PointerWheelChanged="Board_OnPointerWheelChanged">
+                <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        PointerWheelChanged="Board_OnPointerWheelChanged">
                     <i:Interaction.Behaviors>
                         <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
                             <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding CreateNoteCommand}" />
@@ -38,7 +39,8 @@
             <DataTemplate x:DataType="models:Note">
                 <StackPanel x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"
                             MinWidth="200" MaxWidth="600">
-                    <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Right">
+                    <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch"
+                                HorizontalAlignment="Right">
                         <Button Foreground="Green" HorizontalAlignment="Right"
                                 Cursor="Hand"
                                 Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"
@@ -59,14 +61,20 @@
                         </Button>
                         <Button Foreground="GhostWhite" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
-                                Cursor="Hand">E</Button>
+                                Cursor="Hand">
+                            E
+                        </Button>
                         <Button Foreground="Red" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
-                                Cursor="Hand">D</Button>
+                                Cursor="Hand">
+                            D
+                        </Button>
                         <Button Foreground="Red" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
                                 Cursor="Hand"
-                                CommandParameter="{Binding Id}">X</Button>
+                                CommandParameter="{Binding Id}">
+                            X
+                        </Button>
                     </StackPanel>
                     <noteNode:NoteNodeComponent
                         Nodes="{Binding Nodes}"
@@ -75,13 +83,15 @@
                         EditMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).EditMode}">
                         <i:Interaction.Behaviors>
                             <ia:EventTriggerBehavior EventName="DeleteNode">
-                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}"  />
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                        Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}" />
                             </ia:EventTriggerBehavior>
                             <ia:EventTriggerBehavior EventName="MoveNode">
-                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}"  />
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                        Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}" />
                             </ia:EventTriggerBehavior>
                         </i:Interaction.Behaviors>
-                    </noteNode:NoteNodeComponent> 
+                    </noteNode:NoteNodeComponent>
                 </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

@@ -8,13 +8,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.Image.ImageComponent"
              x:DataType="image:ImageComponentViewModel">
-    
+
     <StackPanel Orientation="Vertical">
         <Button Name="AddImageButton" IsVisible="{Binding !ImageSelected}">
             Add button
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="Click">
-                    <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding SetImageCommand}"  />
+                    <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding SetImageCommand}" />
                 </ia:EventTriggerBehavior>
             </i:Interaction.Behaviors>
         </Button>

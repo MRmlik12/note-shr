@@ -1,10 +1,6 @@
 ﻿using System.Reactive.Disposables;
-using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
-using Avalonia.Threading;
-using NoteSHR.Core.Models;
 using NoteSHR.ViewModels;
 using ReactiveUI;
 
@@ -12,13 +8,14 @@ namespace NoteSHR.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
-    private BoardViewModel _vm;
+    private readonly BoardViewModel _vm;
+
     public BoardView()
     {
         InitializeComponent();
         _vm = new BoardViewModel();
         DataContext = _vm;
-        
+
         this.WhenActivated(disposable =>
         {
             this.OneWayBind(ViewModel, vm => vm.Notes, v => v.NoteItemsControl.ItemsSource)

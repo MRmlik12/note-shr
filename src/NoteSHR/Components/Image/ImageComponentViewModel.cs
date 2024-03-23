@@ -12,11 +12,6 @@ namespace NoteSHR.Components.Image;
 
 public class ImageComponentViewModel : ViewModelBase
 {
-    [Reactive] public Bitmap Image { get; set; }
-    [Reactive] public bool ImageSelected { get; set; }
-
-    public ReactiveCommand<RoutedEventArgs, Unit> SetImageCommand { get; set; }
-
     public ImageComponentViewModel()
     {
         SetImageCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
@@ -25,20 +20,22 @@ public class ImageComponentViewModel : ViewModelBase
             var fileOptions = new FilePickerOpenOptions
             {
                 AllowMultiple = false,
-                FileTypeFilter = new []
+                FileTypeFilter = new[]
                 {
                     FilePickerFileTypes.ImageAll
                 }
             };
-        
+
             var file = await topLevel!.StorageProvider.OpenFilePickerAsync(fileOptions);
-            if (file.Count == 0)
-            {
-                return;
-            }
-            
+            if (file.Count == 0) return;
+
             Image = ImageHelper.LoadFromFileSystem(file[0].Path);
             ImageSelected = true;
         });
     }
+
+    [Reactive] public Bitmap Image { get; set; }
+    [Reactive] public bool ImageSelected { get; set; }
+
+    public ReactiveCommand<RoutedEventArgs, Unit> SetImageCommand { get; set; }
 }

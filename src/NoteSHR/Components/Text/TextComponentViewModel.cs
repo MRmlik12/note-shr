@@ -5,6 +5,5 @@ namespace NoteSHR.Components.Text;
 
 public class TextComponentViewModel : ViewModelBase
 {
-    [Reactive]
-    public string? Text { get; set; }
+    [Reactive] public string? Text { get; set; }
 }

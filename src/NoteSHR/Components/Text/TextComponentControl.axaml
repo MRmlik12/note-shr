@@ -6,7 +6,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.Text.TextComponentControl"
              x:DataType="text:TextComponentViewModel">
-    
-    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" TextWrapping="Wrap" Text="{Binding Text}" />
-    
+
+    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AcceptsReturn="True" TextWrapping="Wrap"
+             Text="{Binding Text}" />
+
 </UserControl>

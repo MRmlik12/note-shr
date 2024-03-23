@@ -7,10 +7,10 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.MainView"
              x:DataType="vm:MainViewModel">
-    
+
     <Design.DataContext>
         <vm:MainViewModel />
     </Design.DataContext>
-    
+
     <views:BoardView />
 </UserControl>
