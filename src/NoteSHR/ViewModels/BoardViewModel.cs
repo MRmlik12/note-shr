@@ -5,6 +5,7 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using NoteSHR.Components.Image;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
 using NoteSHR.Core.Models;
@@ -54,12 +55,18 @@ public class BoardViewModel : ViewModelBase
             Notes = [..Notes];
         });
 
-        AddNoteNodeCommand = ReactiveCommand.Create((Guid id) =>
+        AddNoteNodeCommand = ReactiveCommand.Create(((Guid, NodeType) item) =>
         {
-            var noteIndex = Notes.FindIndex(x => x.Id == id);
+            var noteIndex = Notes.FindIndex(x => x.Id == item.Item1);
 
-            Notes[noteIndex].Nodes.Add((Guid.NewGuid(), typeof(TextComponentControl), new TextComponentViewModel()));
-            //Notes[noteIndex].Nodes.Add((Guid.NewGuid(), typeof(ImageComponent), new ImageComponentViewModel()));
+            var (componentType, componentVm) = item.Item2 switch
+            {
+                NodeType.Text => (typeof(TextComponentControl), new TextComponentViewModel()),
+                NodeType.Image => (typeof(ImageComponent), (ViewModelBase)new ImageComponentViewModel()),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            
+            Notes[noteIndex].Nodes.Add((Guid.NewGuid(), componentType, componentVm));
 
             Notes = [..Notes];
         });
@@ -110,7 +117,7 @@ public class BoardViewModel : ViewModelBase
     public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }
     public ReactiveCommand<PointerReleasedEventArgs, Unit> UpdateNoteLocation { get; set; }
-    public ReactiveCommand<Guid, Unit> AddNoteNodeCommand { get; set; }
+    public ReactiveCommand<(Guid, NodeType), Unit> AddNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeDeleteModeStateCommand { get; set; }
     public ReactiveCommand<DeleteNodeEventArgs, Unit> DeleteNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeEditModeStateCommand { get; set; }

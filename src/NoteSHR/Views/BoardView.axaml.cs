@@ -1,6 +1,10 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
+using NoteSHR.Core.Models;
 using NoteSHR.ViewModels;
 using ReactiveUI;
 
@@ -35,5 +39,14 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
             ViewModel!.ZoomX /= 1.2;
             ViewModel.ZoomY /= 1.2;
         }
+    }
+
+    private void MenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var menuItem = sender as MenuItem;
+        var nodeType = Enum.Parse<NodeType>(menuItem.CommandParameter as string);
+        var argumentsToCommand = ((menuItem.DataContext as Note)!.Id, nodeType);
+        
+        ViewModel!.AddNoteNodeCommand.Execute(argumentsToCommand).Subscribe();
     }
 }

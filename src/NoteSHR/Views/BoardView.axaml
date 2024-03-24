@@ -42,22 +42,14 @@
                     <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Right">
                         <Button Foreground="Green" HorizontalAlignment="Right"
-                                Cursor="Hand"
-                                Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"
-                                CommandParameter="{Binding Id}">
+                                Cursor="Hand">
                             +
-                            <!-- <Button.Flyout> -->
-                            <!--         <MenuFlyout> -->
-                            <!--             <MenuItem Header="Text" CommandParameter="{Binding Id}"> -->
-                            <!--                 <MenuItem.Styles> -->
-                            <!--                     <Style Selector="MenuItem.SubItems MenuItem"> -->
-                            <!--                         <Setter Property="Command" Value="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).AddNoteNodeCommand}"/> -->
-                            <!--                         <Setter Property="CommandParameter" Value="{Binding Id}"/> -->
-                            <!--                     </Style> -->
-                            <!--                 </MenuItem.Styles> -->
-                            <!--             </MenuItem> -->
-                            <!--         </MenuFlyout> -->
-                            <!-- </Button.Flyout> -->
+                            <Button.Flyout>
+                                    <MenuFlyout>
+                                        <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
+                                        <MenuItem Header="Image" CommandParameter="Image" Click="MenuItem_OnClick" />
+                                    </MenuFlyout>
+                            </Button.Flyout>
                         </Button>
                         <Button Foreground="GhostWhite" HorizontalAlignment="Right"
                                 Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
