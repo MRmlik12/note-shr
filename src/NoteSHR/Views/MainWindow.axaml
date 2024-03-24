@@ -6,6 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="NoteSHR.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
+        Width="1280"
+        Height="720"
         Title="NoteSHR">
 
     <views:MainView />
