@@ -3,5 +3,6 @@
 public enum NodeType
 {
     Text,
-    Image
+    Image,
+    Check
 }

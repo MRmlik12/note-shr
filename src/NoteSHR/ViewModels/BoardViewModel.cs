@@ -5,6 +5,7 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using NoteSHR.Components.Check;
 using NoteSHR.Components.Image;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
@@ -62,10 +63,11 @@ public class BoardViewModel : ViewModelBase
             var (componentType, componentVm) = item.Item2 switch
             {
                 NodeType.Text => (typeof(TextComponentControl), new TextComponentViewModel()),
-                NodeType.Image => (typeof(ImageComponent), (ViewModelBase)new ImageComponentViewModel()),
+                NodeType.Image => (typeof(ImageComponent), new ImageComponentViewModel()),
+                NodeType.Check => (typeof(CheckComponent), (ViewModelBase)new CheckComponentViewModel()),
                 _ => throw new ArgumentOutOfRangeException()
             };
-            
+
             Notes[noteIndex].Nodes.Add((Guid.NewGuid(), componentType, componentVm));
 
             Notes = [..Notes];
