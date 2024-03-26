@@ -29,7 +29,7 @@ public class ImageComponentViewModel : ViewModelBase
             var file = await topLevel!.StorageProvider.OpenFilePickerAsync(fileOptions);
             if (file.Count == 0) return;
 
-            Image = ImageHelper.LoadFromFileSystem(file[0].Path);
+            Image = await ImageHelper.LoadFromFileSystem(file[0]);
             ImageSelected = true;
         });
     }

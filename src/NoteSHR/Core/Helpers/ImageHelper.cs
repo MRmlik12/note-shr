@@ -1,13 +1,15 @@
-using System;
-using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 
 namespace NoteSHR.Core.Helpers;
 
 public static class ImageHelper
 {
-    public static Bitmap LoadFromFileSystem(Uri resource)
+    public static async Task<Bitmap> LoadFromFileSystem(IStorageFile resource)
     {
-        return new Bitmap(new FileStream(resource.LocalPath, FileMode.Open));
+        var stream = await resource.OpenReadAsync();
+        
+        return new Bitmap(stream);
     }
 }
