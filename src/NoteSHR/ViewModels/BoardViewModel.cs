@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using NoteSHR.Components.Check;
 using NoteSHR.Components.Image;
+using NoteSHR.Components.List;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
 using NoteSHR.Core.Models;
@@ -64,7 +65,8 @@ public class BoardViewModel : ViewModelBase
             {
                 NodeType.Text => (typeof(TextComponentControl), new TextComponentViewModel()),
                 NodeType.Image => (typeof(ImageComponent), new ImageComponentViewModel()),
-                NodeType.Check => (typeof(CheckComponent), (ViewModelBase)new CheckComponentViewModel()),
+                NodeType.Check => (typeof(CheckComponent), new CheckComponentViewModel()),
+                NodeType.List => (typeof(ListComponent), (ViewModelBase)new ListComponentViewModel()),
                 _ => throw new ArgumentOutOfRangeException()
             };
 

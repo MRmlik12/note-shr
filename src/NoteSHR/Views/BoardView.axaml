@@ -49,6 +49,7 @@
                                     <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
                                     <MenuItem Header="Image" CommandParameter="Image" Click="MenuItem_OnClick" />
                                     <MenuItem Header="Check" CommandParameter="Check" Click="MenuItem_OnClick" />
+                                    <MenuItem Header="List" CommandParameter="List" Click="MenuItem_OnClick" />
                                 </MenuFlyout>
                             </Button.Flyout>
                         </Button>

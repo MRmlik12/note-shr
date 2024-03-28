@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:vm="clr-namespace:NoteSHR.Components.List"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="NoteSHR.Components.List.ListComponent"
+             x:DataType="vm:ListComponentViewModel">
+    
+    <ItemsControl ItemsSource="{Binding Rows}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Orientation="Vertical">
+                    <TextBox Text="{Binding ., Mode=TwoWay}">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="KeyDown">
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:ListComponentViewModel)DataContext).AddRowCommand}" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+    
+</UserControl>
