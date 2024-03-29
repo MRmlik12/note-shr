@@ -12,15 +12,16 @@
     <ItemsControl ItemsSource="{Binding Rows}">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Vertical">
-                    <TextBox Text="{Binding ., Mode=TwoWay}">
+                <Grid ColumnDefinitions="5*,95*" RowDefinitions="*">
+                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4">&#8226;</Label>
+                    <TextBox Grid.Column="1" Text="{Binding ., Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <i:Interaction.Behaviors>
                             <ia:EventTriggerBehavior EventName="KeyDown">
                                 <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:ListComponentViewModel)DataContext).AddRowCommand}" />
                             </ia:EventTriggerBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
-                </StackPanel>
+                </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
