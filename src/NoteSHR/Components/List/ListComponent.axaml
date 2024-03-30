@@ -8,16 +8,18 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.List.ListComponent"
              x:DataType="vm:ListComponentViewModel">
-    
-    <ItemsControl ItemsSource="{Binding Rows}">
+
+    <ItemsControl x:Name="RowItemsControl" ItemsSource="{Binding Rows, Mode=TwoWay}">
         <ItemsControl.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="vm:ListItem">
                 <Grid ColumnDefinitions="5*,95*" RowDefinitions="*">
                     <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4">&#8226;</Label>
-                    <TextBox Grid.Column="1" Text="{Binding ., Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <TextBox Grid.Column="1" Text="{Binding Text, Mode=TwoWay}" HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch">
                         <i:Interaction.Behaviors>
                             <ia:EventTriggerBehavior EventName="KeyDown">
-                                <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding $parent[ItemsControl].((vm:ListComponentViewModel)DataContext).AddRowCommand}" />
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ListComponentViewModel)DataContext).AddRowCommand}" />
                             </ia:EventTriggerBehavior>
                         </i:Interaction.Behaviors>
                     </TextBox>
@@ -25,5 +27,5 @@
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>
-    
+
 </UserControl>

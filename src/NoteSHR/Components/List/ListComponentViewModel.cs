@@ -9,21 +9,17 @@ namespace NoteSHR.Components.List;
 
 public class ListComponentViewModel : ViewModelBase
 {
-    [Reactive]
-    public List<string> Rows { get; set; } = new () { string.Empty };
-    
-    public ReactiveCommand<KeyEventArgs, Unit> AddRowCommand { get; set; }
-    
     public ListComponentViewModel()
     {
         AddRowCommand = ReactiveCommand.Create((KeyEventArgs args) =>
         {
-            if (args.Key != Key.Enter)
-            {
-                return;
-            } 
-            
-            Rows = [..Rows, ""];
+            if (args.Key != Key.Enter) return;
+
+            Rows = [..Rows, new ListItem(string.Empty)];
         });
     }
+
+    [Reactive] public IEnumerable<ListItem> Rows { get; set; } = new List<ListItem> { new(string.Empty) };
+
+    public ReactiveCommand<KeyEventArgs, Unit> AddRowCommand { get; set; }
 }
