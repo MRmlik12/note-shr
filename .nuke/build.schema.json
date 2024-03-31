@@ -18,6 +18,10 @@
           "type": "boolean",
           "description": "Allow iOS build"
         },
+        "ArtifactsPath": {
+          "type": "string",
+          "description": "Artifacts path"
+        },
         "Configuration": {
           "type": "string",
           "description": "Configuration to build - Default is 'Debug' (local) or 'Release' (server)",
@@ -90,6 +94,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "Pack",
               "Restore"
             ]
           }
@@ -106,6 +111,7 @@
             "enum": [
               "Clean",
               "Compile",
+              "Pack",
               "Restore"
             ]
           }

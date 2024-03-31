@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.Execution;
+using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
@@ -22,13 +25,16 @@ class Build : NukeBuild
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
 
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main () => Execute<Build>(x => x.Pack);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
     
     [Parameter("Output path")]
     readonly AbsolutePath OutputPath = RootDirectory / "out";
+    
+    [Parameter("Artifacts path")]
+    readonly AbsolutePath ArtifactsPath = RootDirectory / "artifacts";
     
     [Parameter("Allow desktop build")]
     readonly bool AllowDesktopBuild = true;
@@ -40,13 +46,16 @@ class Build : NukeBuild
     readonly bool AllowiOSBuild;
     
     [Solution] readonly Solution Solution;
+    
+    [GitRepository]
+    readonly GitRepository GitRepository;
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
             OutputPath.DeleteDirectory();
-            DotNetTasks.DotNetClean();
+            ArtifactsPath.DeleteDirectory();
         });
 
     Target Restore => _ => _
@@ -85,6 +94,16 @@ class Build : NukeBuild
                     .SetConfiguration(Configuration)
                     .SetProject(project)
                     .SetOutput($"{OutputPath}/{project.Name}"));
+            }
+        });
+    
+    Target Pack => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            foreach (var folder in OutputPath.GetDirectories("*"))
+            {
+                folder.ZipTo(ArtifactsPath / $"{folder.Name}-{GitRepository.Branch}-{GitRepository.Commit}.zip", compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
             }
         });
 }
