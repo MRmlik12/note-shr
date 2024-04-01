@@ -27,6 +27,8 @@ class Build : NukeBuild
 
     public static int Main () => Execute<Build>(x => x.Pack);
 
+    readonly List<PlatformItem> Platforms = [];
+    
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
     
@@ -62,38 +64,63 @@ class Build : NukeBuild
         .Executes(() =>
         {
             DotNetTasks.DotNetRestore();
-            
         });
 
     Target Compile => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
-            var projectNames = new List<string>();
-
             if (AllowDesktopBuild)
             {
-                projectNames.Add("NoteSHR.Desktop");
+                switch (Platform)
+                {
+                    case PlatformFamily.Windows:
+                        Platforms.Add(new PlatformItem("NoteSHR.Desktop", "win", ["x64"]));
+                        break;
+                    case PlatformFamily.OSX:
+                        Platforms.Add(new PlatformItem("NoteSHR.Desktop", "osx", ["x64", "arm64"]));
+                        break;
+                    case PlatformFamily.Linux:
+                        Platforms.Add(new PlatformItem("NoteSHR.Desktop", "linux", ["x64", "arm64"]));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
             
             if (AllowAndroidBuild)
             {
-                projectNames.Add("NoteSHR.Android");
+                Platforms.Add(new PlatformItem("NoteSHR.Android", "android", null));
             }
             
             if (AllowiOSBuild && IsOsx)
             {
-                projectNames.Add("NoteSHR.iOS");
+                Platforms.Add(new PlatformItem("NoteSHR.iOS", "ios", null));
             }
-
-            var projects = Solution.AllProjects.Where(x => projectNames.Contains(x.Name));
             
-            foreach (var project in projects)
+            var projects = Solution.AllProjects.Where(x => Platforms.Select(p => p.Name).Contains(x.Name));
+            
+            foreach (var (project, projectDetail) in projects.Join(Platforms, p => p.Name, pD => pD.Name, (p, pD) => (p, pD)))
             {
-                DotNetTasks.DotNetPublish(_ => _.EnableNoRestore()
-                    .SetConfiguration(Configuration)
-                    .SetProject(project)
-                    .SetOutput($"{OutputPath}/{project.Name}"));
+                if (projectDetail.Architectures == null)
+                {
+                    DotNetTasks.DotNetPublish(_ => _.EnableNoRestore()
+                        .SetConfiguration(Configuration)
+                        .SetProject(project)
+                        .SetFramework("net8.0")
+                        .SetOutput($"{OutputPath}/{project.Name}/{projectDetail.Platform}"));
+                    continue;
+                }
+                
+                foreach (var architecture in projectDetail.Architectures)
+                {
+                    DotNetTasks.DotNetPublish(_ => _.EnableNoRestore()
+                        .SetConfiguration(Configuration)
+                        .SetProject(project)
+                        .SetFramework("net8.0")
+                        .SetRuntime($"{projectDetail.Platform}-{architecture}")
+                        .SetOutput($"{OutputPath}/{project.Name}/{projectDetail.Platform}-{architecture}"));
+                }
             }
         });
     
@@ -101,9 +128,14 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
-            foreach (var folder in OutputPath.GetDirectories("*"))
+            foreach (var folder in OutputPath.GetDirectories())
             {
-                folder.ZipTo(ArtifactsPath / $"{folder.Name}-{GitRepository.Branch}-{GitRepository.Commit}.zip", compressionLevel: CompressionLevel.SmallestSize, fileMode: FileMode.CreateNew);
+                foreach (var platformBuildFolder in folder.GetDirectories())
+                {
+                    platformBuildFolder.ZipTo(ArtifactsPath / $"{platformBuildFolder.Name}-{GitRepository.Branch}-{GitRepository.Commit}.zip",
+                        compressionLevel: CompressionLevel.SmallestSize,
+                        fileMode: FileMode.CreateNew);
+                }
             }
         });
 }
