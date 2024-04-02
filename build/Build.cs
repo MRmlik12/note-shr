@@ -45,7 +45,7 @@ class Build : NukeBuild
     readonly bool AllowAndroidBuild;
     
     [Parameter("Allow iOS build")]
-    readonly bool AllowiOSBuild;
+    readonly bool AllowIOSBuild;
     
     [Solution] readonly Solution Solution;
     
@@ -93,7 +93,7 @@ class Build : NukeBuild
                 Platforms.Add(new PlatformItem("NoteSHR.Android", "android", null));
             }
             
-            if (AllowiOSBuild && IsOsx)
+            if (AllowIOSBuild && IsOsx)
             {
                 Platforms.Add(new PlatformItem("NoteSHR.iOS", "ios", null));
             }
@@ -107,8 +107,8 @@ class Build : NukeBuild
                     DotNetTasks.DotNetPublish(_ => _.EnableNoRestore()
                         .SetConfiguration(Configuration)
                         .SetProject(project)
-                        .SetFramework("net8.0")
-                        .SetOutput($"{OutputPath}/{project.Name}/{projectDetail.Platform}"));
+                        .SetFramework($"net8.0-{projectDetail.Platform}")
+                        .SetOutput($"{OutputPath}/{project.Name}"));
                     continue;
                 }
                 
@@ -128,8 +128,22 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
+            if (!Directory.Exists(ArtifactsPath.Name))
+            {
+                ArtifactsPath.CreateDirectory();
+            }
+            
             foreach (var folder in OutputPath.GetDirectories())
             {
+                if (folder.Name == "NoteSHR.Android")
+                {
+                    foreach (var platformBuildFolder in folder.GetFiles().Where(x => x.Name.Contains("-Signed.apk")))
+                    {
+                        platformBuildFolder.MoveToDirectory(RootDirectory / "artifacts");
+                    }
+                    continue;
+                }
+                
                 foreach (var platformBuildFolder in folder.GetDirectories())
                 {
                     platformBuildFolder.ZipTo(ArtifactsPath / $"{platformBuildFolder.Name}-{GitRepository.Branch}-{GitRepository.Commit}.zip",

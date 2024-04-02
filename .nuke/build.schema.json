@@ -14,7 +14,7 @@
           "type": "boolean",
           "description": "Allow desktop build"
         },
-        "AllowiOSBuild": {
+        "AllowIOSBuild": {
           "type": "boolean",
           "description": "Allow iOS build"
         },
