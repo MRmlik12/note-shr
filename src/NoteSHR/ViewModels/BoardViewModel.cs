@@ -111,8 +111,8 @@ public class BoardViewModel : ViewModelBase
     }
 
     [Reactive] public List<Note> Notes { get; set; } = [];
-    [Reactive] public double ZoomX { get; set; } = 1d;
-    [Reactive] public double ZoomY { get; set; } = 1d;
+    // [Reactive] public double ZoomX { get; set; } = 1d;
+    // [Reactive] public double ZoomY { get; set; } = 1d;
     [Reactive] public bool DeleteMode { get; set; }
     [Reactive] public bool EditMode { get; set; }
 
