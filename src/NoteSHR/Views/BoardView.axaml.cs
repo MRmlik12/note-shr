@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using Avalonia.Controls.PanAndZoom;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using NoteSHR.Core.Models;
 using NoteSHR.ViewModels;

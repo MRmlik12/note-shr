@@ -37,11 +37,11 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:Note">
-                    <StackPanel x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"
+                    <StackPanel Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"
                                 MinWidth="200" MaxWidth="600">
-                        <StackPanel x:Name="Header" Orientation="Horizontal" VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Right">
-                            <Button Foreground="Green" HorizontalAlignment="Right"
+                        <StackPanel x:Name="Header" Background="#bda800" Orientation="Horizontal" VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Stretch">
+                            <Button Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
                                     Cursor="Hand">
                                 +
                                 <Button.Flyout>
@@ -53,17 +53,17 @@
                                     </MenuFlyout>
                                 </Button.Flyout>
                             </Button>
-                            <Button Foreground="GhostWhite" HorizontalAlignment="Right"
+                            <Button Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
                                     Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
                                     Cursor="Hand">
                                 E
                             </Button>
-                            <Button Foreground="Red" HorizontalAlignment="Right"
+                            <Button Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
                                     Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
                                     Cursor="Hand">
                                 D
                             </Button>
-                            <Button Foreground="Red" HorizontalAlignment="Right"
+                            <Button Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
                                     Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
                                     Cursor="Hand"
                                     CommandParameter="{Binding Id}">
