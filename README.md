@@ -45,19 +45,30 @@ $ dotnet run --project src/NoteSHR.Browser
 
 ### Build
 
+#### Using Bash
+
 ```bash
-$ dotnet restore
 # For desktop platforms
-$ dotnet build --project src/NoteSHR.Desktop
+$ ./build.sh --configuration Release
 # For iOS platform
-$ dotnet build --project src/NoteSHR.iOS
+$ ./build.sh --configuration Release --allow-ios-build
 # For Android platform
-$ dotnet build --project src/NoteSHR.Android
-# For Web platform
-$ dotnet build --project src/NoteSHR.Browser
+$ ./build.sh --configuration Release --allow-android-build
+```
+
+#### Using PowerShell
+
+```powershell
+# For desktop platforms 
+> .\build.ps1 
+# For iOS platform
+> .\build.ps1 --allow-ios-build
+# For Android platform
+> .\build.ps1 --allow-android-build
 ```
 
 ## Used libraries
 
 - [Avalonia](https://avaloniaui.net/)
 - [ReactiveUI](https://www.reactiveui.net/)
+- [NUKE](https://nuke.build/)
