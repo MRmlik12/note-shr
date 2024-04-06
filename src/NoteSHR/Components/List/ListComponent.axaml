@@ -5,15 +5,33 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:vm="clr-namespace:NoteSHR.Components.List"
+             xmlns:converters="clr-namespace:NoteSHR.Components.List.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.List.ListComponent"
              x:DataType="vm:ListComponentViewModel">
 
+    <UserControl.Resources>
+        <converters:PrefixTypeToStringConverter x:Key="PrefixTypeToString" />
+    </UserControl.Resources>
+    
     <ItemsControl x:Name="RowItemsControl" ItemsSource="{Binding Rows, Mode=TwoWay}">
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="vm:ListItem">
                 <Grid ColumnDefinitions="5*,95*" RowDefinitions="*">
-                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4">&#8226;</Label>
+                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4" >
+                        <Label.Content>
+                            <MultiBinding Converter="{StaticResource PrefixTypeToString}">
+                                <Binding Path="$parent[ItemsControl].((vm:ListComponentViewModel)DataContext).PrefixType" />
+                                <Binding Path="Index" />
+                            </MultiBinding>
+                        </Label.Content>
+                        <Label.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Bullet" CommandParameter="Bullet" Click="MenuItem_OnClick" />
+                                <MenuItem Header="Numbered" CommandParameter="Numbered" Click="MenuItem_OnClick" />
+                            </ContextMenu>
+                        </Label.ContextMenu>
+                    </Label>
                     <TextBox Grid.Column="1" Text="{Binding Text, Mode=TwoWay}" HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch">
                         <i:Interaction.Behaviors>
