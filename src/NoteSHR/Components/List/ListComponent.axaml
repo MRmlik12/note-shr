@@ -18,17 +18,11 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="vm:ListItem">
                 <Grid ColumnDefinitions="5*,95*" RowDefinitions="*">
-                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4" >
-                        <Label.Content>
-                            <MultiBinding Converter="{StaticResource PrefixTypeToString}">
-                                <Binding Path="$parent[ItemsControl].((vm:ListComponentViewModel)DataContext).PrefixType" />
-                                <Binding Path="Index" />
-                            </MultiBinding>
-                        </Label.Content>
+                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4" Content="{Binding ., Converter={StaticResource PrefixTypeToString}}" >
                         <Label.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Bullet" CommandParameter="Bullet" Click="MenuItem_OnClick" />
-                                <MenuItem Header="Numbered" CommandParameter="Numbered" Click="MenuItem_OnClick" />
+                                <MenuItem Header="Number" CommandParameter="Number" Click="MenuItem_OnClick" />
                             </ContextMenu>
                         </Label.ContextMenu>
                     </Label>

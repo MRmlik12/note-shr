@@ -1,3 +1,3 @@
 ﻿namespace NoteSHR.Components.List;
 
-public record ListItem(int Index, string Text);
+public record ListItem(int Index, string Text, PrefixType Prefix);

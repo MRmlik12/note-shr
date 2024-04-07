@@ -17,19 +17,23 @@ public class ListComponentViewModel : ViewModelBase
         {
             if (args.Key != Key.Enter) return;
 
-            Rows = [..Rows, new ListItem(Rows.Count(), string.Empty)];
+            Rows = [..Rows, new ListItem(Rows.Count(), string.Empty, PrefixType)];
         });
 
         ChangePrefixTypeCommand = ReactiveCommand.Create((string type) =>
         {
-            if (Enum.TryParse<PrefixType>(type, out var parsedType))
+            // TODO: Implement prefix logic better
+            if (!Enum.TryParse<PrefixType>(type, out var parsedType))
             {
-                PrefixType = parsedType;
+                return;
             }
+            
+            PrefixType = parsedType;
+            Rows = Rows.Select((row, index) => new ListItem(index, row.Text, PrefixType)).ToList();
         });
     }
 
-    [Reactive] public IEnumerable<ListItem> Rows { get; set; } = new List<ListItem> { new(0, string.Empty) };
+    [Reactive] public IEnumerable<ListItem> Rows { get; set; } = new List<ListItem> { new(0, string.Empty, default) };
     [Reactive] public PrefixType PrefixType { get; set; } = PrefixType.Bullet;
     
     public ReactiveCommand<KeyEventArgs, Unit> AddRowCommand { get; set; }
