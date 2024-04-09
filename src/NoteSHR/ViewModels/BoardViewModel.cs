@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using Avalonia;
@@ -32,10 +32,10 @@ public class BoardViewModel : ViewModelBase
             var position = args.GetPosition(null);
 
             var note = new Note(Guid.NewGuid(), position.X, position.Y);
-            Notes = [..Notes, note];
+            Notes.Add(note);
         });
 
-        RemoveNote = ReactiveCommand.Create((Guid id) => { Notes = Notes.Where(note => note.Id != id).ToList(); });
+        RemoveNote = ReactiveCommand.Create((Guid id) => { Notes.Remove(Notes.Where(note => note.Id == id).Single()); });
 
         UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
         {
@@ -50,16 +50,17 @@ public class BoardViewModel : ViewModelBase
                 return;
 
 
-            var noteIndex = Notes.FindIndex(x => x.Id == id);
-            Notes[noteIndex].X = pointerPoint.Position.X;
-            Notes[noteIndex].Y = pointerPoint.Position.Y;
-
-            Notes = [..Notes];
+            var note = Notes.SingleOrDefault(x => x.Id == id);
+            if (note != null)
+            {
+                note.X = pointerPoint.Position.X;
+                note.Y = pointerPoint.Position.Y;
+            }
         });
 
         AddNoteNodeCommand = ReactiveCommand.Create(((Guid, NodeType) item) =>
         {
-            var noteIndex = Notes.FindIndex(x => x.Id == item.Item1);
+            var noteIndex = Notes.IndexOf(Notes.Where(x => x.Id == item.Item1).Single());
 
             var (componentType, componentVm) = item.Item2 switch
             {
@@ -89,14 +90,13 @@ public class BoardViewModel : ViewModelBase
 
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
         {
-            var noteIndex = Notes.FindIndex(x => x.Id == args.NoteId);
+            var noteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
             Notes[noteIndex].Nodes = Notes[noteIndex].Nodes.Where(x => x.Item1 != args.NodeId).ToList();
-            Notes = [..Notes];
         });
 
         MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>
         {
-            var sourceNoteIndex = Notes.FindIndex(x => x.Id == args.NoteId);
+            var sourceNoteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
             var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Item1 == args.NodeToMoveId);
             var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
 
@@ -105,12 +105,10 @@ public class BoardViewModel : ViewModelBase
             var sourceNode = Notes[sourceNoteIndex].Nodes[sourceNodeIndex];
             Notes[sourceNoteIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
             Notes[sourceNoteIndex].Nodes[nodeToMoveIndex] = sourceNode;
-
-            Notes = [..Notes];
         });
     }
 
-    [Reactive] public List<Note> Notes { get; set; } = [];
+    [Reactive] public ObservableCollection<Note> Notes { get; set; } = [];
     // [Reactive] public double ZoomX { get; set; } = 1d;
     // [Reactive] public double ZoomY { get; set; } = 1d;
     [Reactive] public bool DeleteMode { get; set; }
