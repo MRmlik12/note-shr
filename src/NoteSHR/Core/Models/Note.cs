@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using DynamicData;
@@ -11,22 +12,23 @@ public class Note(Guid id, double x, double y) : INotifyPropertyChanged
 {
     private double _x = x;
     private double _y = y;
-    private List<(Guid, Type, ViewModelBase)> _nodes = [];
-    
+    private ObservableCollection<NodeViewModel> _nodes = new();
+
     public Guid Id { get; set; } = id;
 
     public double X
     {
-        get { return _x; }
+        get => _x;
         set
         {
             _x = value;
             OnPropertyChanged(nameof(X));
         }
     }
+
     public double Y
     {
-        get { return _y; }
+        get => _y;
         set
         {
             _y = value;
@@ -34,16 +36,16 @@ public class Note(Guid id, double x, double y) : INotifyPropertyChanged
         }
     }
 
-    public List<(Guid, Type, ViewModelBase)> Nodes
+    public ObservableCollection<NodeViewModel> Nodes
     {
-        get { return _nodes; }
+        get => _nodes;
         set
         {
             _nodes = value;
             OnPropertyChanged(nameof(Nodes));
         }
     }
-    
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)

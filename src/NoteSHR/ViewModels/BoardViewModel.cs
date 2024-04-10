@@ -60,7 +60,7 @@ public class BoardViewModel : ViewModelBase
 
         AddNoteNodeCommand = ReactiveCommand.Create(((Guid, NodeType) item) =>
         {
-            var noteIndex = Notes.IndexOf(Notes.Where(x => x.Id == item.Item1).Single());
+            var note = Notes.Where(x => x.Id == item.Item1).SingleOrDefault();
 
             var (componentType, componentVm) = item.Item2 switch
             {
@@ -71,9 +71,12 @@ public class BoardViewModel : ViewModelBase
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            Notes[noteIndex].Nodes.Add((Guid.NewGuid(), componentType, componentVm));
-
-            Notes = [..Notes];
+            if (note == null)
+            {
+                return;
+            }
+            
+            note.Nodes.Add(new NodeViewModel(Guid.NewGuid(), componentType, componentVm));
         });
 
         ChangeDeleteModeStateCommand = ReactiveCommand.Create(() =>
@@ -91,20 +94,20 @@ public class BoardViewModel : ViewModelBase
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
         {
             var noteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
-            Notes[noteIndex].Nodes = Notes[noteIndex].Nodes.Where(x => x.Item1 != args.NodeId).ToList();
+            // Notes[noteIndex].Nodes = Notes[noteIndex].Nodes.Where(x => x.Id != args.NodeId).ToList();
         });
 
         MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>
         {
-            var sourceNoteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
-            var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Item1 == args.NodeToMoveId);
-            var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
-
-            if (sourceNodeIndex > Notes[sourceNoteIndex].Nodes.Count - 1 || sourceNodeIndex < 0) return;
-
-            var sourceNode = Notes[sourceNoteIndex].Nodes[sourceNodeIndex];
-            Notes[sourceNoteIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
-            Notes[sourceNoteIndex].Nodes[nodeToMoveIndex] = sourceNode;
+            // var sourceNoteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
+            // var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Id == args.NodeToMoveId);
+            // var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
+            //
+            // if (sourceNodeIndex > Notes[sourceNoteIndex].Nodes.Count - 1 || sourceNodeIndex < 0) return;
+            //
+            // var sourceNode = Notes[sourceNoteIndex].Nodes[sourceNodeIndex];
+            // Notes[sourceNoteIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
+            // Notes[sourceNoteIndex].Nodes[nodeToMoveIndex] = sourceNode;
         });
     }
 

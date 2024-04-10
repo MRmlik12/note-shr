@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -17,8 +18,8 @@ public class NoteNodeComponent : UserControl
     private const string MoveUpButtonName = "MoveUpButton";
     private const string MoveDownButtonName = "MoveDownButton";
 
-    public static readonly StyledProperty<List<(Guid, Type, ViewModelBase)>> NodesProperty =
-        AvaloniaProperty.Register<NoteNodeComponent, List<(Guid, Type, ViewModelBase)>>(nameof(Nodes),
+    public static readonly StyledProperty<ObservableCollection<NodeViewModel>> NodesProperty =
+        AvaloniaProperty.Register<NoteNodeComponent, ObservableCollection<NodeViewModel>>(nameof(Nodes),
             defaultBindingMode: BindingMode.TwoWay);
 
     public static readonly StyledProperty<Guid> NoteIdProperty =
@@ -52,7 +53,7 @@ public class NoteNodeComponent : UserControl
         Content = _stackPanel;
     }
 
-    private List<(Guid, Type, ViewModelBase)> Nodes
+    private ObservableCollection<NodeViewModel> Nodes
     {
         get => GetValue(NodesProperty);
         set => SetValue(NodesProperty, value);
@@ -88,15 +89,25 @@ public class NoteNodeComponent : UserControl
         remove => RemoveHandler(MoveNodeEvent, value);
     }
 
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == NodesProperty)
+        {
+            Console.Write("AAA  ");
+        }
+    }
+
     protected override void OnInitialized()
     {
-        foreach (var (id, type, vm) in Nodes)
+        foreach (var nodeVm in Nodes)
         {
             var grid = new Grid
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                DataContext = id,
+                DataContext = nodeVm.Id,
                 ColumnDefinitions = new ColumnDefinitions
                 {
                     new(20.0, GridUnitType.Auto),
@@ -113,13 +124,13 @@ public class NoteNodeComponent : UserControl
                 var deleteButton = new Button
                 {
                     Content = "D",
-                    DataContext = (id, type, vm)
+                    DataContext = nodeVm
                 };
 
                 Grid.SetColumn(deleteButton, 0);
 
                 deleteButton.Click += (sender, args) =>
-                    RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, id));
+                    RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, nodeVm.Id));
                 grid.Children.Add(deleteButton);
             }
 
@@ -142,14 +153,14 @@ public class NoteNodeComponent : UserControl
                 {
                     Name = MoveUpButtonName,
                     Text = "\u25b2",
-                    DataContext = id
+                    DataContext = nodeVm.Id
                 };
 
                 var moveDownButton = new TextBlock
                 {
                     Name = MoveDownButtonName,
                     Text = "\u25bc",
-                    DataContext = id
+                    DataContext = nodeVm.Id
                 };
 
                 moveUpButton.PointerPressed += EditModeButtonClicked;
@@ -168,7 +179,7 @@ public class NoteNodeComponent : UserControl
                 grid.Children.Add(editModeGrid);
             }
 
-            var node = (Control)Activator.CreateInstance(type, vm);
+            var node = (Control)Activator.CreateInstance(nodeVm.Type, nodeVm.ViewModel);
             node.HorizontalAlignment = HorizontalAlignment.Stretch;
             node.VerticalAlignment = VerticalAlignment.Stretch;
             Grid.SetColumn(node, 1);
@@ -183,9 +194,9 @@ public class NoteNodeComponent : UserControl
     private void EditModeButtonClicked(object? sender, PointerPressedEventArgs e)
     {
         var control = e.Source as TextBlock;
-        var sourceNode = Nodes.SingleOrDefault(x => x.Item1 == (Guid)control.DataContext);
+        var sourceNode = Nodes.SingleOrDefault(x => x.Id == (Guid)control.DataContext);
         var moveOptions = control?.Name == MoveUpButtonName ? NodeMoveOptions.Up : NodeMoveOptions.Down;
 
-        RaiseEvent(new MoveNodeEventArgs(MoveNodeEvent, NoteId, sourceNode.Item1, moveOptions));
+        RaiseEvent(new MoveNodeEventArgs(MoveNodeEvent, NoteId, sourceNode.Id, moveOptions));
     }
 }
