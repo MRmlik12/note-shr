@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using DynamicData;
 using NoteSHR.ViewModels;
 
 namespace NoteSHR.Core.Models;
 
 public class Note(Guid id, double x, double y) : INotifyPropertyChanged
 {
+    private ObservableCollection<NodeViewModel> _nodes = new();
     private double _x = x;
     private double _y = y;
-    private ObservableCollection<NodeViewModel> _nodes = new();
 
     public Guid Id { get; set; } = id;
 

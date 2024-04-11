@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Avalonia;
@@ -93,10 +92,7 @@ public class NoteNodeComponent : UserControl
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == NodesProperty)
-        {
-            Console.Write("AAA  ");
-        }
+        if (change.Property == NodesProperty) Console.Write("AAA  ");
     }
 
     protected override void OnInitialized()

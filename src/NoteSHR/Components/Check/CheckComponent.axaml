@@ -6,10 +6,10 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.Check.CheckComponent"
              x:DataType="vm:CheckComponentViewModel">
-    
+
     <Grid RowDefinitions="Auto" ColumnDefinitions="5*,95*" HorizontalAlignment="Left" VerticalAlignment="Center">
         <CheckBox Grid.Column="0" Foreground="Black" IsChecked="{Binding Checked}" Margin="5,0,0,0" />
         <TextBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="{Binding Text}" />
     </Grid>
-    
+
 </UserControl>

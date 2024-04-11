@@ -9,7 +9,7 @@ public static class ImageHelper
     public static async Task<Bitmap> LoadFromFileSystem(IStorageFile resource)
     {
         var stream = await resource.OpenReadAsync();
-        
+
         return new Bitmap(stream);
     }
 }

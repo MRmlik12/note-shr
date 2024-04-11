@@ -35,7 +35,10 @@ public class BoardViewModel : ViewModelBase
             Notes.Add(note);
         });
 
-        RemoveNote = ReactiveCommand.Create((Guid id) => { Notes.Remove(Notes.Where(note => note.Id == id).Single()); });
+        RemoveNote = ReactiveCommand.Create((Guid id) =>
+        {
+            Notes.Remove(Notes.Where(note => note.Id == id).Single());
+        });
 
         UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
         {
@@ -71,11 +74,8 @@ public class BoardViewModel : ViewModelBase
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (note == null)
-            {
-                return;
-            }
-            
+            if (note == null) return;
+
             note.Nodes.Add(new NodeViewModel(Guid.NewGuid(), componentType, componentVm));
         });
 
@@ -112,6 +112,7 @@ public class BoardViewModel : ViewModelBase
     }
 
     [Reactive] public ObservableCollection<Note> Notes { get; set; } = [];
+
     // [Reactive] public double ZoomX { get; set; } = 1d;
     // [Reactive] public double ZoomY { get; set; } = 1d;
     [Reactive] public bool DeleteMode { get; set; }

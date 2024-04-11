@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Avalonia.Data.Converters;
 
@@ -10,7 +9,7 @@ public class PrefixTypeToStringConverter : IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         var item = (ListItem)value;
-        
+
         return item?.Prefix switch
         {
             PrefixType.Bullet => "•",

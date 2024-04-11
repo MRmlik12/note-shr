@@ -13,12 +13,13 @@
     <UserControl.Resources>
         <converters:PrefixTypeToStringConverter x:Key="PrefixTypeToString" />
     </UserControl.Resources>
-    
+
     <ItemsControl x:Name="RowItemsControl" ItemsSource="{Binding Rows, Mode=TwoWay}">
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="vm:ListItem">
                 <Grid ColumnDefinitions="5*,95*" RowDefinitions="*">
-                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4" Content="{Binding ., Converter={StaticResource PrefixTypeToString}}" >
+                    <Label Grid.Column="0" Foreground="Black" VerticalAlignment="Center" Padding="4"
+                           Content="{Binding ., Converter={StaticResource PrefixTypeToString}}">
                         <Label.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Bullet" CommandParameter="Bullet" Click="MenuItem_OnClick" />

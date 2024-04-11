@@ -23,11 +23,8 @@ public class ListComponentViewModel : ViewModelBase
         ChangePrefixTypeCommand = ReactiveCommand.Create((string type) =>
         {
             // TODO: Implement prefix logic better
-            if (!Enum.TryParse<PrefixType>(type, out var parsedType))
-            {
-                return;
-            }
-            
+            if (!Enum.TryParse<PrefixType>(type, out var parsedType)) return;
+
             PrefixType = parsedType;
             Rows = Rows.Select((row, index) => new ListItem(index, row.Text, PrefixType)).ToList();
         });
@@ -35,7 +32,7 @@ public class ListComponentViewModel : ViewModelBase
 
     [Reactive] public IEnumerable<ListItem> Rows { get; set; } = new List<ListItem> { new(0, string.Empty, default) };
     [Reactive] public PrefixType PrefixType { get; set; } = PrefixType.Bullet;
-    
+
     public ReactiveCommand<KeyEventArgs, Unit> AddRowCommand { get; set; }
     public ReactiveCommand<string, Unit> ChangePrefixTypeCommand { get; set; }
 }

@@ -15,31 +15,34 @@
     <Design.DataContext>
         <vm:BoardViewModel />
     </Design.DataContext>
-    
+
     <paz:ZoomBorder Name="ZoomBorder" Stretch="None" ZoomSpeed="1.2"
                     ClipToBounds="True" Focusable="True"
                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <ItemsControl x:Name="NoteItemsControl">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                        <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <i:Interaction.Behaviors>
-                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding CreateNoteCommand}" />
-                                </ia:EventTriggerBehavior>
-                                <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                            Command="{Binding UpdateNoteLocation}" />
-                                </ia:EventTriggerBehavior>
-                            </i:Interaction.Behaviors>
-                        </Canvas>
+                    <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <i:Interaction.Behaviors>
+                            <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                        Command="{Binding CreateNoteCommand}" />
+                            </ia:EventTriggerBehavior>
+                            <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                        Command="{Binding UpdateNoteLocation}" />
+                            </ia:EventTriggerBehavior>
+                        </i:Interaction.Behaviors>
+                    </Canvas>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:Note">
-                    <StackPanel Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"
+                    <StackPanel Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
+                                Canvas.Top="{Binding Y}"
                                 MinWidth="200" MaxWidth="600">
-                        <StackPanel x:Name="Header" Background="#bda800" Orientation="Horizontal" VerticalAlignment="Stretch"
+                        <StackPanel x:Name="Header" Background="#bda800" Orientation="Horizontal"
+                                    VerticalAlignment="Stretch"
                                     HorizontalAlignment="Stretch">
                             <Button Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
                                     Cursor="Hand">
