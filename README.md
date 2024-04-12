@@ -1,6 +1,7 @@
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
 ![GitHub repo size](https://img.shields.io/github/repo-size/MRmlik12/note-shr?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/MRmlik12/note-shr?style=for-the-badge)
+
 # NoteSHR
 
 A multi-platform application to effectively manage notes on a whiteboard.
