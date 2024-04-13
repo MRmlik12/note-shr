@@ -88,13 +88,6 @@ public class NoteNodeComponent : UserControl
         remove => RemoveHandler(MoveNodeEvent, value);
     }
 
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-
-        if (change.Property == NodesProperty) Console.Write("AAA  ");
-    }
-
     protected override void OnInitialized()
     {
         foreach (var nodeVm in Nodes)

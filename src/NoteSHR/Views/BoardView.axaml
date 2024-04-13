@@ -38,13 +38,11 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:Note">
-                    <StackPanel Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
-                                Canvas.Top="{Binding Y}"
-                                MinWidth="200" MaxWidth="600">
-                        <StackPanel x:Name="Header" Background="#bda800" Orientation="Horizontal"
-                                    VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Stretch">
-                            <Button Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
+                    <Grid ColumnDefinitions="Auto,2,Auto" RowDefinitions="*">
+                        <Grid Grid.Column="0" ColumnDefinitions="Auto" RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
+                                      Canvas.Top="{Binding Y}" ZIndex="5">
+                        <Grid Grid.Row="0" x:Name="Header" Background="#bda800" ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
+                            <Button Grid.Column="0" Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
                                     Cursor="Hand">
                                 +
                                 <Button.Flyout>
@@ -56,24 +54,25 @@
                                     </MenuFlyout>
                                 </Button.Flyout>
                             </Button>
-                            <Button Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
+                            <Button Grid.Column="1" Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
                                     Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
                                     Cursor="Hand">
                                 E
                             </Button>
-                            <Button Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
+                            <Button Grid.Column="2" Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
                                     Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
                                     Cursor="Hand">
                                 D
                             </Button>
-                            <Button Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
+                            <Button Grid.Column="3" Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
                                     Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
                                     Cursor="Hand"
                                     CommandParameter="{Binding Id}">
                                 X
                             </Button>
-                        </StackPanel>
+                        </Grid>
                         <noteNode:NoteNodeComponent
+                            Grid.Row="1"
                             Nodes="{Binding Nodes}"
                             NoteId="{Binding Id}"
                             DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
@@ -89,7 +88,10 @@
                                 </ia:EventTriggerBehavior>
                             </i:Interaction.Behaviors>
                         </noteNode:NoteNodeComponent>
-                    </StackPanel>
+                        </Grid>
+                        <GridSplitter Width="2" Grid.Column="1" IsVisible="True" ResizeDirection="Columns" ShowsPreview="True" ResizeBehavior="PreviousAndCurrent" />
+                        <Grid Grid.Column="2" MinWidth="200" MaxWidth="600" ZIndex="10" />
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerTheme>
