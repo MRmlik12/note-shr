@@ -26,20 +26,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         });
     }
 
-    // private void Board_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
-    // {
-    //     if (e.Delta.Y > 0)
-    //     {
-    //         ViewModel!.ZoomX *= 1.2;
-    //         ViewModel.ZoomY *= 1.2;
-    //     }
-    //     else
-    //     {
-    //         ViewModel!.ZoomX /= 1.2;
-    //         ViewModel.ZoomY /= 1.2;
-    //     }
-    // }
-
     private void MenuItem_OnClick(object? sender, RoutedEventArgs e)
     {
         var menuItem = sender as MenuItem;
