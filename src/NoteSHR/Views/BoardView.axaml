@@ -38,8 +38,8 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:Note">
-                    <Grid ColumnDefinitions="Auto,2,Auto" RowDefinitions="*">
-                        <Grid Grid.Column="0" ColumnDefinitions="Auto" RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
+                    <Grid ColumnDefinitions="Auto,2" RowDefinitions="*">
+                        <Grid Grid.Column="0" Width="200" ColumnDefinitions="Auto" RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
                                       Canvas.Top="{Binding Y}" ZIndex="5">
                         <Grid Grid.Row="0" x:Name="Header" Background="#bda800" ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
                             <Button Grid.Column="0" Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
@@ -89,8 +89,7 @@
                             </i:Interaction.Behaviors>
                         </noteNode:NoteNodeComponent>
                         </Grid>
-                        <GridSplitter Width="2" Grid.Column="1" IsVisible="True" ResizeDirection="Columns" ShowsPreview="True" ResizeBehavior="PreviousAndCurrent" />
-                        <Grid Grid.Column="2" MinWidth="200" MaxWidth="600" ZIndex="10" />
+                        <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch" Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed" PointerReleased="InputElement_OnPointerReleased"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

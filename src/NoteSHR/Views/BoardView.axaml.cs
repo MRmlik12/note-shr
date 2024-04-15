@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
 using NoteSHR.Core.Models;
 using NoteSHR.ViewModels;
 using ReactiveUI;
+using Rectangle = Avalonia.Controls.Shapes.Rectangle;
 
 namespace NoteSHR.Views;
 
 public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
     private readonly BoardViewModel _vm;
+    private bool _changeNoteRightSide;
 
     public BoardView()
     {
@@ -33,5 +36,21 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         var argumentsToCommand = ((menuItem.DataContext as Note)!.Id, nodeType);
 
         ViewModel!.AddNoteNodeCommand.Execute(argumentsToCommand).Subscribe();
+    }
+
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        _changeNoteRightSide = true;
+    }
+
+    private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        _changeNoteRightSide = false;
+        
+        var rectangle = (Rectangle)e.Source!;
+        var grid = (Grid)rectangle.Parent!;
+        
+        var p = e.GetPosition(rectangle);
+        grid!.Children[0].Width += p.X;
     }
 }
