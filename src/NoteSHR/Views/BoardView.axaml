@@ -39,57 +39,66 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:Note">
                     <Grid ColumnDefinitions="Auto,2" RowDefinitions="*">
-                        <Grid Grid.Column="0" Width="200" ColumnDefinitions="Auto" RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
-                                      Canvas.Top="{Binding Y}" ZIndex="5" MinWidth="200">
-                        <Grid Grid.Row="0" x:Name="Header" Background="#bda800" ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
-                            <Button Grid.Column="0" Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
-                                    Cursor="Hand">
-                                +
-                                <Button.Flyout>
-                                    <MenuFlyout>
-                                        <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
-                                        <MenuItem Header="Image" CommandParameter="Image" Click="MenuItem_OnClick" />
-                                        <MenuItem Header="Check" CommandParameter="Check" Click="MenuItem_OnClick" />
-                                        <MenuItem Header="List" CommandParameter="List" Click="MenuItem_OnClick" />
-                                    </MenuFlyout>
-                                </Button.Flyout>
-                            </Button>
-                            <Button Grid.Column="1" Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
-                                    Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
-                                    Cursor="Hand">
-                                E
-                            </Button>
-                            <Button Grid.Column="2" Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
-                                    Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
-                                    Cursor="Hand">
-                                D
-                            </Button>
-                            <Button Grid.Column="3" Background="Transparent" Foreground="Red" HorizontalAlignment="Right"
-                                    Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
-                                    Cursor="Hand"
-                                    CommandParameter="{Binding Id}">
-                                X
-                            </Button>
+                        <Grid Grid.Column="0" Width="{Binding Width, Mode=TwoWay}" ColumnDefinitions="100*"
+                              RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow"
+                              ZIndex="5" MinWidth="200">
+                            <Grid Grid.Row="0" x:Name="Header" Background="#bda800"
+                                  ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
+                                <Button Grid.Column="0" Background="Transparent" Foreground="Green"
+                                        HorizontalAlignment="Right"
+                                        Cursor="Hand">
+                                    +
+                                    <Button.Flyout>
+                                        <MenuFlyout>
+                                            <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
+                                            <MenuItem Header="Image" CommandParameter="Image" Click="MenuItem_OnClick" />
+                                            <MenuItem Header="Check" CommandParameter="Check" Click="MenuItem_OnClick" />
+                                            <MenuItem Header="List" CommandParameter="List" Click="MenuItem_OnClick" />
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button Grid.Column="1" Background="Transparent" Foreground="GhostWhite"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
+                                        Cursor="Hand">
+                                    E
+                                </Button>
+                                <Button Grid.Column="2" Background="Transparent" Foreground="Red"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
+                                        Cursor="Hand">
+                                    D
+                                </Button>
+                                <Button Grid.Column="3" Background="Transparent" Foreground="Red"
+                                        HorizontalAlignment="Right"
+                                        Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
+                                        Cursor="Hand"
+                                        CommandParameter="{Binding Id}">
+                                    X
+                                </Button>
+                            </Grid>
+                            <noteNode:NoteNodeComponent
+                                Grid.Row="1"
+                                Nodes="{Binding Nodes}"
+                                NoteId="{Binding Id}"
+                                DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
+                                EditMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).EditMode}">
+                                <i:Interaction.Behaviors>
+                                    <ia:EventTriggerBehavior EventName="DeleteNode">
+                                        <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}" />
+                                    </ia:EventTriggerBehavior>
+                                    <ia:EventTriggerBehavior EventName="MoveNode">
+                                        <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}" />
+                                    </ia:EventTriggerBehavior>
+                                </i:Interaction.Behaviors>
+                            </noteNode:NoteNodeComponent>
                         </Grid>
-                        <noteNode:NoteNodeComponent
-                            Grid.Row="1"
-                            Nodes="{Binding Nodes}"
-                            NoteId="{Binding Id}"
-                            DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
-                            EditMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).EditMode}">
-                            <i:Interaction.Behaviors>
-                                <ia:EventTriggerBehavior EventName="DeleteNode">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                            Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}" />
-                                </ia:EventTriggerBehavior>
-                                <ia:EventTriggerBehavior EventName="MoveNode">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                            Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}" />
-                                </ia:EventTriggerBehavior>
-                            </i:Interaction.Behaviors>
-                        </noteNode:NoteNodeComponent>
-                        </Grid>
-                        <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch" Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed" PointerMoved="InputElement_OnPointerMoved" PointerReleased="InputElement_OnPointerReleased"/>
+                        <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch"
+                                   Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed"
+                                   PointerMoved="InputElement_OnPointerMoved"
+                                   PointerReleased="InputElement_OnPointerReleased" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

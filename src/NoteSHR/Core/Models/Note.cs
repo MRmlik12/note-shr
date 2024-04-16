@@ -10,6 +10,7 @@ public class Note(Guid id, double x, double y) : INotifyPropertyChanged
     private ObservableCollection<NodeViewModel> _nodes = new();
     private double _x = x;
     private double _y = y;
+    private double _width = 200.0d;
 
     public Guid Id { get; set; } = id;
 
@@ -30,6 +31,16 @@ public class Note(Guid id, double x, double y) : INotifyPropertyChanged
         {
             _y = value;
             OnPropertyChanged(nameof(Y));
+        }
+    }
+
+    public double Width
+    {
+        get => _width;
+        set
+        {
+            _width = value;
+            OnPropertyChanged(nameof(Width));
         }
     }
 
