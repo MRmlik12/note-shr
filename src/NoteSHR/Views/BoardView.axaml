@@ -40,7 +40,7 @@
                 <DataTemplate x:DataType="models:Note">
                     <Grid ColumnDefinitions="Auto,2" RowDefinitions="*">
                         <Grid Grid.Column="0" Width="200" ColumnDefinitions="Auto" RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow" Canvas.Left="{Binding X}"
-                                      Canvas.Top="{Binding Y}" ZIndex="5">
+                                      Canvas.Top="{Binding Y}" ZIndex="5" MinWidth="200">
                         <Grid Grid.Row="0" x:Name="Header" Background="#bda800" ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
                             <Button Grid.Column="0" Background="Transparent" Foreground="Green" HorizontalAlignment="Right"
                                     Cursor="Hand">
@@ -89,7 +89,7 @@
                             </i:Interaction.Behaviors>
                         </noteNode:NoteNodeComponent>
                         </Grid>
-                        <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch" Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed" PointerReleased="InputElement_OnPointerReleased"/>
+                        <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch" Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed" PointerMoved="InputElement_OnPointerMoved" PointerReleased="InputElement_OnPointerReleased"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
