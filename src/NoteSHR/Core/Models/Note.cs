@@ -8,9 +8,9 @@ namespace NoteSHR.Core.Models;
 public class Note(Guid id, double x, double y) : INotifyPropertyChanged
 {
     private ObservableCollection<NodeViewModel> _nodes = new();
+    private double _width = 200.0d;
     private double _x = x;
     private double _y = y;
-    private double _width = 200.0d;
 
     public Guid Id { get; set; } = id;
 

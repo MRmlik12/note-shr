@@ -10,7 +10,7 @@
              x:DataType="image:ImageComponentViewModel">
 
     <StackPanel Orientation="Vertical">
-        <Button Name="AddImageButton" IsVisible="{Binding !ImageSelected}">
+        <Button Name="AddImageButton" IsVisible="{Binding !ImageSelected}" Background="Black">
             Add button
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="Click">
