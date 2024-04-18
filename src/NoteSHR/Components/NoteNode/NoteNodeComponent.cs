@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -90,7 +93,19 @@ public class NoteNodeComponent : UserControl
 
     protected override void OnInitialized()
     {
-        foreach (var nodeVm in Nodes)
+        Nodes.CollectionChanged += NodesOnCollectionChanged;
+
+        Content = _stackPanel;
+    }
+
+    private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (!(e.NewItems?.Count > 0))
+        {
+            return;
+        }
+        
+        foreach (var nodeVm in e.NewItems.Cast<NodeViewModel>())
         {
             var grid = new Grid
             {
@@ -114,8 +129,7 @@ public class NoteNodeComponent : UserControl
                 {
                     Content = "D",
                     DataContext = nodeVm
-                };
-
+                }; 
                 Grid.SetColumn(deleteButton, 0);
 
                 deleteButton.Click += (sender, args) =>
@@ -176,8 +190,6 @@ public class NoteNodeComponent : UserControl
             grid.Children.Add(node);
             _stackPanel.Children.Add(grid);
         }
-
-        Content = _stackPanel;
     }
 
     private void EditModeButtonClicked(object? sender, PointerPressedEventArgs e)

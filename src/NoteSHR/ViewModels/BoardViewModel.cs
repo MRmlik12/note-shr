@@ -30,8 +30,9 @@ public class BoardViewModel : ViewModelBase
             if (!args.GetCurrentPoint(null).Properties.IsLeftButtonPressed) return;
 
             var position = args.GetPosition(null);
-
-            var note = new Note(Guid.NewGuid(), position.X, position.Y);
+            
+            var note = new Note(position.X, position.Y);
+            
             Notes.Add(note);
         });
 

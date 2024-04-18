@@ -5,31 +5,29 @@ using NoteSHR.ViewModels;
 
 namespace NoteSHR.Core.Models;
 
-public class Note(Guid id, double x, double y) : INotifyPropertyChanged
+public class Note(double x, double y) : INotifyPropertyChanged
 {
-    private ObservableCollection<NodeViewModel> _nodes = new();
+    private ObservableCollection<NodeViewModel> _nodes = new ();
     private double _width = 200.0d;
-    private double _x = x;
-    private double _y = y;
-
-    public Guid Id { get; set; } = id;
+    
+    public Guid Id { get; } = Guid.NewGuid();
 
     public double X
     {
-        get => _x;
+        get => x;
         set
         {
-            _x = value;
+            x = value;
             OnPropertyChanged(nameof(X));
         }
     }
 
     public double Y
     {
-        get => _y;
+        get => y;
         set
         {
-            _y = value;
+            y = value;
             OnPropertyChanged(nameof(Y));
         }
     }
@@ -47,10 +45,9 @@ public class Note(Guid id, double x, double y) : INotifyPropertyChanged
     public ObservableCollection<NodeViewModel> Nodes
     {
         get => _nodes;
-        set
+        private set
         {
             _nodes = value;
-            OnPropertyChanged(nameof(Nodes));
         }
     }
 
