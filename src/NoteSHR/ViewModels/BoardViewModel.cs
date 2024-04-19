@@ -5,6 +5,7 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using DynamicData;
 using NoteSHR.Components.Check;
 using NoteSHR.Components.Image;
 using NoteSHR.Components.List;
@@ -83,7 +84,6 @@ public class BoardViewModel : ViewModelBase
         ChangeDeleteModeStateCommand = ReactiveCommand.Create(() =>
         {
             DeleteMode = !DeleteMode;
-            Notes = [..Notes];
         });
 
         ChangeEditModeStateCommand = ReactiveCommand.Create(() =>
@@ -94,8 +94,8 @@ public class BoardViewModel : ViewModelBase
 
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
         {
-            var noteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
-            // Notes[noteIndex].Nodes = Notes[noteIndex].Nodes.Where(x => x.Id != args.NodeId).ToList();
+            var note = Notes.Single(x => x.Id == args.NoteId);
+            note.Nodes.Remove(note.Nodes.Single(x => x.Id == args.NodeId));
         });
 
         MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>

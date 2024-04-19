@@ -10,6 +10,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using DynamicData;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.ViewModels;
 
@@ -40,6 +41,7 @@ public class NoteNodeComponent : UserControl
         RoutedEvent.Register<NoteNodeComponent, MoveNodeEventArgs>(nameof(MoveNodeEvent), RoutingStrategies.Direct);
 
     private readonly StackPanel _stackPanel;
+    private List<Grid> _nodeGrids = new();
 
     public NoteNodeComponent()
     {
@@ -91,6 +93,38 @@ public class NoteNodeComponent : UserControl
         remove => RemoveHandler(MoveNodeEvent, value);
     }
 
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        if (change.Property.Name == nameof(DeleteMode))
+        {
+            var deleteMode = (bool)change.NewValue;
+            _nodeGrids.ForEach(x =>
+            {
+                if (deleteMode)
+                {
+                    var deleteButton = new Button
+                    {
+                        Name = "DeleteButton",
+                        Content = "D",
+                        DataContext = x.DataContext
+                    }; 
+                    Grid.SetColumn(deleteButton, 0);
+        
+                    deleteButton.Click += (sender, args) =>
+                        RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, (Guid)x.DataContext));
+                    
+                    x.Children.Add(deleteButton);
+                }
+                else
+                {
+                    x.Children.Remove(x.Children.FirstOrDefault(x => x.Name == "DeleteButton"));
+                }
+            });
+        }
+        
+        base.OnPropertyChanged(change);
+    }
+
     protected override void OnInitialized()
     {
         Nodes.CollectionChanged += NodesOnCollectionChanged;
@@ -100,6 +134,16 @@ public class NoteNodeComponent : UserControl
 
     private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var nodeVm in e.OldItems.Cast<NodeViewModel>())
+            {
+                var grid = _nodeGrids.Single(x => (Guid)x.DataContext == nodeVm.Id);
+                _nodeGrids.Remove(grid);
+                _stackPanel.Children.Remove(grid);
+            }
+        }
+        
         if (!(e.NewItems?.Count > 0))
         {
             return;
@@ -187,6 +231,7 @@ public class NoteNodeComponent : UserControl
             node.VerticalAlignment = VerticalAlignment.Stretch;
             Grid.SetColumn(node, 1);
 
+            _nodeGrids.Add(grid);
             grid.Children.Add(node);
             _stackPanel.Children.Add(grid);
         }
