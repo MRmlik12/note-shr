@@ -89,7 +89,6 @@ public class BoardViewModel : ViewModelBase
         ChangeEditModeStateCommand = ReactiveCommand.Create(() =>
         {
             EditMode = !EditMode;
-            Notes = [..Notes];
         });
 
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
@@ -100,15 +99,13 @@ public class BoardViewModel : ViewModelBase
 
         MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>
         {
-            // var sourceNoteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
-            // var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.FindIndex(x => x.Id == args.NodeToMoveId);
-            // var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
-            //
-            // if (sourceNodeIndex > Notes[sourceNoteIndex].Nodes.Count - 1 || sourceNodeIndex < 0) return;
-            //
-            // var sourceNode = Notes[sourceNoteIndex].Nodes[sourceNodeIndex];
-            // Notes[sourceNoteIndex].Nodes[sourceNodeIndex] = Notes[sourceNoteIndex].Nodes[nodeToMoveIndex];
-            // Notes[sourceNoteIndex].Nodes[nodeToMoveIndex] = sourceNode;
+            var sourceNoteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
+            var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.IndexOf(Notes[sourceNoteIndex].Nodes.Single(x => x.Id == args.NodeToMoveId));
+            var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
+            
+            if (sourceNodeIndex > Notes[sourceNoteIndex].Nodes.Count - 1 || sourceNodeIndex < 0) return;
+            
+            Notes[sourceNoteIndex].Nodes.Move(sourceNodeIndex, nodeToMoveIndex);
         });
     }
 

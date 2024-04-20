@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,7 +9,6 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using DynamicData;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.ViewModels;
 
@@ -18,6 +16,8 @@ namespace NoteSHR.Components.NoteNode;
 
 public class NoteNodeComponent : UserControl
 {
+    private const string DeleteButtonName = "DeleteButton";
+    private const string EditButtonName = "EditModeButton";
     private const string MoveUpButtonName = "MoveUpButton";
     private const string MoveDownButtonName = "MoveDownButton";
 
@@ -41,7 +41,7 @@ public class NoteNodeComponent : UserControl
         RoutedEvent.Register<NoteNodeComponent, MoveNodeEventArgs>(nameof(MoveNodeEvent), RoutingStrategies.Direct);
 
     private readonly StackPanel _stackPanel;
-    private List<Grid> _nodeGrids = new();
+    private readonly List<Grid> _nodeGrids = new();
 
     public NoteNodeComponent()
     {
@@ -102,26 +102,32 @@ public class NoteNodeComponent : UserControl
             {
                 if (deleteMode)
                 {
-                    var deleteButton = new Button
-                    {
-                        Name = "DeleteButton",
-                        Content = "D",
-                        DataContext = x.DataContext
-                    }; 
-                    Grid.SetColumn(deleteButton, 0);
-        
-                    deleteButton.Click += (sender, args) =>
-                        RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, (Guid)x.DataContext));
-                    
+                    var deleteButton = GetDeleteButtonControl((Guid)x.DataContext); 
+
                     x.Children.Add(deleteButton);
                 }
                 else
                 {
-                    x.Children.Remove(x.Children.FirstOrDefault(x => x.Name == "DeleteButton"));
+                    x.Children.Remove(x.Children.FirstOrDefault(x => x.Name == DeleteButtonName));
                 }
             });
         }
-        
+        else if (change.Property.Name == nameof(EditMode))
+        {
+            _nodeGrids.ForEach(x =>
+            {
+                if (EditMode)
+                {
+                    var editModeGrid = GetEditModeControl((Guid)x.DataContext);
+                    x.Children.Add(editModeGrid);
+                }
+                else
+                {
+                    x.Children.Remove(x.Children.FirstOrDefault(x => x.Name == EditButtonName));
+                }
+            });
+        }
+
         base.OnPropertyChanged(change);
     }
 
@@ -134,7 +140,19 @@ public class NoteNodeComponent : UserControl
 
     private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
+        if (e.Action == NotifyCollectionChangedAction.Move)
+        {
+            _stackPanel.Children.RemoveAll(_nodeGrids);
+            _nodeGrids.Clear();
+            foreach (var nodeVm in Nodes)
+            {
+                var grid = InitializeNodeGrid(nodeVm); 
+                _stackPanel.Children.Add(grid);
+            }
+
+            return;
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (var nodeVm in e.OldItems.Cast<NodeViewModel>())
             {
@@ -143,98 +161,117 @@ public class NoteNodeComponent : UserControl
                 _stackPanel.Children.Remove(grid);
             }
         }
-        
-        if (!(e.NewItems?.Count > 0))
-        {
-            return;
-        }
-        
+
+        if (!(e.NewItems?.Count > 0)) return;
+
         foreach (var nodeVm in e.NewItems.Cast<NodeViewModel>())
         {
-            var grid = new Grid
-            {
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                DataContext = nodeVm.Id,
-                ColumnDefinitions = new ColumnDefinitions
-                {
-                    new(20.0, GridUnitType.Auto),
-                    new(GridLength.Star)
-                },
-                RowDefinitions = new RowDefinitions
-                {
-                    new(GridLength.Auto)
-                }
-            };
-
-            if (DeleteMode)
-            {
-                var deleteButton = new Button
-                {
-                    Content = "D",
-                    DataContext = nodeVm
-                }; 
-                Grid.SetColumn(deleteButton, 0);
-
-                deleteButton.Click += (sender, args) =>
-                    RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, nodeVm.Id));
-                grid.Children.Add(deleteButton);
-            }
-
-            if (EditMode)
-            {
-                var editModeGrid = new Grid
-                {
-                    ColumnDefinitions = new ColumnDefinitions
-                    {
-                        new(GridLength.Star)
-                    },
-                    RowDefinitions = new RowDefinitions
-                    {
-                        new(GridLength.Auto),
-                        new(GridLength.Auto)
-                    }
-                };
-
-                var moveUpButton = new TextBlock
-                {
-                    Name = MoveUpButtonName,
-                    Text = "\u25b2",
-                    DataContext = nodeVm.Id
-                };
-
-                var moveDownButton = new TextBlock
-                {
-                    Name = MoveDownButtonName,
-                    Text = "\u25bc",
-                    DataContext = nodeVm.Id
-                };
-
-                moveUpButton.PointerPressed += EditModeButtonClicked;
-                moveDownButton.PointerPressed += EditModeButtonClicked;
-
-                Grid.SetRow(moveUpButton, 0);
-                Grid.SetColumn(moveUpButton, 0);
-                Grid.SetRow(moveDownButton, 1);
-                Grid.SetColumn(moveDownButton, 0);
-
-                Grid.SetColumn(editModeGrid, 0);
-
-                editModeGrid.Children.Add(moveUpButton);
-                editModeGrid.Children.Add(moveDownButton);
-
-                grid.Children.Add(editModeGrid);
-            }
-
-            var node = (Control)Activator.CreateInstance(nodeVm.Type, nodeVm.ViewModel);
-            node.HorizontalAlignment = HorizontalAlignment.Stretch;
-            node.VerticalAlignment = VerticalAlignment.Stretch;
-            Grid.SetColumn(node, 1);
-
-            _nodeGrids.Add(grid);
-            grid.Children.Add(node);
+            var grid = InitializeNodeGrid(nodeVm);
             _stackPanel.Children.Add(grid);
         }
+    }
+
+    private Grid InitializeNodeGrid(NodeViewModel nodeViewModel)
+    {
+        var grid = new Grid
+        {
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            DataContext = nodeViewModel.Id,
+            ColumnDefinitions = new ColumnDefinitions
+            {
+                new(20.0, GridUnitType.Auto),
+                new(GridLength.Star)
+            },
+            RowDefinitions = new RowDefinitions
+            {
+                new(GridLength.Auto)
+            }
+        };
+
+        if (DeleteMode)
+        {
+            var deleteButton = GetDeleteButtonControl(nodeViewModel.Id);
+            grid.Children.Add(deleteButton);
+        }
+
+        var node = (Control)Activator.CreateInstance(nodeViewModel.Type, nodeViewModel.ViewModel);
+        if (EditMode)
+        {
+            var editModeGrid = GetEditModeControl(nodeViewModel.Id);
+
+            grid.Children.Add(editModeGrid);
+        }
+
+        node.HorizontalAlignment = HorizontalAlignment.Stretch;
+        node.VerticalAlignment = VerticalAlignment.Stretch;
+        Grid.SetColumn(node, 1);
+
+        _nodeGrids.Add(grid);
+        grid.Children.Add(node);
+        return grid;
+    }
+
+    private Grid GetEditModeControl(Guid id)
+    {
+        var editModeGrid = new Grid
+        {
+            Name = EditButtonName,
+            ColumnDefinitions = new ColumnDefinitions
+            {
+                new(GridLength.Star)
+            },
+            RowDefinitions = new RowDefinitions
+            {
+                new(GridLength.Auto),
+                new(GridLength.Auto)
+            }
+        };
+
+        var moveUpButton = new TextBlock
+        {
+            Name = MoveUpButtonName,
+            Text = "\u25b2",
+            DataContext = id
+        };
+
+        var moveDownButton = new TextBlock
+        {
+            Name = MoveDownButtonName,
+            Text = "\u25bc",
+            DataContext = id 
+        };
+
+        moveUpButton.PointerPressed += EditModeButtonClicked;
+        moveDownButton.PointerPressed += EditModeButtonClicked;
+
+        Grid.SetRow(moveUpButton, 0);
+        Grid.SetColumn(moveUpButton, 0);
+        Grid.SetRow(moveDownButton, 1);
+        Grid.SetColumn(moveDownButton, 0);
+
+        Grid.SetColumn(editModeGrid, 0);
+
+        editModeGrid.Children.Add(moveUpButton);
+        editModeGrid.Children.Add(moveDownButton);
+        
+        return editModeGrid;
+    }
+
+    private Button GetDeleteButtonControl(Guid id) 
+    {
+        var deleteButton = new Button
+        {
+            Name = DeleteButtonName,
+            Content = "D",
+            DataContext = id 
+        };
+        Grid.SetColumn(deleteButton, 0);
+
+        deleteButton.Click += (_, _) =>
+            RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, id));
+        
+        return deleteButton;
     }
 
     private void EditModeButtonClicked(object? sender, PointerPressedEventArgs e)
