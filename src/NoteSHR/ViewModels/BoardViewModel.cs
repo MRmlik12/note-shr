@@ -5,7 +5,6 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using DynamicData;
 using NoteSHR.Components.Check;
 using NoteSHR.Components.Image;
 using NoteSHR.Components.List;
@@ -19,14 +18,25 @@ namespace NoteSHR.ViewModels;
 
 public class BoardViewModel : ViewModelBase
 {
-    private const double Tolerance = 0.5d;
+    private bool _noteMoveState;
 
     public BoardViewModel()
     {
         CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
         {
             LastMousePosition = args.GetPosition(null);
-            if (args.Source is not Canvas) return;
+            if (args.Source is not Canvas)
+            {
+                if (args.Source is not Grid header) 
+                    return;
+
+                if (header?.Name == "Header")
+                {
+                    _noteMoveState = true;
+                }
+
+                return;
+            };
 
             if (!args.GetCurrentPoint(null).Properties.IsLeftButtonPressed) return;
 
@@ -42,19 +52,40 @@ public class BoardViewModel : ViewModelBase
             Notes.Remove(Notes.Where(note => note.Id == id).Single());
         });
 
+        MoveNoteCommand = ReactiveCommand.Create((PointerEventArgs args) =>
+        {
+            if (!_noteMoveState)
+            {
+                return;
+            }
+
+            var noteHeader = (Grid)args.Source!;
+            var noteComponent = (Grid)noteHeader.Parent;
+            var p = args.GetPosition(null);
+            var note = Notes.SingleOrDefault(x => x.Id == ((Note)noteComponent.DataContext).Id);
+            
+            if (note != null)
+            {
+                note.X = p.X;
+                note.Y = p.Y;
+            } 
+        });
+
         UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
         {
+            if (!_noteMoveState)
+            {
+                return;
+            }
+            
             var id = ((args.Source as Grid)?.DataContext as Note)?.Id;
             if (id == null) return;
 
             var pointerPoint = args.GetCurrentPoint(null);
             if (pointerPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonReleased) return;
 
-            if (Math.Abs(pointerPoint.Position.X - LastMousePosition.X) < Tolerance
-                && Math.Abs(pointerPoint.Position.Y - LastMousePosition.Y) < Tolerance)
-                return;
-
-
+            _noteMoveState = false;
+            
             var note = Notes.SingleOrDefault(x => x.Id == id);
             if (note != null)
             {
@@ -123,4 +154,5 @@ public class BoardViewModel : ViewModelBase
     public ReactiveCommand<DeleteNodeEventArgs, Unit> DeleteNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeEditModeStateCommand { get; set; }
     public ReactiveCommand<MoveNodeEventArgs, Unit> MoveNoteNodeCommand { get; set; }
+    public ReactiveCommand<PointerEventArgs, Unit> MoveNoteCommand { get; set; }
 }

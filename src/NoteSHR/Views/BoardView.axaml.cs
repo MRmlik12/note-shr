@@ -15,6 +15,7 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 {
     private readonly BoardViewModel _vm;
     private bool _changeNoteRightSide;
+    private bool _noteMoveState; 
 
     public BoardView()
     {
@@ -46,12 +47,6 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
     private void InputElement_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         _changeNoteRightSide = false;
-        //
-        // var rectangle = (Rectangle)e.Source!;
-        // var grid = (Grid)rectangle.Parent!;
-        //
-        // var p = e.GetPosition(rectangle);
-        // grid!.Children[0].Width += p.X;
     }
 
     private void InputElement_OnPointerMoved(object? sender, PointerEventArgs e)

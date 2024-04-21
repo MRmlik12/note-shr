@@ -28,6 +28,10 @@
                                 <ia:InvokeCommandAction PassEventArgsToCommand="True"
                                                         Command="{Binding CreateNoteCommand}" />
                             </ia:EventTriggerBehavior>
+                            <ia:EventTriggerBehavior EventName="PointerMoved" SourceObject="Board">
+                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                        Command="{Binding MoveNoteCommand}" />
+                            </ia:EventTriggerBehavior>
                             <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
                                 <ia:InvokeCommandAction PassEventArgsToCommand="True"
                                                         Command="{Binding UpdateNoteLocation}" />
