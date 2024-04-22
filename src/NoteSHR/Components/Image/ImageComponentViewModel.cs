@@ -1,3 +1,4 @@
+using System;
 using System.Reactive;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -16,6 +17,12 @@ public class ImageComponentViewModel : ViewModelBase
     {
         SetImageCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
         {
+            if (OperatingSystem.IsBrowser())
+            {
+                await App.FilePicker.Open();
+                return;
+            }
+            
             var topLevel = TopLevel.GetTopLevel(args.Source as Button);
             var fileOptions = new FilePickerOpenOptions
             {

@@ -4,6 +4,7 @@
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
         <WasmMainJSPath>AppBundle\main.js</WasmMainJSPath>
         <OutputType>Exe</OutputType>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,9 +13,11 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Browser" Version="11.0.10"/>
+        <PackageReference Include="Avalonia.Browser.Blazor" Version="11.0.10" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\NoteSHR\NoteSHR.csproj"/>
     </ItemGroup>
+
 </Project>
