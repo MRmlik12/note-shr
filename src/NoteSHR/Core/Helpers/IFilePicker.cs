@@ -4,5 +4,5 @@ namespace NoteSHR.Core.Services;
 
 public interface IFilePicker
 { 
-    Task Open();
+    string? GetFileUrl();
 }

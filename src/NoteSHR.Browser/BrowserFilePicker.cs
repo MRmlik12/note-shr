@@ -1,20 +1,29 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using NoteSHR.Core.Services;
 
 namespace NoteSHR.Browser;
 
 public class BrowserFilePicker : IFilePicker
 {
-    public async Task Open()
+    
+    public BrowserFilePicker()
     {
-        await JSHost.ImportAsync("FilePickerEmbed", "filePicker.js");
-        FilePickerEmbed.GetFile(); 
+        Task.Run(async () => await JSHost.ImportAsync("FilePicker", "./filePicker.js"));
+    }
+    
+    public string? GetFileUrl()
+    {
+        var url = FilePickerEmbed.OpenFilePicker();
+        
+        return url!;
     }
 }
 
 internal partial class FilePickerEmbed
 {
-    [JSImport("openFilePicker", "filePicker.js")]
-    public static partial void GetFile();
+    [JSImport("openFilePicker", "FilePicker")]
+    public static partial string? OpenFilePicker();
 }

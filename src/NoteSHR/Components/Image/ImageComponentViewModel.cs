@@ -19,7 +19,9 @@ public class ImageComponentViewModel : ViewModelBase
         {
             if (OperatingSystem.IsBrowser())
             {
-                await App.FilePicker.Open();
+                var url = App.FilePicker.GetFileUrl();
+                Image = await HttpHelper.GetBitmatFromUrl(url);
+                
                 return;
             }
             
@@ -37,11 +39,19 @@ public class ImageComponentViewModel : ViewModelBase
             if (file.Count == 0) return;
 
             Image = await ImageHelper.LoadFromFileSystem(file[0]);
-            ImageSelected = true;
         });
+        
+        this.WhenAnyValue(vm => vm.Image)
+            .Subscribe(image =>
+            {
+                if (image != null)
+                {
+                    ImageSelected = true;
+                } 
+            });
     }
 
-    [Reactive] public Bitmap Image { get; set; }
+    [Reactive] public Bitmap? Image { get; set; }
     [Reactive] public bool ImageSelected { get; set; }
 
     public ReactiveCommand<RoutedEventArgs, Unit> SetImageCommand { get; set; }
