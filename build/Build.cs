@@ -8,6 +8,7 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Utilities;
 using static Nuke.Common.EnvironmentInfo;
 
 class Build : NukeBuild
@@ -17,6 +18,8 @@ class Build : NukeBuild
     [Parameter("Allow desktop build")] readonly bool AllowDesktopBuild = true;
 
     [Parameter("Allow iOS build")] readonly bool AllowIOSBuild;
+    
+    [Parameter("Allow browser build")] readonly bool AllowBrowserBuild;
 
     [Parameter("Artifacts path")] readonly AbsolutePath ArtifactsPath = RootDirectory / "artifacts";
 
@@ -68,6 +71,7 @@ class Build : NukeBuild
             if (AllowAndroidBuild) Platforms.Add(new PlatformItem("NoteSHR.Android", "android", null));
 
             if (AllowIOSBuild && IsOsx) Platforms.Add(new PlatformItem("NoteSHR.iOS", "ios", null));
+            if (AllowBrowserBuild) Platforms.Add(new PlatformItem("NoteSHR.Browser", string.Empty, null));
 
             var projects = Solution.AllProjects.Where(x => Platforms.Select(p => p.Name).Contains(x.Name));
 
@@ -79,7 +83,7 @@ class Build : NukeBuild
                     DotNetTasks.DotNetPublish(_ => _.EnableNoRestore()
                         .SetConfiguration(Configuration)
                         .SetProject(project)
-                        .SetFramework($"net8.0-{projectDetail.Platform}")
+                        .SetFramework($"net8.0{(projectDetail.Platform.IsNullOrEmpty() ? string.Empty : "-")}{projectDetail.Platform}")
                         .SetOutput($"{OutputPath}/{project.Name}"));
                     continue;
                 }
