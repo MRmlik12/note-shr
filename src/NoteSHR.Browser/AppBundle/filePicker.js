@@ -1,16 +1,17 @@
 export function openFilePicker() {
-    let url = null;
-    const input = document.createElement('input');
-    input.type = 'file';
-    
-    input.click();
+    return new Promise((resolve, reject) => {
+        const input = document.createElement('input');
+        input.type = 'file';
 
-    while (url == null) {
-        if (input.files.length > 0) {
-            url = URL.createObjectURL(input.files[0]);
-            break;
-        }
-    }
-    
-    return url;
+        input.addEventListener('change', () => {
+            if (input.files.length > 0) {
+                const url = URL.createObjectURL(input.files[0]);
+                resolve(url);
+            } else {
+                reject(new Error('No file selected'));
+            }
+        });
+
+        input.click();
+    });
 }

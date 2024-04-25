@@ -14,16 +14,16 @@ public class BrowserFilePicker : IFilePicker
         Task.Run(async () => await JSHost.ImportAsync("FilePicker", "./filePicker.js"));
     }
     
-    public string? GetFileUrl()
+    public async Task<string?> GetFileUrl()
     {
-        var url = FilePickerEmbed.OpenFilePicker();
+        var url = await FilePickerEmbed.OpenFilePicker();
         
-        return url!;
+        return url;
     }
 }
 
 internal partial class FilePickerEmbed
 {
     [JSImport("openFilePicker", "FilePicker")]
-    public static partial string? OpenFilePicker();
+    public static partial Task<string?> OpenFilePicker();
 }

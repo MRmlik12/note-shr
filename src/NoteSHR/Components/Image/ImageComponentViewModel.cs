@@ -19,9 +19,13 @@ public class ImageComponentViewModel : ViewModelBase
         {
             if (OperatingSystem.IsBrowser())
             {
-                var url = App.FilePicker.GetFileUrl();
-                Image = await HttpHelper.GetBitmatFromUrl(url);
+                var url = await App.FilePicker.GetFileUrl();
+                if (string.IsNullOrEmpty(url))
+                {
+                    return;
+                }
                 
+                Image = await HttpHelper.GetBitmatFromUrl(url);
                 return;
             }
             
