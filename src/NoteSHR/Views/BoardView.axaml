@@ -51,7 +51,7 @@
                                 <Button Grid.Column="0" Background="Transparent" Foreground="Green"
                                         HorizontalAlignment="Right"
                                         Cursor="Hand">
-                                    +
+                                    <Svg Path="/Assets/Icons/add-outline.svg" Width="16" Height="16" />
                                     <Button.Flyout>
                                         <MenuFlyout>
                                             <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
@@ -65,20 +65,20 @@
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
                                         Cursor="Hand">
-                                    E
+                                    <Svg Path="/Assets/Icons/pencil-outline.svg" Width="16" Height="16" />
                                 </Button>
                                 <Button Grid.Column="2" Background="Transparent" Foreground="Red"
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
                                         Cursor="Hand">
-                                    D
+                                    <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16"  />
                                 </Button>
                                 <Button Grid.Column="3" Background="Transparent" Foreground="Red"
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
                                         Cursor="Hand"
                                         CommandParameter="{Binding Id}">
-                                    X
+                                    <Svg Path="/Assets/Icons/close-outline.svg" Width="16" Height="16" />
                                 </Button>
                             </Grid>
                             <noteNode:NoteNodeComponent
