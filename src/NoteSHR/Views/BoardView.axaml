@@ -51,7 +51,7 @@
                                 <Button Grid.Column="0" Background="Transparent" Foreground="Green"
                                         HorizontalAlignment="Right"
                                         Cursor="Hand">
-                                    <Svg Path="/Assets/Icons/add-outline.svg" Width="16" Height="16" />
+                                    <Svg Path="/Assets/Icons/add-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #228B22; }" />
                                     <Button.Flyout>
                                         <MenuFlyout>
                                             <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
@@ -65,13 +65,13 @@
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
                                         Cursor="Hand">
-                                    <Svg Path="/Assets/Icons/pencil-outline.svg" Width="16" Height="16" />
+                                    <Svg Path="/Assets/Icons/pencil-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #3A9BDC; } "/>
                                 </Button>
                                 <Button Grid.Column="2" Background="Transparent" Foreground="Red"
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
                                         Cursor="Hand">
-                                    <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16"  />
+                                    <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #FF0000; }" />
                                 </Button>
                                 <Button Grid.Column="3" Background="Transparent" Foreground="Red"
                                         HorizontalAlignment="Right"

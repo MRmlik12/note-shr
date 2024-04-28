@@ -9,6 +9,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Media;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.ViewModels;
 
@@ -228,20 +229,34 @@ public class NoteNodeComponent : UserControl
             }
         };
 
-        var moveUpButton = new TextBlock
+        var moveUpButton = new StackPanel
         {
             Name = MoveUpButtonName,
-            Text = "\u25b2",
-            DataContext = id
+            Width = 16,
+            Height = 16
         };
 
-        var moveDownButton = new TextBlock
+        var caretUpIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/caret-up-outline.svg"))
+        {
+            Path = "avares://NoteSHR/Assets/Icons/caret-up-outline.svg",
+            DataContext = id,
+        };
+        moveUpButton.Children.Add(caretUpIcon);
+
+        var moveDownButton = new StackPanel
         {
             Name = MoveDownButtonName,
-            Text = "\u25bc",
-            DataContext = id 
+            Width = 16,
+            Height = 16
         };
 
+        var caretDownIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/caret-down-outline.svg"))
+        {
+            Path = "avares://NoteSHR/Assets/Icons/caret-down-outline.svg",
+            DataContext = id,
+        };
+        moveDownButton.Children.Add(caretDownIcon);
+        
         moveUpButton.PointerPressed += EditModeButtonClicked;
         moveDownButton.PointerPressed += EditModeButtonClicked;
 
@@ -263,9 +278,19 @@ public class NoteNodeComponent : UserControl
         var deleteButton = new Button
         {
             Name = DeleteButtonName,
-            Content = "D",
-            DataContext = id 
+            Background = Brushes.Transparent,
+            DataContext = id, 
         };
+        
+        var deleteIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/trash-outline.svg"))
+        {
+            Path = "avares://NoteSHR/Assets/Icons/trash-outline.svg",
+            Width = 16,
+            Height = 16,
+        };
+        Avalonia.Svg.Skia.Svg.SetCss(deleteIcon, ".foreground { stroke: #FF0000; }");
+        deleteButton.Content = deleteIcon;
+        
         Grid.SetColumn(deleteButton, 0);
 
         deleteButton.Click += (_, _) =>
@@ -276,7 +301,7 @@ public class NoteNodeComponent : UserControl
 
     private void EditModeButtonClicked(object? sender, PointerPressedEventArgs e)
     {
-        var control = e.Source as TextBlock;
+        var control = e.Source as Control;
         var sourceNode = Nodes.SingleOrDefault(x => x.Id == (Guid)control.DataContext);
         var moveOptions = control?.Name == MoveUpButtonName ? NodeMoveOptions.Up : NodeMoveOptions.Down;
 
