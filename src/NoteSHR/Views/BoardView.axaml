@@ -44,9 +44,9 @@
                 <DataTemplate x:DataType="models:Note">
                     <Grid ColumnDefinitions="Auto,2" RowDefinitions="*">
                         <Grid Grid.Column="0" Width="{Binding Width, Mode=TwoWay}" ColumnDefinitions="100*"
-                              RowDefinitions="5*,95*" Opacity="40" x:Name="Note" Background="Yellow"
+                              RowDefinitions="5*,95*" x:Name="Note" Background="{Binding BackgroundColor}"
                               ZIndex="5" MinWidth="200">
-                            <Grid Grid.Row="0" x:Name="Header" Background="#bda800"
+                            <Grid Grid.Row="0" x:Name="Header" Background="{Binding HeaderColor}"
                                   ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
                                 <Button Grid.Column="0" Background="Transparent" Foreground="Green"
                                         HorizontalAlignment="Right"
@@ -67,13 +67,13 @@
                                         Cursor="Hand">
                                     <Svg Path="/Assets/Icons/pencil-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #3A9BDC; } "/>
                                 </Button>
-                                <Button Grid.Column="2" Background="Transparent" Foreground="Red"
+                                <Button Grid.Column="2" Background="Transparent"
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
                                         Cursor="Hand">
                                     <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #FF0000; }" />
                                 </Button>
-                                <Button Grid.Column="3" Background="Transparent" Foreground="Red"
+                                <Button Grid.Column="3" Background="Transparent" 
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
                                         Cursor="Hand"
