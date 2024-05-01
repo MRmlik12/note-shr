@@ -226,7 +226,8 @@ public class NoteNodeComponent : UserControl
             {
                 new(GridLength.Auto),
                 new(GridLength.Auto)
-            }
+            },
+            VerticalAlignment = VerticalAlignment.Center
         };
 
         var moveUpButton = new StackPanel
@@ -241,6 +242,8 @@ public class NoteNodeComponent : UserControl
             Path = "avares://NoteSHR/Assets/Icons/caret-up-outline.svg",
             DataContext = id,
         };
+        
+        Avalonia.Svg.Skia.Svg.SetCss(caretUpIcon, ".foreground { fill: #FFFFFF; }");
         moveUpButton.Children.Add(caretUpIcon);
 
         var moveDownButton = new StackPanel
@@ -253,8 +256,10 @@ public class NoteNodeComponent : UserControl
         var caretDownIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/caret-down-outline.svg"))
         {
             Path = "avares://NoteSHR/Assets/Icons/caret-down-outline.svg",
-            DataContext = id,
+            DataContext = id
         };
+        
+        Avalonia.Svg.Skia.Svg.SetCss(caretDownIcon, ".foreground { fill: #FFFFFF; }");
         moveDownButton.Children.Add(caretDownIcon);
         
         moveUpButton.PointerPressed += EditModeButtonClicked;
