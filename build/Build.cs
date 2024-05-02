@@ -45,6 +45,7 @@ class Build : NukeBuild
     Target Restore => _ => _
         .Executes(() =>
         {
+            DotNetTasks.DotNetWorkloadRestore();
             DotNetTasks.DotNetRestore();
         });
 
