@@ -4,12 +4,22 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using Nuke.Common;
+using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities;
+using Serilog;
 using static Nuke.Common.EnvironmentInfo;
+
+[GitHubActions(
+    "build",
+    GitHubActionsImage.WindowsLatest, 
+    GitHubActionsImage.MacOsLatest,
+    GitHubActionsImage.UbuntuLatest,
+    On = [GitHubActionsTrigger.Push],
+    InvokedTargets = [nameof(PublishBuilds)])]
 
 class Build : NukeBuild
 {
@@ -41,16 +51,8 @@ class Build : NukeBuild
             OutputPath.DeleteDirectory();
             ArtifactsPath.DeleteDirectory();
         });
-
-    Target Restore => _ => _
-        .Executes(() =>
-        {
-            DotNetTasks.DotNetWorkloadRestore();
-            DotNetTasks.DotNetRestore();
-        });
-
-    Target Compile => _ => _
-        .DependsOn(Restore)
+    
+    Target Setup => _ => _
         .Executes(() =>
         {
             if (AllowDesktopBuild)
@@ -69,11 +71,33 @@ class Build : NukeBuild
                         throw new ArgumentOutOfRangeException();
                 }
 
-            if (AllowAndroidBuild) Platforms.Add(new PlatformItem("NoteSHR.Android", "android", null));
+            if (AllowAndroidBuild) 
+                Platforms.Add(new PlatformItem("NoteSHR.Android", "android", null));
 
-            if (AllowIOSBuild && IsOsx) Platforms.Add(new PlatformItem("NoteSHR.iOS", "ios", null));
-            if (AllowBrowserBuild) Platforms.Add(new PlatformItem("NoteSHR.Browser", string.Empty, null));
+            if (AllowIOSBuild && IsOsx) 
+                Platforms.Add(new PlatformItem("NoteSHR.iOS", "ios", null));
+            
+            if (AllowBrowserBuild)
+                Platforms.Add(new PlatformItem("NoteSHR.Browser", string.Empty, null));
 
+            Log.Information("Projects to build: {Platforms}", Platforms.Select(x => $"{x.Name} [{x.Architectures?.Join("; ")}]").Join(", "));
+        });
+
+    Target Restore => _ => _
+        .DependsOn(Setup)
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetWorkloadRestore();
+            foreach (var platform in Platforms)
+            {
+                DotNetTasks.DotNetRestore(_ => _.SetProjectFile(Solution.GetProject(platform.Name)?.Path));
+            }
+        });
+
+    Target Compile => _ => _
+        .DependsOn(Restore)
+        .Executes(() =>
+        {
             var projects = Solution.AllProjects.Where(x => Platforms.Select(p => p.Name).Contains(x.Name));
 
             foreach (var (project, projectDetail) in projects.Join(Platforms, p => p.Name, pD => pD.Name,
@@ -122,6 +146,13 @@ class Build : NukeBuild
             }
         });
 
+    Target PublishBuilds => _ => _
+        .DependsOn(Pack)
+        .Produces(ArtifactsPath / "*.zip")
+        .Executes(() =>
+        {
+
+        });
     /// Support plugins are available for:
     /// - JetBrains ReSharper        https://nuke.build/resharper
     /// - JetBrains Rider            https://nuke.build/rider

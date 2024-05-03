@@ -99,7 +99,9 @@
               "Clean",
               "Compile",
               "Pack",
-              "Restore"
+              "PublishBuilds",
+              "Restore",
+              "Setup"
             ]
           }
         },
@@ -116,7 +118,9 @@
               "Clean",
               "Compile",
               "Pack",
-              "Restore"
+              "PublishBuilds",
+              "Restore",
+              "Setup"
             ]
           }
         },
