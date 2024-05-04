@@ -20,7 +20,6 @@ using static Nuke.Common.EnvironmentInfo;
     GitHubActionsImage.UbuntuLatest,
     On = [GitHubActionsTrigger.Push],
     InvokedTargets = [nameof(PublishBuilds)])]
-
 class Build : NukeBuild
 {
     [Parameter("Allow android build")] readonly bool AllowAndroidBuild;
@@ -87,7 +86,18 @@ class Build : NukeBuild
         .DependsOn(Setup)
         .Executes(() =>
         {
-            DotNetTasks.DotNetWorkloadRestore();
+            DotNetTasks.DotNetWorkloadInstall(s => s
+                .SetWorkloadId("android")
+                .SetSkipManifestUpdate(true));
+            
+            DotNetTasks.DotNetWorkloadInstall(s => s
+                .SetWorkloadId("ios")
+                .SetSkipManifestUpdate(true));
+
+            DotNetTasks.DotNetWorkloadInstall(s => s
+                .SetWorkloadId("wasm-tools")
+                .SetSkipManifestUpdate(true));
+             
             foreach (var platform in Platforms)
             {
                 DotNetTasks.DotNetRestore(_ => _.SetProjectFile(Solution.GetProject(platform.Name)?.Path));
