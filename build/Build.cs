@@ -19,7 +19,8 @@ using static Nuke.Common.EnvironmentInfo;
     GitHubActionsImage.MacOsLatest,
     GitHubActionsImage.UbuntuLatest,
     On = [GitHubActionsTrigger.Push],
-    InvokedTargets = [nameof(PublishBuilds)])]
+    AutoGenerate = false)]
+    //InvokedTargets = [nameof(PublishBuilds)])]
 class Build : NukeBuild
 {
     [Parameter("Allow android build")] readonly bool AllowAndroidBuild;
@@ -86,21 +87,24 @@ class Build : NukeBuild
         .DependsOn(Setup)
         .Executes(() =>
         {
-            DotNetTasks.DotNetWorkloadInstall(s => s
-                .SetWorkloadId("android")
-                .SetSkipManifestUpdate(true));
+            if (AllowAndroidBuild)
+                DotNetTasks.DotNetWorkloadInstall(s => s
+                    .SetWorkloadId("android")
+                    .SetSkipManifestUpdate(true));
+           
+            if (AllowIOSBuild)
+                DotNetTasks.DotNetWorkloadInstall(s => s
+                    .SetWorkloadId("ios")
+                    .SetSkipManifestUpdate(true));
             
-            DotNetTasks.DotNetWorkloadInstall(s => s
-                .SetWorkloadId("ios")
-                .SetSkipManifestUpdate(true));
-
-            DotNetTasks.DotNetWorkloadInstall(s => s
-                .SetWorkloadId("wasm-tools")
-                .SetSkipManifestUpdate(true));
+            if (AllowBrowserBuild)
+                DotNetTasks.DotNetWorkloadInstall(s => s
+                    .SetWorkloadId("wasm-tools")
+                    .SetSkipManifestUpdate(true));
              
             foreach (var platform in Platforms)
             {
-                DotNetTasks.DotNetRestore(_ => _.SetProjectFile(Solution.GetProject(platform.Name)?.Path));
+                DotNetTasks.DotNetRestore(_ => _.SetProjectFile(Solution.AllProjects.Single(x => x.Name == platform.Name).Path));
             }
         });
 
@@ -156,13 +160,14 @@ class Build : NukeBuild
             }
         });
 
-    Target PublishBuilds => _ => _
-        .DependsOn(Pack)
-        .Produces(ArtifactsPath / "*.zip")
-        .Executes(() =>
-        {
-
-        });
+    // Target PublishBuilds => _ => _
+    //     .DependsOn(Pack)
+    //     .Produces(ArtifactsPath / "*.zip")
+    //     .Executes(() =>
+    //     {
+    //
+    //     });
+    
     /// Support plugins are available for:
     /// - JetBrains ReSharper        https://nuke.build/resharper
     /// - JetBrains Rider            https://nuke.build/rider
