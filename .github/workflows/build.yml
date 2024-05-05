@@ -57,4 +57,40 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
             name: linux
-            path: ./artifacts 
+            path: ./artifacts     
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.nuget/packages
+            !~/.nuget/packages/unwanted
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget- 
+      - name: Run NUKE
+        run: chmod +x build.sh && ./build.sh --allow-browser-build --allow-desktop-build=false Compile
+        env:
+          NetlifySiteId: ${{ secrets.NETLIFY_SITE_ID }}
+          NetlifyAccessToken: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: ./src/NoteSHR.Browser/bin/Release/net8.0/browser-wasm/AppBundle
+  deploy-gh-pages:
+    runs-on: ubuntu-latest
+    needs: browser
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v3
+        with:
+          artifact_name: web

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using NetlifySharp;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
 using Nuke.Common.Git;
@@ -117,13 +118,15 @@ class Build : NukeBuild
             foreach (var (project, projectDetail) in projects.Join(Platforms, p => p.Name, pD => pD.Name,
                          (p, pD) => (p, pD)))
             {
+                var outputPath = $"{OutputPath}/{project.Name}";
                 if (projectDetail.Architectures == null)
                 {
                     DotNetTasks.DotNetPublish(_ => _.EnableNoRestore()
                         .SetConfiguration(Configuration)
                         .SetProject(project)
                         .SetFramework($"net8.0{(projectDetail.Platform.IsNullOrEmpty() ? string.Empty : "-")}{projectDetail.Platform}")
-                        .SetOutput($"{OutputPath}/{project.Name}"));
+                        .SetOutput(outputPath));
+                    
                     continue;
                 }
 
@@ -133,7 +136,7 @@ class Build : NukeBuild
                         .SetProject(project)
                         .SetFramework("net8.0")
                         .SetRuntime($"{projectDetail.Platform}-{architecture}")
-                        .SetOutput($"{OutputPath}/{project.Name}/{projectDetail.Platform}-{architecture}"));
+                        .SetOutput($"{outputPath}/{projectDetail.Platform}-{architecture}"));
             }
         });
 
