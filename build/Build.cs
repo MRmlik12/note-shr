@@ -107,7 +107,17 @@ class Build : NukeBuild
                 DotNetTasks.DotNetRestore(_ => _.SetProjectFile(Solution.AllProjects.Single(x => x.Name == platform.Name).Path));
             }
         });
-
+    
+    Target CompileBrowser => _ => _
+        .DependsOn(Restore)
+        .Executes(() =>
+        { 
+            Log.Information("{Path}",Solution.AllProjects.Single(x => x.Name == "NoteSHR.Browser").Path);
+            DotNetTasks.DotNetBuild(_ => _.EnableNoRestore()
+                .SetConfiguration(Configuration)
+                .SetProjectFile(Solution.AllProjects.Single(x => x.Name == "NoteSHR.Browser").Path));
+        });
+    
     Target Compile => _ => _
         .DependsOn(Restore)
         .Executes(() =>
