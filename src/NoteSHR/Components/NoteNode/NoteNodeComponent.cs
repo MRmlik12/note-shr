@@ -239,6 +239,7 @@ public class NoteNodeComponent : UserControl
 
         var caretUpIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/caret-up-outline.svg"))
         {
+            Name = MoveUpButtonName,
             Path = "avares://NoteSHR/Assets/Icons/caret-up-outline.svg",
             DataContext = id,
         };
@@ -255,6 +256,7 @@ public class NoteNodeComponent : UserControl
 
         var caretDownIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/caret-down-outline.svg"))
         {
+            Name = MoveDownButtonName,
             Path = "avares://NoteSHR/Assets/Icons/caret-down-outline.svg",
             DataContext = id
         };
