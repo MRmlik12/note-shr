@@ -4,6 +4,10 @@
 
 # NoteSHR
 
+<div style="margin-bottom: 0.5rem;">
+    <img src="images/preview.png" alt="drawing" style="width:800px;"/>
+</div>
+
 A multi-platform application to effectively manage notes on a whiteboard.
 
 ## Goals
