@@ -1,6 +1,7 @@
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
 ![GitHub repo size](https://img.shields.io/github/repo-size/MRmlik12/note-shr?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/MRmlik12/note-shr?style=for-the-badge)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MRmlik12/note-shr/build.yml?style=for-the-badge)
 
 # NoteSHR
 
@@ -20,6 +21,11 @@ For more detailed plan of app development please look into [TODO board](https://
 - [ ]  Share board with everyone
 - [ ]  Collaboration API
 - [ ]  Keep responsiveness and stability for web, desktop and mobile platforms
+
+## Try it out
+
+* [Web version](https://note-shr.dolczyk.rocks)
+* Desktop platforms (Windows, MacOS, Linux). Pick the latest build action from [here](https://github.com/MRmlik12/note-shr/actions/workflows/build.yml)
 
 ## Build/Run process
 
