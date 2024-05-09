@@ -8,6 +8,7 @@
              xmlns:models="clr-namespace:NoteSHR.Core.Models"
              xmlns:noteNode="clr-namespace:NoteSHR.Components.NoteNode"
              xmlns:paz="using:Avalonia.Controls.PanAndZoom"
+             xmlns:converters="clr-namespace:NoteSHR.Core.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              x:CompileBindings="False">
@@ -15,6 +16,10 @@
     <Design.DataContext>
         <vm:BoardViewModel />
     </Design.DataContext>
+    
+    <UserControl.Resources>
+        <converters:ColorToHexConverter x:Key="ColorToHexConverter" />
+    </UserControl.Resources>
 
     <paz:ZoomBorder Name="ZoomBorder" Stretch="None" ZoomSpeed="1.2"
                     ClipToBounds="True" Focusable="True"
@@ -47,7 +52,7 @@
                               RowDefinitions="5*,95*" x:Name="Note" Background="{Binding BackgroundColor}"
                               ZIndex="5" MinWidth="200">
                             <Grid Grid.Row="0" x:Name="Header" Background="{Binding HeaderColor}"
-                                  ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="*">
+                                  ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" RowDefinitions="*">
                                 <Button Grid.Column="0" Background="Transparent" Foreground="Green"
                                         HorizontalAlignment="Right"
                                         Cursor="Hand">
@@ -73,7 +78,18 @@
                                         Cursor="Hand">
                                     <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #FF0000; }" />
                                 </Button>
-                                <Button Grid.Column="3" Background="Transparent" 
+                                <Button Grid.Column="3" Background="Transparent"
+                                        HorizontalAlignment="Right"
+                                        Cursor="Hand"
+                                        CommandParameter="{Binding Id}">
+                                    <Svg Path="/Assets/Icons/color-palette-outline.svg" Width="16" Height="16" />
+                                    <Button.Flyout>
+                                        <Flyout>
+                                            <ColorView Color="{Binding HeaderColor, Converter={StaticResource ColorToHexConverter}}"  />
+                                        </Flyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button Grid.Column="4" Background="Transparent" 
                                         HorizontalAlignment="Right"
                                         Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
                                         Cursor="Hand"
