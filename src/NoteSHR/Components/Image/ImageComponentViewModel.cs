@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using NoteSHR.Core.Helpers;
+using NoteSHR.Core.ViewModel;
 using NoteSHR.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

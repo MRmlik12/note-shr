@@ -10,7 +10,9 @@ using NoteSHR.Components.Image;
 using NoteSHR.Components.List;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
+using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
+using NoteSHR.Core.ViewModel;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -42,7 +44,7 @@ public class BoardViewModel : ViewModelBase
 
             var position = args.GetPosition(null);
             
-            var note = new Note(position.X, position.Y);
+            var note = new Note(position.X, position.Y, ColorHelper.GenerateColor());
             
             Notes.Add(note);
         });
@@ -109,7 +111,7 @@ public class BoardViewModel : ViewModelBase
 
             if (note == null) return;
 
-            note.Nodes.Add(new NodeViewModel(Guid.NewGuid(), componentType, componentVm));
+            note.Nodes.Add(new Node(Guid.NewGuid(), componentType, componentVm));
         });
 
         ChangeDeleteModeStateCommand = ReactiveCommand.Create(() =>

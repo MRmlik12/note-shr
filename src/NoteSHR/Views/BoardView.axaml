@@ -5,10 +5,10 @@
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:NoteSHR.ViewModels"
-             xmlns:models="clr-namespace:NoteSHR.Core.Models"
              xmlns:noteNode="clr-namespace:NoteSHR.Components.NoteNode"
              xmlns:paz="using:Avalonia.Controls.PanAndZoom"
              xmlns:converters="clr-namespace:NoteSHR.Core.Converters"
+             xmlns:models="clr-namespace:NoteSHR.Core.Models;assembly=NoteSHR.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              x:CompileBindings="False">

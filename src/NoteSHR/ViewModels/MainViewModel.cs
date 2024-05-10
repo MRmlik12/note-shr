@@ -1,4 +1,6 @@
-﻿namespace NoteSHR.ViewModels;
+﻿using NoteSHR.Core.ViewModel;
+
+namespace NoteSHR.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {

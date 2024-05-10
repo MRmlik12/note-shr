@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using Avalonia.Input;
+using NoteSHR.Core.ViewModel;
 using NoteSHR.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;

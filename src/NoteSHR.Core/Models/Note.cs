@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using NoteSHR.ViewModels;
-using ColorHelper = NoteSHR.Core.Helpers.ColorHelper;
 
 namespace NoteSHR.Core.Models;
 
-public class Note(double x, double y) : INotifyPropertyChanged
+public class Note(double x, double y, string headerColor) : INotifyPropertyChanged
 {
-    private ObservableCollection<NodeViewModel> _nodes = new ();
+    private ObservableCollection<Node> _nodes = new ();
     private double _width = 200.0d;
-    private string _headerColor = ColorHelper.GenerateColor();
+    private string _headerColor = headerColor;
     private string _backgroundColor = "#222222"; 
 
     public Guid Id { get; } = Guid.NewGuid();
@@ -45,7 +42,7 @@ public class Note(double x, double y) : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<NodeViewModel> Nodes
+    public ObservableCollection<Node> Nodes
     {
         get => _nodes;
         private set

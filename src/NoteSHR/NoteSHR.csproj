@@ -27,4 +27,8 @@
     <ItemGroup>
         <AdditionalFiles Include="Components\Text\TextComponentControl.axaml"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NoteSHR.Core\NoteSHR.Core.csproj" />
+    </ItemGroup>
 </Project>

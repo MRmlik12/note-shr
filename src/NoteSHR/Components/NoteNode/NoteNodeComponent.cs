@@ -11,6 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using NoteSHR.Components.NoteNode.EventArgs;
+using NoteSHR.Core.Models;
 using NoteSHR.ViewModels;
 
 namespace NoteSHR.Components.NoteNode;
@@ -22,8 +23,8 @@ public class NoteNodeComponent : UserControl
     private const string MoveUpButtonName = "MoveUpButton";
     private const string MoveDownButtonName = "MoveDownButton";
 
-    public static readonly StyledProperty<ObservableCollection<NodeViewModel>> NodesProperty =
-        AvaloniaProperty.Register<NoteNodeComponent, ObservableCollection<NodeViewModel>>(nameof(Nodes),
+    public static readonly StyledProperty<ObservableCollection<Node>> NodesProperty =
+        AvaloniaProperty.Register<NoteNodeComponent, ObservableCollection<Node>>(nameof(Nodes),
             defaultBindingMode: BindingMode.TwoWay);
 
     public static readonly StyledProperty<Guid> NoteIdProperty =
@@ -58,7 +59,7 @@ public class NoteNodeComponent : UserControl
         Content = _stackPanel;
     }
 
-    private ObservableCollection<NodeViewModel> Nodes
+    private ObservableCollection<Node> Nodes
     {
         get => GetValue(NodesProperty);
         set => SetValue(NodesProperty, value);
@@ -155,7 +156,7 @@ public class NoteNodeComponent : UserControl
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
         {
-            foreach (var nodeVm in e.OldItems.Cast<NodeViewModel>())
+            foreach (var nodeVm in e.OldItems.Cast<Node>())
             {
                 var grid = _nodeGrids.Single(x => (Guid)x.DataContext == nodeVm.Id);
                 _nodeGrids.Remove(grid);
@@ -165,14 +166,14 @@ public class NoteNodeComponent : UserControl
 
         if (!(e.NewItems?.Count > 0)) return;
 
-        foreach (var nodeVm in e.NewItems.Cast<NodeViewModel>())
+        foreach (var nodeVm in e.NewItems.Cast<Node>())
         {
             var grid = InitializeNodeGrid(nodeVm);
             _stackPanel.Children.Add(grid);
         }
     }
 
-    private Grid InitializeNodeGrid(NodeViewModel nodeViewModel)
+    private Grid InitializeNodeGrid(Node nodeViewModel)
     {
         var grid = new Grid
         {

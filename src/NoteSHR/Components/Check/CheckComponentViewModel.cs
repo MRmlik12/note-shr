@@ -1,4 +1,5 @@
-﻿using NoteSHR.ViewModels;
+﻿using NoteSHR.Core.ViewModel;
+using NoteSHR.ViewModels;
 using ReactiveUI.Fody.Helpers;
 
 namespace NoteSHR.Components.Check;
