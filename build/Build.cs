@@ -31,6 +31,8 @@ class Build : NukeBuild
     
     [Parameter("Allow browser build")] readonly bool AllowBrowserBuild;
 
+    [Parameter("Skip tests")] readonly bool SkipTests;
+
     [Parameter("Artifacts path")] readonly AbsolutePath ArtifactsPath = RootDirectory / "artifacts";
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
@@ -117,9 +119,17 @@ class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .SetProjectFile(Solution.AllProjects.Single(x => x.Name == "NoteSHR.Browser").Path));
         });
+
+    Target Test => _ => _
+        .DependsOn(Restore)
+        .OnlyWhenDynamic(() => !SkipTests)
+        .Executes(() =>
+        {
+            DotNetTasks.DotNetTest();
+        });
     
     Target Compile => _ => _
-        .DependsOn(Restore)
+        .DependsOn(Test)
         .Executes(() =>
         {
             var projects = Solution.AllProjects.Where(x => Platforms.Select(p => p.Name).Contains(x.Name));

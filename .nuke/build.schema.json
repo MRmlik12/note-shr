@@ -101,9 +101,14 @@
               "CompileBrowser",
               "Pack",
               "Restore",
-              "Setup"
+              "Setup",
+              "Test"
             ]
           }
+        },
+        "SkipTests": {
+          "type": "boolean",
+          "description": "Skip tests"
         },
         "Solution": {
           "type": "string",
@@ -120,7 +125,8 @@
               "CompileBrowser",
               "Pack",
               "Restore",
-              "Setup"
+              "Setup",
+              "Test"
             ]
           }
         },
