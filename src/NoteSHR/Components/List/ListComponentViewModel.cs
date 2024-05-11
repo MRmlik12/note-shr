@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using Avalonia.Input;
+using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
 using NoteSHR.ViewModels;
 using ReactiveUI;
@@ -10,7 +11,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace NoteSHR.Components.List;
 
-public class ListComponentViewModel : ViewModelBase
+public class ListComponentViewModel : ViewModelBase, IDataPersistence
 {
     public ListComponentViewModel()
     {
@@ -36,4 +37,13 @@ public class ListComponentViewModel : ViewModelBase
 
     public ReactiveCommand<KeyEventArgs, Unit> AddRowCommand { get; set; }
     public ReactiveCommand<string, Unit> ChangePrefixTypeCommand { get; set; }
+    
+    public object ExportValues()
+    {
+        return new
+        {
+            Rows,
+            PrefixType,
+        };
+    }
 }

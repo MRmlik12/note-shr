@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using NoteSHR.Core.Helpers;
+using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
 using NoteSHR.ViewModels;
 using ReactiveUI;
@@ -12,7 +13,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace NoteSHR.Components.Image;
 
-public class ImageComponentViewModel : ViewModelBase
+public class ImageComponentViewModel : ViewModelBase 
 {
     public ImageComponentViewModel()
     {
