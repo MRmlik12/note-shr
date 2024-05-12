@@ -1,17 +1,17 @@
-﻿using System.IO.Compression;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NoteSHR.Components.Check;
 using NoteSHR.Components.Text;
 using NoteSHR.Core.Models;
 
 namespace NoteSHR.File.Tests;
 
-public class BoardExporterTests
+public class BoardImporterTests
 {
-    private const string BoardName = "test-board";
+    
+    private const string BoardName = "import-test";
     
     [Fact]
-    public async Task TryExportBoard_OK()
+    public async Task TryImportBoardFromFile_VerifyProperties()
     {
         var notes = new List<Note>
         {
@@ -36,8 +36,8 @@ public class BoardExporterTests
         }));
         
         var outputPath = await BoardExporter.ExportToFile(notes, BoardName, ".");
+        var importedNotes = await BoardImporter.ImportFromFile(outputPath);
         
-        var zip = ZipFile.Open(outputPath, ZipArchiveMode.Read);
-        zip.Entries.Select(x => x.FullName).Count().Should().Be(1);
+        importedNotes.Notes.Should().HaveCount(notes.Count);
     }
 }

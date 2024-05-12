@@ -1,4 +1,4 @@
-﻿namespace NoteSHR.File.Models;
+﻿namespace NoteSHR.File.Schemes;
 
 public class NoteScheme
 {

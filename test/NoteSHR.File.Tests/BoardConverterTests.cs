@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NoteSHR.Components.Text;
 using NoteSHR.Core.Models;
+using NoteSHR.File.Schemes;
 
 namespace NoteSHR.File.Tests;
 
@@ -56,5 +57,73 @@ public class BoardConverterTests
         scheme.Name.Should().Be(boardName);
         scheme.LastModifiedAt.Should().BeSameDateAs(DateTime.Today);
         scheme.Notes.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void ImportBoardFromScheme_VerifyProperties()
+    {
+        var scheme = new BoardScheme
+        {
+            Id = Guid.NewGuid(),
+            Name = "Hello",
+            LastModifiedAt = DateTime.Now.AddDays(-2),
+            Notes = new List<NoteScheme>
+            {
+                new()
+                {
+                    Id = Guid.NewGuid(),
+                    X = 100,
+                    Y = 200,
+                    HeaderColor = "#ffffff",
+                    BackgroundColor = "#000000",
+                    Width = 200,
+                    Nodes = new List<NodeScheme>
+                    {
+                        new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Component = typeof(TextComponentControl).FullName,
+                            Assembly = nameof(NoteSHR),
+                            ViewModelType = typeof(TextComponentViewModel).FullName,
+                            Data = new
+                            {
+                                Text = "Hello, World!"
+                            }
+                        },
+                        new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Component = typeof(TextComponentControl).FullName,
+                            Assembly = nameof(NoteSHR),
+                            ViewModelType = typeof(TextComponentViewModel).FullName,
+                            Data = new 
+                            {
+                                Text = "What's up?"
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        var board = BoardConverter.ConvertBack(scheme);
+
+        board.Name.Should().Be(scheme.Name);
+        board.Id.Should().Be(scheme.Id);
+        board.Notes.Count.Should().Be(scheme.Notes.Count());
+        
+        foreach (var item in scheme.Notes.Select((value, i) => new { i, value }))
+        {
+            var note = board.Notes[item.i];
+            var noteScheme = item.value;
+
+            note.Id.Should().Be(noteScheme.Id);
+            note.X.Should().Be(noteScheme.X);
+            note.Y.Should().Be(noteScheme.Y);
+            note.HeaderColor.Should().Be(noteScheme.HeaderColor);
+            note.BackgroundColor.Should().Be(noteScheme.BackgroundColor);
+            note.Width.Should().Be(noteScheme.Width);
+            note.Nodes.Count.Should().Be(noteScheme.Nodes.Count());
+        }
     }
 }

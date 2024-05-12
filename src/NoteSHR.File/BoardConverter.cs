@@ -1,5 +1,7 @@
-﻿using NoteSHR.Core.Models;
-using NoteSHR.File.Models;
+﻿using System.Reflection;
+using NoteSHR.Core.Models;
+using NoteSHR.Core.ViewModel;
+using NoteSHR.File.Schemes;
 
 namespace NoteSHR.File;
 
@@ -33,12 +35,63 @@ internal static class BoardConverter
                 return new NodeScheme
                 {
                     Id = node.Id,
-                    Component = node.Type.Name,
-                    Data = data 
+                    Assembly = node.Type.Assembly.GetName().Name,
+                    Component = node.Type.FullName,
+                    ViewModelType = node.ViewModel.GetType().Name,
+                    Data = data
                 };
             })
         });
         
         return scheme;
+    }
+
+    public static Board ConvertBack(BoardScheme scheme)
+    {
+        var notes = new List<Note>();
+        
+        foreach (var noteScheme in scheme.Notes)
+        {
+            var note = new Note(noteScheme.X, noteScheme.Y, noteScheme.HeaderColor)
+            {
+                Id = noteScheme.Id,
+                BackgroundColor = noteScheme.BackgroundColor,
+                Width = noteScheme.Width,
+            };
+            
+            foreach (var nodeScheme in noteScheme.Nodes)
+            {
+                var assembly = Assembly.Load($"{nodeScheme.Assembly}");
+                
+                var type = assembly?.GetType(nodeScheme.Component);
+                if (type == null)
+                {
+                    continue;
+                }
+
+                var viewModelType = assembly?.GetType(nodeScheme.ViewModelType);
+                if (viewModelType == null)
+                {
+                    continue;
+                }
+
+                var viewModel = (ViewModelBase)Activator.CreateInstance(viewModelType);
+                if (viewModel is IDataPersistence persistence)
+                {
+                    persistence?.ConvertValues(nodeScheme.Data);
+                }
+                
+                note.Nodes.Add(new Node(Guid.NewGuid(), type, viewModel));
+            }
+            
+            notes.Add(note);
+        }
+
+        return new Board
+        {
+            Id = scheme.Id,
+            Name = scheme.Name,
+            Notes = notes
+        };
     }
 }

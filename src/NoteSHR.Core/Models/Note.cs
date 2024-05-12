@@ -10,7 +10,7 @@ public class Note(double x, double y, string headerColor) : INotifyPropertyChang
     private string _headerColor = headerColor;
     private string _backgroundColor = "#222222"; 
 
-    public Guid Id { get; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     public double X
     {
@@ -54,7 +54,7 @@ public class Note(double x, double y, string headerColor) : INotifyPropertyChang
     public string HeaderColor
     {
         get => _headerColor;
-        private set
+        set
         {
             _headerColor = value;
             OnPropertyChanged(nameof(HeaderColor));
@@ -63,7 +63,7 @@ public class Note(double x, double y, string headerColor) : INotifyPropertyChang
     public string BackgroundColor
     {
         get => _backgroundColor;
-        private set
+        set
         {
             _backgroundColor = value;
             OnPropertyChanged(nameof(BackgroundColor));
