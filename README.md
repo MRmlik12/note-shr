@@ -54,6 +54,18 @@ $ dotnet run --project src/NoteSHR.Android
 $ dotnet run --project src/NoteSHR.Browser
 ```
 
+### Run tests
+
+#### Using Bash
+```bash
+$ ./build.sh Test
+```
+
+#### Using PowerShell
+```powershell
+> .\build.ps1 Test
+```
+
 ### Build
 
 #### Using Bash
