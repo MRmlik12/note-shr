@@ -8,7 +8,7 @@ namespace NoteSHR.File.Tests;
 public class BoardConverterTests
 {
     [Fact]
-    public void ExportBoardToScheme_VerifyProperties()
+    public async Task ExportBoardToScheme_VerifyProperties()
     {
         var notes = new List<Note>
         {
@@ -28,7 +28,7 @@ public class BoardConverterTests
         
         const string boardName = "Hello";
         
-        var scheme = BoardConverter.ConvertToScheme(boardName, notes);
+        var scheme = await BoardConverter.ConvertToScheme(boardName, notes);
 
         scheme.LastModifiedAt.Should().BeSameDateAs(DateTime.Now);
         scheme.Name.Should().Be(boardName);
@@ -47,12 +47,12 @@ public class BoardConverterTests
     }
     
     [Fact]
-    public void ExportBoardToScheme_ShouldNotesBeEmpty()
+    public async Task ExportBoardToScheme_ShouldNotesBeEmpty()
     {
         var notes = new List<Note>();
         
         const string boardName = "empty";
-        var scheme = BoardConverter.ConvertToScheme(boardName, notes);
+        var scheme = await BoardConverter.ConvertToScheme(boardName, notes);
 
         scheme.Name.Should().Be(boardName);
         scheme.LastModifiedAt.Should().BeSameDateAs(DateTime.Today);

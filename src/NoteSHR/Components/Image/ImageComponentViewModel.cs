@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reactive;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -7,13 +8,12 @@ using Avalonia.Platform.Storage;
 using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
-using NoteSHR.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace NoteSHR.Components.Image;
 
-public class ImageComponentViewModel : ViewModelBase 
+public class ImageComponentViewModel : ViewModelBase, IDataPersistence 
 {
     public ImageComponentViewModel()
     {
@@ -61,4 +61,15 @@ public class ImageComponentViewModel : ViewModelBase
     [Reactive] public bool ImageSelected { get; set; }
 
     public ReactiveCommand<RoutedEventArgs, Unit> SetImageCommand { get; set; }
+    
+    public object ExportValues()
+    {
+        var stream = new MemoryStream();
+        Image?.Save(stream);
+        
+        return new
+        {
+            Image = stream 
+        };
+    }
 }

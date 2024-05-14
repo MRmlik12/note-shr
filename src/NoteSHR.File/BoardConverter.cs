@@ -7,10 +7,11 @@ namespace NoteSHR.File;
 
 internal static class BoardConverter
 {
-    public static BoardScheme ConvertToScheme(string boardName, List<Note> notes)
+    public async static Task<BoardScheme> ConvertToScheme(string boardName, List<Note> notes)
     {
         var scheme = new BoardScheme
         {
+            Id = Guid.NewGuid(),
             Name = boardName,
             LastModifiedAt = DateTime.Now,
         };
@@ -30,6 +31,24 @@ internal static class BoardConverter
                 if (node.ViewModel is IDataPersistence)
                 {
                     data = ((IDataPersistence)node.ViewModel).ExportValues();
+
+                    foreach (var property in data.GetType().GetProperties().Where(x => x.PropertyType == typeof(Stream)))
+                    {
+                        Stream? stream = null;
+                        property.GetValue(stream);
+                        
+                        if (stream != null)
+                        {
+                            var fileId = Guid.NewGuid();
+                            var blob = new Blob(stream, fileId.ToString(), scheme.Id);
+                            
+                            Task.Run(async () =>
+                            {
+                                await blob.Write();
+                                property.SetValue(data, fileId);
+                            });
+                        }
+                    } 
                 }
                 
                 return new NodeScheme

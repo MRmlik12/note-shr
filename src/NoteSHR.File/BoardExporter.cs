@@ -2,6 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 using NoteSHR.Core.Models;
+using NoteSHR.File.Utils;
 
 namespace NoteSHR.File;
 
@@ -17,12 +18,12 @@ public static class BoardExporter
     
     public static async Task<string> ExportToFile(List<Note> notes, string name, string path)
     {
-        var boardScheme = BoardConverter.ConvertToScheme(name, notes);
+        var boardScheme = await BoardConverter.ConvertToScheme(name, notes);
         var json = JsonConvert.SerializeObject(boardScheme);
 
         var tempFolder = GetTemporaryPath();
 
-        var boardFile = System.IO.File.Create(Path.Combine(tempFolder, "board.json"));
+        var boardFile = System.IO.File.Create(PathUtils.GetTemporaryPath(boardScheme.Id));
         await boardFile.WriteAsync(Encoding.UTF8.GetBytes(json));
         boardFile.Close();
 
