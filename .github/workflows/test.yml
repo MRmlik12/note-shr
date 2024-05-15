@@ -1,9 +1,6 @@
 ﻿name: Test
 on: [push]
 jobs:
-name: Build
-on: [push]
-jobs:
   default:
     runs-on: ubuntu-latest
     steps:
