@@ -1,0 +1,20 @@
+﻿name: Test
+on: [push]
+jobs:
+name: Build
+on: [push]
+jobs:
+  default:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.nuget/packages
+            !~/.nuget/packages/unwanted
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget- 
+      - name: Run Tests
+        run: .\build.ps1 Test
