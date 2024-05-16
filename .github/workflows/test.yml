@@ -14,4 +14,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget- 
       - name: Run Tests
-        run: .\build.ps1 Test
+        run: ./build.sh Test
