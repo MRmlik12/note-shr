@@ -8,6 +8,7 @@ using Avalonia.Platform.Storage;
 using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
+using NoteSHR.File;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -61,7 +62,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
     [Reactive] public bool ImageSelected { get; set; }
 
     public ReactiveCommand<RoutedEventArgs, Unit> SetImageCommand { get; set; }
-    
+
     public object ExportValues()
     {
         var stream = new MemoryStream();
@@ -69,7 +70,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
         
         return new
         {
-            Image = stream 
+            Image = new FileBlob(stream) 
         };
     }
 }

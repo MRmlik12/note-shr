@@ -8,6 +8,7 @@ namespace NoteSHR.File.Tests;
 
 public class BoardExporterTests
 {
+    private const string TestImagePath = "./Assets/image.png";
     private const string BoardName = "test-board";
     
     [Fact]
@@ -34,7 +35,7 @@ public class BoardExporterTests
             Text = "Prepare meal",
             Checked = true
         }));
-        
+
         var outputPath = await BoardExporter.ExportToFile(notes, BoardName, ".");
         
         var zip = ZipFile.Open(outputPath, ZipArchiveMode.Read);

@@ -8,22 +8,15 @@ namespace NoteSHR.File;
 
 public static class BoardExporter
 {
-    private static string GetTemporaryPath()
-    {
-        var tempFolder = Path.Combine(Path.GetTempPath(), $"NoteSHR/{Guid.NewGuid()}");
-        Directory.CreateDirectory(tempFolder);
-        
-        return tempFolder;
-    }
-    
     public static async Task<string> ExportToFile(List<Note> notes, string name, string path)
     {
-        var boardScheme = await BoardConverter.ConvertToScheme(name, notes);
+        var boardScheme = BoardConverter.ConvertToScheme(name, notes);
         var json = JsonConvert.SerializeObject(boardScheme);
 
-        var tempFolder = GetTemporaryPath();
+        var tempFolder = PathUtils.GetTemporaryPath(boardScheme.Id);
+        Directory.CreateDirectory(tempFolder);
 
-        var boardFile = System.IO.File.Create(PathUtils.GetTemporaryPath(boardScheme.Id));
+        var boardFile = System.IO.File.Create(Path.Combine(tempFolder, "board.json"));
         await boardFile.WriteAsync(Encoding.UTF8.GetBytes(json));
         boardFile.Close();
 

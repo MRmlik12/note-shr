@@ -30,5 +30,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\NoteSHR.Core\NoteSHR.Core.csproj" />
+      <ProjectReference Include="..\NoteSHR.File\NoteSHR.File.csproj" />
     </ItemGroup>
 </Project>

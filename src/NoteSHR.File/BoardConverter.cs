@@ -7,7 +7,19 @@ namespace NoteSHR.File;
 
 internal static class BoardConverter
 {
-    public async static Task<BoardScheme> ConvertToScheme(string boardName, List<Note> notes)
+    private static bool FilterByBlobUrl(PropertyInfo property, object data)
+    {
+        var value = property.GetValue(data);
+        
+        if (value is string str)
+        {
+            return str.Contains("blob://");
+        }
+
+        return false;
+    }
+    
+    internal static BoardScheme ConvertToScheme(string boardName, List<Note> notes)
     {
         var scheme = new BoardScheme
         {
@@ -32,20 +44,18 @@ internal static class BoardConverter
                 {
                     data = ((IDataPersistence)node.ViewModel).ExportValues();
 
-                    foreach (var property in data.GetType().GetProperties().Where(x => x.PropertyType == typeof(Stream)))
+                    foreach (var property in data.GetType().GetProperties().Where(x => x.PropertyType == typeof(FileBlob)))
                     {
-                        Stream? stream = null;
-                        property.GetValue(stream);
+                        var fileBlob = property.GetValue(data) as FileBlob;
                         
-                        if (stream != null)
+                        if (fileBlob != null)
                         {
-                            var fileId = Guid.NewGuid();
-                            var blob = new Blob(stream, fileId.ToString(), scheme.Id);
-                            
                             Task.Run(async () =>
                             {
-                                await blob.Write();
-                                property.SetValue(data, fileId);
+                                var fileId = Guid.NewGuid();
+                                
+                                var path = await fileBlob.Write( fileId.ToString());
+                                property.SetValue(data, path);
                             });
                         }
                     } 
@@ -65,7 +75,7 @@ internal static class BoardConverter
         return scheme;
     }
 
-    public static Board ConvertBack(BoardScheme scheme)
+    internal static Board ConvertBack(BoardScheme scheme)
     {
         var notes = new List<Note>();
         
@@ -97,6 +107,13 @@ internal static class BoardConverter
                 var viewModel = (ViewModelBase)Activator.CreateInstance(viewModelType);
                 if (viewModel is IDataPersistence persistence)
                 {
+                    foreach (var properties in nodeScheme.Data.GetType().GetProperties().Where(x => FilterByBlobUrl(x, nodeScheme.Data)))
+                    {
+                        var path = properties.GetValue(nodeScheme.Data) as string;
+                        var blob = new FileBlob(scheme.Id, path);
+                        properties.SetValue(nodeScheme.Data, blob);
+                    }
+                    
                     persistence?.ConvertValues(nodeScheme.Data);
                 }
                 
