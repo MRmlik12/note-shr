@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:NoteSHR.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="NoteSHR.Views.BoardToolbar"
+             >
+    <Design.DataContext>
+        <viewModels:BoardToolbarViewModel />
+    </Design.DataContext>
+    
+    <DockPanel Background="White" HorizontalAlignment="Stretch">
+        <Button x:Name="ExportBoardButton" Click="ExportBoardButton_OnClick" Background="Transparent" Foreground="GhostWhite">
+            <Svg Path="/Assets/Icons/save-outline.svg" Width="32" Height="32" />
+        </Button>
+    </DockPanel>
+</UserControl>

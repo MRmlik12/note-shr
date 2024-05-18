@@ -9,126 +9,140 @@
              xmlns:paz="using:Avalonia.Controls.PanAndZoom"
              xmlns:converters="clr-namespace:NoteSHR.Core.Converters"
              xmlns:models="clr-namespace:NoteSHR.Core.Models;assembly=NoteSHR.Core"
+             xmlns:views="clr-namespace:NoteSHR.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
+             VerticalAlignment="Stretch"
+             HorizontalAlignment="Stretch"
              x:CompileBindings="False">
 
     <Design.DataContext>
         <vm:BoardViewModel />
     </Design.DataContext>
-    
+
     <UserControl.Resources>
         <converters:ColorToHexConverter x:Key="ColorToHexConverter" />
     </UserControl.Resources>
 
-    <paz:ZoomBorder Name="ZoomBorder" Stretch="None" ZoomSpeed="1.2"
-                    ClipToBounds="True" Focusable="True"
-                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <ItemsControl x:Name="NoteItemsControl">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <i:Interaction.Behaviors>
-                            <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
-                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                        Command="{Binding CreateNoteCommand}" />
-                            </ia:EventTriggerBehavior>
-                            <ia:EventTriggerBehavior EventName="PointerMoved" SourceObject="Board">
-                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                        Command="{Binding MoveNoteCommand}" />
-                            </ia:EventTriggerBehavior>
-                            <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
-                                <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                        Command="{Binding UpdateNoteLocation}" />
-                            </ia:EventTriggerBehavior>
-                        </i:Interaction.Behaviors>
-                    </Canvas>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="models:Note">
-                    <Grid ColumnDefinitions="Auto,2" RowDefinitions="*">
-                        <Grid Grid.Column="0" Width="{Binding Width, Mode=TwoWay}" ColumnDefinitions="100*"
-                              RowDefinitions="5*,95*" x:Name="Note" Background="{Binding BackgroundColor}"
-                              ZIndex="5" MinWidth="200">
-                            <Grid Grid.Row="0" x:Name="Header" Background="{Binding HeaderColor}"
-                                  ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" RowDefinitions="*">
-                                <Button Grid.Column="0" Background="Transparent" Foreground="Green"
-                                        HorizontalAlignment="Right"
-                                        Cursor="Hand">
-                                    <Svg Path="/Assets/Icons/add-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #228B22; }" />
-                                    <Button.Flyout>
-                                        <MenuFlyout>
-                                            <MenuItem Header="Text" CommandParameter="Text" Click="MenuItem_OnClick" />
-                                            <MenuItem Header="Image" CommandParameter="Image" Click="MenuItem_OnClick" />
-                                            <MenuItem Header="Check" CommandParameter="Check" Click="MenuItem_OnClick" />
-                                            <MenuItem Header="List" CommandParameter="List" Click="MenuItem_OnClick" />
-                                        </MenuFlyout>
-                                    </Button.Flyout>
-                                </Button>
-                                <Button Grid.Column="1" Background="Transparent" Foreground="GhostWhite"
-                                        HorizontalAlignment="Right"
-                                        Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
-                                        Cursor="Hand">
-                                    <Svg Path="/Assets/Icons/pencil-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #3A9BDC; } "/>
-                                </Button>
-                                <Button Grid.Column="2" Background="Transparent"
-                                        HorizontalAlignment="Right"
-                                        Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
-                                        Cursor="Hand">
-                                    <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16" Css=".foreground { stroke: #FF0000; }" />
-                                </Button>
-                                <Button Grid.Column="3" Background="Transparent"
-                                        HorizontalAlignment="Right"
-                                        Cursor="Hand"
-                                        CommandParameter="{Binding Id}">
-                                    <Svg Path="/Assets/Icons/color-palette-outline.svg" Width="16" Height="16" />
-                                    <Button.Flyout>
-                                        <Flyout>
-                                            <ColorView Color="{Binding HeaderColor, Converter={StaticResource ColorToHexConverter}}"  />
-                                        </Flyout>
-                                    </Button.Flyout>
-                                </Button>
-                                <Button Grid.Column="4" Background="Transparent" 
-                                        HorizontalAlignment="Right"
-                                        Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
-                                        Cursor="Hand"
-                                        CommandParameter="{Binding Id}">
-                                    <Svg Path="/Assets/Icons/close-outline.svg" Width="16" Height="16" />
-                                </Button>
-                            </Grid>
-                            <noteNode:NoteNodeComponent
-                                Grid.Row="1"
-                                Nodes="{Binding Nodes}"
-                                NoteId="{Binding Id}"
-                                DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
-                                EditMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).EditMode}">
-                                <i:Interaction.Behaviors>
-                                    <ia:EventTriggerBehavior EventName="DeleteNode">
-                                        <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                                Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}" />
-                                    </ia:EventTriggerBehavior>
-                                    <ia:EventTriggerBehavior EventName="MoveNode">
-                                        <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                                Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}" />
-                                    </ia:EventTriggerBehavior>
-                                </i:Interaction.Behaviors>
-                            </noteNode:NoteNodeComponent>
-                        </Grid>
-                        <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch"
-                                   Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed"
-                                   PointerMoved="InputElement_OnPointerMoved"
-                                   PointerReleased="InputElement_OnPointerReleased" />
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemContainerTheme>
-                <ControlTheme TargetType="ContentPresenter" x:DataType="models:Note">
-                    <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}" />
-                </ControlTheme>
-            </ItemsControl.ItemContainerTheme>
-        </ItemsControl>
-    </paz:ZoomBorder>
+    <DockPanel>
+        <views:BoardToolbar DockPanel.Dock="Top" HorizontalAlignment="Stretch" ExportBoard="BoardToolbar_OnExportBoard" />
 
+        <paz:ZoomBorder Name="ZoomBorder" Stretch="Fill" ZoomSpeed="1.2"
+                        ClipToBounds="True" Focusable="True">
+            <ItemsControl x:Name="NoteItemsControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch">
+                            <i:Interaction.Behaviors>
+                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
+                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                            Command="{Binding CreateNoteCommand}" />
+                                </ia:EventTriggerBehavior>
+                                <ia:EventTriggerBehavior EventName="PointerMoved" SourceObject="Board">
+                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                            Command="{Binding MoveNoteCommand}" />
+                                </ia:EventTriggerBehavior>
+                                <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
+                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                            Command="{Binding UpdateNoteLocation}" />
+                                </ia:EventTriggerBehavior>
+                            </i:Interaction.Behaviors>
+                        </Canvas>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:Note">
+                        <Grid ColumnDefinitions="Auto,2" RowDefinitions="*">
+                            <Grid Grid.Column="0" Width="{Binding Width, Mode=TwoWay}" ColumnDefinitions="100*"
+                                  RowDefinitions="5*,95*" x:Name="Note" Background="{Binding BackgroundColor}"
+                                  ZIndex="5" MinWidth="200">
+                                <Grid Grid.Row="0" x:Name="Header" Background="{Binding HeaderColor}"
+                                      ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" RowDefinitions="*">
+                                    <Button Grid.Column="0" Background="Transparent" Foreground="Green"
+                                            HorizontalAlignment="Right"
+                                            Cursor="Hand">
+                                        <Svg Path="/Assets/Icons/add-outline.svg" Width="16" Height="16"
+                                             Css=".foreground { stroke: #228B22; }" />
+                                        <Button.Flyout>
+                                            <MenuFlyout>
+                                                <MenuItem Header="Text" CommandParameter="Text"
+                                                          Click="MenuItem_OnClick" />
+                                                <MenuItem Header="Image" CommandParameter="Image"
+                                                          Click="MenuItem_OnClick" />
+                                                <MenuItem Header="Check" CommandParameter="Check"
+                                                          Click="MenuItem_OnClick" />
+                                                <MenuItem Header="List" CommandParameter="List"
+                                                          Click="MenuItem_OnClick" />
+                                            </MenuFlyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Button Grid.Column="1" Background="Transparent" Foreground="GhostWhite"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeEditModeStateCommand}"
+                                            Cursor="Hand">
+                                        <Svg Path="/Assets/Icons/pencil-outline.svg" Width="16" Height="16"
+                                             Css=".foreground { stroke: #3A9BDC; } " />
+                                    </Button>
+                                    <Button Grid.Column="2" Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).ChangeDeleteModeStateCommand}"
+                                            Cursor="Hand">
+                                        <Svg Path="/Assets/Icons/trash-outline.svg" Width="16" Height="16"
+                                             Css=".foreground { stroke: #FF0000; }" />
+                                    </Button>
+                                    <Button Grid.Column="3" Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            Cursor="Hand"
+                                            CommandParameter="{Binding Id}">
+                                        <Svg Path="/Assets/Icons/color-palette-outline.svg" Width="16" Height="16" />
+                                        <Button.Flyout>
+                                            <Flyout>
+                                                <ColorView
+                                                    Color="{Binding HeaderColor, Converter={StaticResource ColorToHexConverter}}" />
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <Button Grid.Column="4" Background="Transparent"
+                                            HorizontalAlignment="Right"
+                                            Command="{Binding  $parent[ItemsControl].((vm:BoardViewModel)DataContext).RemoveNote}"
+                                            Cursor="Hand"
+                                            CommandParameter="{Binding Id}">
+                                        <Svg Path="/Assets/Icons/close-outline.svg" Width="16" Height="16" />
+                                    </Button>
+                                </Grid>
+                                <noteNode:NoteNodeComponent
+                                    Grid.Row="1"
+                                    Nodes="{Binding Nodes}"
+                                    NoteId="{Binding Id}"
+                                    DeleteMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteMode}"
+                                    EditMode="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).EditMode}">
+                                    <i:Interaction.Behaviors>
+                                        <ia:EventTriggerBehavior EventName="DeleteNode">
+                                            <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                    Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).DeleteNoteNodeCommand}" />
+                                        </ia:EventTriggerBehavior>
+                                        <ia:EventTriggerBehavior EventName="MoveNode">
+                                            <ia:InvokeCommandAction PassEventArgsToCommand="True"
+                                                                    Command="{Binding $parent[ItemsControl].((vm:BoardViewModel)DataContext).MoveNoteNodeCommand}" />
+                                        </ia:EventTriggerBehavior>
+                                    </i:Interaction.Behaviors>
+                                </noteNode:NoteNodeComponent>
+                            </Grid>
+                            <Rectangle Grid.Column="1" Fill="Transparent" Width="2" VerticalAlignment="Stretch"
+                                       Cursor="RightSide" PointerPressed="InputElement_OnPointerPressed"
+                                       PointerMoved="InputElement_OnPointerMoved"
+                                       PointerReleased="InputElement_OnPointerReleased" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemContainerTheme>
+                    <ControlTheme TargetType="ContentPresenter" x:DataType="models:Note">
+                        <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}" />
+                    </ControlTheme>
+                </ItemsControl.ItemContainerTheme>
+            </ItemsControl>
+        </paz:ZoomBorder>
+    </DockPanel>
 </UserControl>
