@@ -5,6 +5,8 @@ using System.Reactive;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
 using NoteSHR.Components.Check;
 using NoteSHR.Components.Image;
 using NoteSHR.Components.List;
@@ -13,6 +15,7 @@ using NoteSHR.Components.Text;
 using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
+using NoteSHR.File;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -140,8 +143,28 @@ public class BoardViewModel : ViewModelBase
             
             Notes[sourceNoteIndex].Nodes.Move(sourceNodeIndex, nodeToMoveIndex);
         });
+
+        ExportBoardCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
+        {
+            var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
+            var saveFilePickerOptions = new FolderPickerOpenOptions
+            {
+                Title = "Select path to export board",
+                AllowMultiple = false
+            };
+            
+            var folderPicker = await topLevel.StorageProvider.OpenFolderPickerAsync(saveFilePickerOptions);
+
+            if (folderPicker.Count == 0)
+            {
+                return;
+            }
+            
+            await BoardExporter.ExportToFile(Notes.ToList(), Name!, folderPicker[0].Path.AbsolutePath);
+        });
     }
 
+    [Reactive] public string Name { get; set; }
     [Reactive] public ObservableCollection<Note> Notes { get; set; } = [];
     [Reactive] public bool DeleteMode { get; set; }
     [Reactive] public bool EditMode { get; set; }
@@ -157,4 +180,5 @@ public class BoardViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> ChangeEditModeStateCommand { get; set; }
     public ReactiveCommand<MoveNodeEventArgs, Unit> MoveNoteNodeCommand { get; set; }
     public ReactiveCommand<PointerEventArgs, Unit> MoveNoteCommand { get; set; }
+    public ReactiveCommand<RoutedEventArgs, Unit> ExportBoardCommand { get; set; }
 }

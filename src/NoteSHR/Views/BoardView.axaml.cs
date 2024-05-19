@@ -59,9 +59,4 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         var p = e.GetPosition(rectangle);
         grid!.Children[0].Width += p.X;
     }
-
-    private void BoardToolbar_OnExportBoard(object? sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
 }

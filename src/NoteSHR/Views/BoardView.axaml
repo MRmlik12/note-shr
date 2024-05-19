@@ -25,7 +25,15 @@
     </UserControl.Resources>
 
     <DockPanel>
-        <views:BoardToolbar DockPanel.Dock="Top" HorizontalAlignment="Stretch" ExportBoard="BoardToolbar_OnExportBoard" />
+        <Canvas ZIndex="1000" HorizontalAlignment="Stretch">
+            <views:BoardToolbar Width="NaN" BoardName="{Binding Name}" HorizontalAlignment="Stretch"> 
+                <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="ExportBoard">
+                        <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding ExportBoardCommand}" />
+                    </ia:EventTriggerBehavior>
+                </i:Interaction.Behaviors>
+            </views:BoardToolbar>
+        </Canvas>
 
         <paz:ZoomBorder Name="ZoomBorder" Stretch="Fill" ZoomSpeed="1.2"
                         ClipToBounds="True" Focusable="True">
