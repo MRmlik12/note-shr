@@ -21,11 +21,8 @@ public static class BoardExporter
         boardFile.Close();
 
         var destinationPath = $"{path}/{name}.zip";
-        if (System.IO.File.Exists(destinationPath))
-        {
-            System.IO.File.Delete(destinationPath);
-        }
-        
+        if (System.IO.File.Exists(destinationPath)) System.IO.File.Delete(destinationPath);
+
         ZipFile.CreateFromDirectory(tempFolder, destinationPath);
 
         return destinationPath;

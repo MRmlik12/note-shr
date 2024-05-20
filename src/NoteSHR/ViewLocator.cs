@@ -2,7 +2,6 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using NoteSHR.Core.ViewModel;
-using NoteSHR.ViewModels;
 
 namespace NoteSHR;
 

@@ -12,11 +12,11 @@ public class BoardConverterTests
     {
         var notes = new List<Note>
         {
-            new (100, 200, "#ffffff"),
-            new (200, 600, "#000000"),
-            new (0, 0, "#ffffff")
+            new(100, 200, "#ffffff"),
+            new(200, 600, "#000000"),
+            new(0, 0, "#ffffff")
         };
-        
+
         notes[0].Nodes.Add(new Node(Guid.NewGuid(), typeof(TextComponentControl), new TextComponentViewModel
         {
             Text = "Hello, World!"
@@ -25,16 +25,16 @@ public class BoardConverterTests
         {
             Text = "What's up?"
         }));
-        
+
         const string boardName = "Hello";
-        
+
         var scheme = BoardConverter.ConvertToScheme(boardName, notes);
 
         scheme.LastModifiedAt.Should().BeSameDateAs(DateTime.Now);
         scheme.Name.Should().Be(boardName);
         scheme.Notes.Count().Should().Be(3);
 
-        foreach (var item in scheme.Notes.Select((value, i) => new {i, value }))
+        foreach (var item in scheme.Notes.Select((value, i) => new { i, value }))
         {
             item.value.Id.Should().Be(notes[item.i].Id);
             item.value.X.Should().Be(notes[item.i].X);
@@ -45,12 +45,12 @@ public class BoardConverterTests
             item.value.Nodes.Count().Should().Be(notes[item.i].Nodes.Count);
         }
     }
-    
+
     [Fact]
     public void ExportBoardToScheme_ShouldNotesBeEmpty()
     {
         var notes = new List<Note>();
-        
+
         const string boardName = "empty";
         var scheme = BoardConverter.ConvertToScheme(boardName, notes);
 
@@ -96,7 +96,7 @@ public class BoardConverterTests
                             Component = typeof(TextComponentControl).FullName,
                             Assembly = nameof(NoteSHR),
                             ViewModelType = typeof(TextComponentViewModel).FullName,
-                            Data = new 
+                            Data = new
                             {
                                 Text = "What's up?"
                             }
@@ -111,7 +111,7 @@ public class BoardConverterTests
         board.Name.Should().Be(scheme.Name);
         board.Id.Should().Be(scheme.Id);
         board.Notes.Count.Should().Be(scheme.Notes.Count());
-        
+
         foreach (var item in scheme.Notes.Select((value, i) => new { i, value }))
         {
             var note = board.Notes[item.i];

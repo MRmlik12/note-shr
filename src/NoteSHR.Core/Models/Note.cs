@@ -5,10 +5,9 @@ namespace NoteSHR.Core.Models;
 
 public class Note(double x, double y, string headerColor) : INotifyPropertyChanged
 {
-    private ObservableCollection<Node> _nodes = new ();
-    private double _width = 200.0d;
+    private string _backgroundColor = "#222222";
     private string _headerColor = headerColor;
-    private string _backgroundColor = "#222222"; 
+    private double _width = 200.0d;
 
     public Guid Id { get; init; } = Guid.NewGuid();
 
@@ -42,14 +41,7 @@ public class Note(double x, double y, string headerColor) : INotifyPropertyChang
         }
     }
 
-    public ObservableCollection<Node> Nodes
-    {
-        get => _nodes;
-        private set
-        {
-            _nodes = value;
-        }
-    }
+    public ObservableCollection<Node> Nodes { get; private set; } = new();
 
     public string HeaderColor
     {
@@ -60,6 +52,7 @@ public class Note(double x, double y, string headerColor) : INotifyPropertyChang
             OnPropertyChanged(nameof(HeaderColor));
         }
     }
+
     public string BackgroundColor
     {
         get => _backgroundColor;

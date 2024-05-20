@@ -26,7 +26,7 @@
 
     <DockPanel>
         <Canvas ZIndex="1000" HorizontalAlignment="Stretch">
-            <views:BoardToolbar Width="NaN" BoardName="{Binding Name}" HorizontalAlignment="Stretch"> 
+            <views:BoardToolbar Width="NaN" BoardName="{Binding Name}" HorizontalAlignment="Stretch">
                 <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="ExportBoard">
                         <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding ExportBoardCommand}" />

@@ -14,7 +14,7 @@ using ReactiveUI.Fody.Helpers;
 
 namespace NoteSHR.Components.Image;
 
-public class ImageComponentViewModel : ViewModelBase, IDataPersistence 
+public class ImageComponentViewModel : ViewModelBase, IDataPersistence
 {
     public ImageComponentViewModel()
     {
@@ -23,15 +23,12 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
             if (OperatingSystem.IsBrowser())
             {
                 var url = await App.FilePicker.GetFileUrl();
-                if (string.IsNullOrEmpty(url))
-                {
-                    return;
-                }
-                
+                if (string.IsNullOrEmpty(url)) return;
+
                 Image = await HttpHelper.GetBitmatFromUrl(url);
                 return;
             }
-            
+
             var topLevel = TopLevel.GetTopLevel(args.Source as Button);
             var fileOptions = new FilePickerOpenOptions
             {
@@ -47,14 +44,11 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
 
             Image = await ImageHelper.LoadFromFileSystem(file[0]);
         });
-        
+
         this.WhenAnyValue(vm => vm.Image)
             .Subscribe(image =>
             {
-                if (image != null)
-                {
-                    ImageSelected = true;
-                } 
+                if (image != null) ImageSelected = true;
             });
     }
 
@@ -67,10 +61,10 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
     {
         var stream = new MemoryStream();
         Image?.Save(stream);
-        
+
         return new
         {
-            Image = new FileBlob(stream) 
+            Image = new FileBlob(stream)
         };
     }
 }

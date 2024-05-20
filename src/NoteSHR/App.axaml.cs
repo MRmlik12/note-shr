@@ -10,7 +10,7 @@ namespace NoteSHR;
 public class App : Application
 {
     public static IFilePicker FilePicker { get; set; }
-    
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

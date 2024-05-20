@@ -11,9 +11,9 @@ public interface IDataPersistence
         foreach (var property in properties)
         {
             var value = property.GetValue(data);
-            if (value == null) 
+            if (value == null)
                 continue;
-            
+
             GetType().GetProperty(property.Name)?.SetValue(this, value);
         }
     }

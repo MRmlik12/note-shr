@@ -12,7 +12,6 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Core.Models;
-using NoteSHR.ViewModels;
 
 namespace NoteSHR.Components.NoteNode;
 
@@ -42,8 +41,9 @@ public class NoteNodeComponent : UserControl
     public static readonly RoutedEvent<MoveNodeEventArgs> MoveNodeEvent =
         RoutedEvent.Register<NoteNodeComponent, MoveNodeEventArgs>(nameof(MoveNodeEvent), RoutingStrategies.Direct);
 
-    private readonly StackPanel _stackPanel;
     private readonly List<Grid> _nodeGrids = new();
+
+    private readonly StackPanel _stackPanel;
 
     public NoteNodeComponent()
     {
@@ -104,7 +104,7 @@ public class NoteNodeComponent : UserControl
             {
                 if (deleteMode)
                 {
-                    var deleteButton = GetDeleteButtonControl((Guid)x.DataContext); 
+                    var deleteButton = GetDeleteButtonControl((Guid)x.DataContext);
 
                     x.Children.Add(deleteButton);
                 }
@@ -148,13 +148,14 @@ public class NoteNodeComponent : UserControl
             _nodeGrids.Clear();
             foreach (var nodeVm in Nodes)
             {
-                var grid = InitializeNodeGrid(nodeVm); 
+                var grid = InitializeNodeGrid(nodeVm);
                 _stackPanel.Children.Add(grid);
             }
 
             return;
         }
-        else if (e.Action == NotifyCollectionChangedAction.Remove)
+
+        if (e.Action == NotifyCollectionChangedAction.Remove)
         {
             foreach (var nodeVm in e.OldItems.Cast<Node>())
             {
@@ -242,9 +243,9 @@ public class NoteNodeComponent : UserControl
         {
             Name = MoveUpButtonName,
             Path = "avares://NoteSHR/Assets/Icons/caret-up-outline.svg",
-            DataContext = id,
+            DataContext = id
         };
-        
+
         Avalonia.Svg.Skia.Svg.SetCss(caretUpIcon, ".foreground { fill: #FFFFFF; }");
         moveUpButton.Children.Add(caretUpIcon);
 
@@ -261,10 +262,10 @@ public class NoteNodeComponent : UserControl
             Path = "avares://NoteSHR/Assets/Icons/caret-down-outline.svg",
             DataContext = id
         };
-        
+
         Avalonia.Svg.Skia.Svg.SetCss(caretDownIcon, ".foreground { fill: #FFFFFF; }");
         moveDownButton.Children.Add(caretDownIcon);
-        
+
         moveUpButton.PointerPressed += EditModeButtonClicked;
         moveDownButton.PointerPressed += EditModeButtonClicked;
 
@@ -277,33 +278,33 @@ public class NoteNodeComponent : UserControl
 
         editModeGrid.Children.Add(moveUpButton);
         editModeGrid.Children.Add(moveDownButton);
-        
+
         return editModeGrid;
     }
 
-    private Button GetDeleteButtonControl(Guid id) 
+    private Button GetDeleteButtonControl(Guid id)
     {
         var deleteButton = new Button
         {
             Name = DeleteButtonName,
             Background = Brushes.Transparent,
-            DataContext = id, 
+            DataContext = id
         };
-        
+
         var deleteIcon = new Avalonia.Svg.Skia.Svg(new Uri("avares://NoteSHR/Assets/Icons/trash-outline.svg"))
         {
             Path = "avares://NoteSHR/Assets/Icons/trash-outline.svg",
             Width = 16,
-            Height = 16,
+            Height = 16
         };
         Avalonia.Svg.Skia.Svg.SetCss(deleteIcon, ".foreground { stroke: #FF0000; }");
         deleteButton.Content = deleteIcon;
-        
+
         Grid.SetColumn(deleteButton, 0);
 
         deleteButton.Click += (_, _) =>
             RaiseEvent(new DeleteNodeEventArgs(DeleteNodeEvent, NoteId, id));
-        
+
         return deleteButton;
     }
 

@@ -15,7 +15,7 @@ public class ColorToHexConverter : IValueConverter
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         var color = (Color)value;
-        
+
         return color.ToString();
     }
 }

@@ -5,7 +5,6 @@ using System.Reactive;
 using Avalonia.Input;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
-using NoteSHR.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -37,13 +36,13 @@ public class ListComponentViewModel : ViewModelBase, IDataPersistence
 
     public ReactiveCommand<KeyEventArgs, Unit> AddRowCommand { get; set; }
     public ReactiveCommand<string, Unit> ChangePrefixTypeCommand { get; set; }
-    
+
     public object ExportValues()
     {
         return new
         {
             Rows,
-            PrefixType,
+            PrefixType
         };
     }
 }

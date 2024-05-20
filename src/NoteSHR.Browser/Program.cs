@@ -21,9 +21,6 @@ internal sealed class Program
     public static AppBuilder BuildAvaloniaApp()
     {
         return AppBuilder.Configure<App>()
-            .AfterSetup(a =>
-            {
-                App.FilePicker = new BrowserFilePicker();
-            });
+            .AfterSetup(a => { App.FilePicker = new BrowserFilePicker(); });
     }
 }

@@ -32,23 +32,22 @@ public class BoardViewModel : ViewModelBase
             LastMousePosition = args.GetPosition(null);
             if (args.Source is not Canvas)
             {
-                if (args.Source is not Grid header) 
+                if (args.Source is not Grid header)
                     return;
 
-                if (header?.Name == "Header")
-                {
-                    _noteMoveState = true;
-                }
+                if (header?.Name == "Header") _noteMoveState = true;
 
                 return;
-            };
+            }
+
+            ;
 
             if (!args.GetCurrentPoint(null).Properties.IsLeftButtonPressed) return;
 
             var position = args.GetPosition(null);
-            
+
             var note = new Note(position.X, position.Y, ColorHelper.GenerateColor());
-            
+
             Notes.Add(note);
         });
 
@@ -59,30 +58,24 @@ public class BoardViewModel : ViewModelBase
 
         MoveNoteCommand = ReactiveCommand.Create((PointerEventArgs args) =>
         {
-            if (!_noteMoveState)
-            {
-                return;
-            }
+            if (!_noteMoveState) return;
 
             var noteHeader = (Grid)args.Source!;
             var noteComponent = (Grid)noteHeader.Parent;
             var p = args.GetPosition(null);
             var note = Notes.SingleOrDefault(x => x.Id == ((Note)noteComponent.DataContext).Id);
-            
+
             if (note != null)
             {
                 note.X = p.X;
                 note.Y = p.Y;
-            } 
+            }
         });
 
         UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
         {
-            if (!_noteMoveState)
-            {
-                return;
-            }
-            
+            if (!_noteMoveState) return;
+
             var id = ((args.Source as Grid)?.DataContext as Note)?.Id;
             if (id == null) return;
 
@@ -90,7 +83,7 @@ public class BoardViewModel : ViewModelBase
             if (pointerPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonReleased) return;
 
             _noteMoveState = false;
-            
+
             var note = Notes.SingleOrDefault(x => x.Id == id);
             if (note != null)
             {
@@ -117,15 +110,9 @@ public class BoardViewModel : ViewModelBase
             note.Nodes.Add(new Node(Guid.NewGuid(), componentType, componentVm));
         });
 
-        ChangeDeleteModeStateCommand = ReactiveCommand.Create(() =>
-        {
-            DeleteMode = !DeleteMode;
-        });
+        ChangeDeleteModeStateCommand = ReactiveCommand.Create(() => { DeleteMode = !DeleteMode; });
 
-        ChangeEditModeStateCommand = ReactiveCommand.Create(() =>
-        {
-            EditMode = !EditMode;
-        });
+        ChangeEditModeStateCommand = ReactiveCommand.Create(() => { EditMode = !EditMode; });
 
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
         {
@@ -136,11 +123,12 @@ public class BoardViewModel : ViewModelBase
         MoveNoteNodeCommand = ReactiveCommand.Create((MoveNodeEventArgs args) =>
         {
             var sourceNoteIndex = Notes.IndexOf(Notes.Where(x => x.Id == args.NoteId).Single());
-            var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes.IndexOf(Notes[sourceNoteIndex].Nodes.Single(x => x.Id == args.NodeToMoveId));
+            var nodeToMoveIndex = Notes[sourceNoteIndex].Nodes
+                .IndexOf(Notes[sourceNoteIndex].Nodes.Single(x => x.Id == args.NodeToMoveId));
             var sourceNodeIndex = nodeToMoveIndex + (int)args.MoveOptions;
-            
+
             if (sourceNodeIndex > Notes[sourceNoteIndex].Nodes.Count - 1 || sourceNodeIndex < 0) return;
-            
+
             Notes[sourceNoteIndex].Nodes.Move(sourceNodeIndex, nodeToMoveIndex);
         });
 
@@ -152,14 +140,11 @@ public class BoardViewModel : ViewModelBase
                 Title = "Select path to export board",
                 AllowMultiple = false
             };
-            
+
             var folderPicker = await topLevel.StorageProvider.OpenFolderPickerAsync(saveFilePickerOptions);
 
-            if (folderPicker.Count == 0)
-            {
-                return;
-            }
-            
+            if (folderPicker.Count == 0) return;
+
             await BoardExporter.ExportToFile(Notes.ToList(), Name!, folderPicker[0].Path.AbsolutePath);
         });
     }

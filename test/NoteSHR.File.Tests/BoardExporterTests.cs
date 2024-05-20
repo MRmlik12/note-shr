@@ -10,17 +10,17 @@ public class BoardExporterTests
 {
     private const string TestImagePath = "./Assets/image.png";
     private const string BoardName = "test-board";
-    
+
     [Fact]
     public async Task TryExportBoard_OK()
     {
         var notes = new List<Note>
         {
-            new (100, 200, "#ffffff"),
-            new (200, 600, "#000000"),
-            new (0, 0, "#ffffff")
+            new(100, 200, "#ffffff"),
+            new(200, 600, "#000000"),
+            new(0, 0, "#ffffff")
         };
-        
+
         notes[0].Nodes.Add(new Node(Guid.NewGuid(), typeof(TextComponentControl), new TextComponentViewModel
         {
             Text = "Hello, World!"
@@ -29,7 +29,7 @@ public class BoardExporterTests
         {
             Text = "What's up?"
         }));
-        
+
         notes[1].Nodes.Add(new Node(Guid.NewGuid(), typeof(CheckComponent), new CheckComponentViewModel
         {
             Text = "Prepare meal",
@@ -37,7 +37,7 @@ public class BoardExporterTests
         }));
 
         var outputPath = await BoardExporter.ExportToFile(notes, BoardName, ".");
-        
+
         var zip = ZipFile.Open(outputPath, ZipArchiveMode.Read);
         zip.Entries.Select(x => x.FullName).Count().Should().Be(1);
     }

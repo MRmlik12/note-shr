@@ -5,10 +5,11 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardToolbar">
 
-    
+
     <DockPanel Background="Transparent">
-        <TextBox Foreground="Black" Background="Transparent" FontSize="24" Width="600" x:Name="BoardNameTextBlock" /> 
-        <Button DockPanel.Dock="Right" x:Name="ExportBoardButton" Click="ExportBoardButton_OnClick" Background="Transparent" Foreground="GhostWhite">
+        <TextBox Foreground="Black" Background="Transparent" FontSize="24" Width="600" x:Name="BoardNameTextBlock" />
+        <Button DockPanel.Dock="Right" x:Name="ExportBoardButton" Click="ExportBoardButton_OnClick"
+                Background="Transparent" Foreground="GhostWhite">
             <Svg Path="/Assets/Icons/save-outline.svg" Width="32" Height="32" />
         </Button>
     </DockPanel>
