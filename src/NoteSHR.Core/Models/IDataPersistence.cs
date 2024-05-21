@@ -4,17 +4,11 @@ public interface IDataPersistence
 {
     object ExportValues();
 
-    void ConvertValues(object data)
+    void ConvertValues(Dictionary<string, object> data)
     {
-        var properties = data.GetType().GetProperties();
-
-        foreach (var property in properties)
+        foreach (var (key, val) in data)
         {
-            var value = property.GetValue(data);
-            if (value == null)
-                continue;
-
-            GetType().GetProperty(property.Name)?.SetValue(this, value);
+            GetType().GetProperty(key)?.SetValue(this, val);
         }
     }
 }

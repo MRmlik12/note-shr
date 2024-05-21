@@ -85,9 +85,9 @@ public class BoardConverterTests
                             Component = typeof(TextComponentControl).FullName,
                             Assembly = nameof(NoteSHR),
                             ViewModelType = typeof(TextComponentViewModel).FullName,
-                            Data = new
+                            Data = new Dictionary<string, object>
                             {
-                                Text = "Hello, World!"
+                                { "Text", "Hello, World!" }
                             }
                         },
                         new()
@@ -96,9 +96,9 @@ public class BoardConverterTests
                             Component = typeof(TextComponentControl).FullName,
                             Assembly = nameof(NoteSHR),
                             ViewModelType = typeof(TextComponentViewModel).FullName,
-                            Data = new
+                            Data = new Dictionary<string, object>()
                             {
-                                Text = "What's up?"
+                                { "Text", "What's up?" }
                             }
                         }
                     }

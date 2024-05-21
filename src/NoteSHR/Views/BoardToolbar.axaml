@@ -12,5 +12,9 @@
                 Background="Transparent" Foreground="GhostWhite">
             <Svg Path="/Assets/Icons/save-outline.svg" Width="32" Height="32" />
         </Button>
+        <Button DockPanel.Dock="Right" x:Name="ImportBoardButton" Click="ImportBoardButton_OnClick"
+                Background="Transparent" Foreground="GhostWhite">
+            <Svg Path="/Assets/Icons/download-outline.svg" Width="32" Height="32" />
+        </Button>
     </DockPanel>
 </UserControl>

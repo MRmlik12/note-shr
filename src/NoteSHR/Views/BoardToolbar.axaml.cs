@@ -11,6 +11,9 @@ public partial class BoardToolbar : UserControl
     public static readonly RoutedEvent<RoutedEventArgs> ExportBoardEvent =
         RoutedEvent.Register<object, RoutedEventArgs>(nameof(ExportBoard), RoutingStrategies.Direct);
 
+    public static readonly RoutedEvent<RoutedEventArgs> ImportBoardEvent =
+        RoutedEvent.Register<object, RoutedEventArgs>(nameof(ImportBoard), RoutingStrategies.Direct);
+    
     public static readonly StyledProperty<string> BoardNameProperty =
         AvaloniaProperty.Register<BoardToolbar, string>(nameof(BoardName), defaultBindingMode: BindingMode.TwoWay);
 
@@ -31,8 +34,19 @@ public partial class BoardToolbar : UserControl
         remove => RemoveHandler(ExportBoardEvent, value);
     }
 
+    public event EventHandler<RoutedEventArgs> ImportBoard 
+    {
+        add => AddHandler(ImportBoardEvent, value);
+        remove => RemoveHandler(ImportBoardEvent, value);
+    }
+    
     private void ExportBoardButton_OnClick(object? sender, RoutedEventArgs e)
     {
         RaiseEvent(new RoutedEventArgs(ExportBoardEvent));
+    }
+
+    private void ImportBoardButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        RaiseEvent(new RoutedEventArgs(ImportBoardEvent));
     }
 }

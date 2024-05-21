@@ -31,6 +31,9 @@
                     <ia:EventTriggerBehavior EventName="ExportBoard">
                         <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding ExportBoardCommand}" />
                     </ia:EventTriggerBehavior>
+                    <ia:EventTriggerBehavior EventName="ImportBoard">
+                        <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding ImportBoardCommand}" />
+                    </ia:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
             </views:BoardToolbar>
         </Canvas>

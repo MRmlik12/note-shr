@@ -6,5 +6,5 @@ public class NodeScheme
     public string Assembly { get; set; }
     public string Component { get; set; }
     public string ViewModelType { get; set; }
-    public object Data { get; set; }
+    public Dictionary<string, object> Data { get; set; }
 }

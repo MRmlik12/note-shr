@@ -9,13 +9,25 @@ internal static class BoardConverter
 {
     private static bool FilterByBlobUrl(PropertyInfo property, object data)
     {
-        var value = property.GetValue(data);
+        object? value;
 
-        if (value is string str) return str.Contains("blob://");
+        if (property.GetIndexParameters().Length == 0)
+        {
+            value = property.GetValue(data);
+        }
+        else
+        {
+            return false;
+        }
+
+        if (value is string str)
+        {
+            return str.Contains("blob://");
+        }
 
         return false;
     }
-
+    
     internal static BoardScheme ConvertToScheme(string boardName, List<Note> notes)
     {
         var scheme = new BoardScheme
@@ -62,8 +74,10 @@ internal static class BoardConverter
                     Id = node.Id,
                     Assembly = node.Type.Assembly.GetName().Name,
                     Component = node.Type.FullName,
-                    ViewModelType = node.ViewModel.GetType().Name,
-                    Data = data
+                    ViewModelType = node.ViewModel.GetType().FullName,
+                    Data = data?.GetType()
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                        .ToDictionary(prop => prop.Name, prop => prop.GetValue(data)) 
                 };
             })
         });

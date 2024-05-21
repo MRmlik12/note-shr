@@ -145,7 +145,25 @@ public class BoardViewModel : ViewModelBase
 
             if (folderPicker.Count == 0) return;
 
-            await BoardExporter.ExportToFile(Notes.ToList(), Name!, folderPicker[0].Path.AbsolutePath);
+            await BoardExporter.ExportToFile(Notes.ToList(), Guid.NewGuid().ToString(), folderPicker[0].Path.AbsolutePath);
+        });
+
+        ImportBoardCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
+        {
+            var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
+            var openFilePickerOptions = new FilePickerOpenOptions()
+            {
+                Title = "Select file",
+                AllowMultiple = false
+            };
+
+            var selectedFiles = await topLevel.StorageProvider.OpenFilePickerAsync(openFilePickerOptions);
+            if (selectedFiles.Count == 0) return;
+
+            var importedBoard = await BoardImporter.ImportFromFile(selectedFiles[0].Path.AbsolutePath);
+
+            Name = importedBoard.Name;
+            Notes = new ObservableCollection<Note>(importedBoard.Notes);
         });
     }
 
@@ -166,4 +184,5 @@ public class BoardViewModel : ViewModelBase
     public ReactiveCommand<MoveNodeEventArgs, Unit> MoveNoteNodeCommand { get; set; }
     public ReactiveCommand<PointerEventArgs, Unit> MoveNoteCommand { get; set; }
     public ReactiveCommand<RoutedEventArgs, Unit> ExportBoardCommand { get; set; }
+    public ReactiveCommand<RoutedEventArgs, Unit> ImportBoardCommand { get; set; }
 }
