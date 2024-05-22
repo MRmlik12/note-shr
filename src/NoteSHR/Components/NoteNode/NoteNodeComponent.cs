@@ -45,6 +45,8 @@ public class NoteNodeComponent : UserControl
 
     private readonly StackPanel _stackPanel;
 
+    private bool _firstInitialized = false;
+
     public NoteNodeComponent()
     {
         MinHeight = 200;
@@ -97,6 +99,7 @@ public class NoteNodeComponent : UserControl
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
+        Console.WriteLine(change.Property.Name);
         if (change.Property.Name == nameof(DeleteMode))
         {
             var deleteMode = (bool)change.NewValue;
@@ -128,6 +131,14 @@ public class NoteNodeComponent : UserControl
                     x.Children.Remove(x.Children.FirstOrDefault(x => x.Name == EditButtonName));
                 }
             });
+        }
+        else if (change.Property.Name == nameof(Nodes) && change.NewValue != null && !_firstInitialized)
+        {
+            foreach (var nodeVm in change.NewValue as ObservableCollection<Node>)
+            {
+                var grid = InitializeNodeGrid(nodeVm);
+                _stackPanel.Children.Add(grid);
+            }
         }
 
         base.OnPropertyChanged(change);
@@ -212,6 +223,9 @@ public class NoteNodeComponent : UserControl
 
         _nodeGrids.Add(grid);
         grid.Children.Add(node);
+
+        _firstInitialized = true;
+        
         return grid;
     }
 
