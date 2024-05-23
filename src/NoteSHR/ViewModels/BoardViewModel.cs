@@ -145,7 +145,7 @@ public class BoardViewModel : ViewModelBase
 
             if (folderPicker.Count == 0) return;
 
-            await BoardExporter.ExportToFile(Notes.ToList(), Guid.NewGuid().ToString(), folderPicker[0].Path.AbsolutePath);
+            await BoardExporter.ExportToFile(Notes.ToList(), Name, folderPicker[0].Path.AbsolutePath);
         });
 
         ImportBoardCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>

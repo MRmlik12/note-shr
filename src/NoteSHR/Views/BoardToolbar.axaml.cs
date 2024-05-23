@@ -22,6 +22,17 @@ public partial class BoardToolbar : UserControl
         InitializeComponent();
     }
 
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        var boardNameTextBox = this.FindControl<TextBox>("BoardNameTextBox");
+        boardNameTextBox?.Bind(TextBox.TextProperty, new Binding
+        {
+            Source = this,
+            Path = "BoardName",
+            Mode = BindingMode.TwoWay
+        });
+    }
+
     public string BoardName
     {
         get => GetValue(BoardNameProperty);
