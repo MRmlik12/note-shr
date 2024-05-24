@@ -99,7 +99,6 @@ public class NoteNodeComponent : UserControl
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
-        Console.WriteLine(change.Property.Name);
         if (change.Property.Name == nameof(DeleteMode))
         {
             var deleteMode = (bool)change.NewValue;
