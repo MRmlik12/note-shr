@@ -4,25 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardToolbar">
-
-    <DockPanel Background="White">
-        <DockPanel.Styles>
-            <Style Selector="TextBox:pointerover">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
     
-            <Style Selector="TextBox:focused">  
-                <Setter Property="Background" Value="Transparent"/>  
-                <Setter Property="BorderThickness" Value="0" />
-            </Style> 
-        </DockPanel.Styles>
+    <UserControl.Styles>
+        <Style Selector="TextBox:focus /template/ Border">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border">
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+    </UserControl.Styles>
+    
+    <DockPanel Background="White">
         <StackPanel>
-            <TextBox DockPanel.Dock="Left" Foreground="Black" Background="Transparent" FontSize="24" Width="600" x:Name="BoardNameTextBox" />
+            <TextBox x:Name="BoardNameTextBox" DockPanel.Dock="Left" Foreground="Black" Background="Transparent" Cursor="Ibeam" FontSize="24" MinWidth="200" />
         </StackPanel>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
             <Button DockPanel.Dock="Right" x:Name="ImportBoardButton" Click="ImportBoardButton_OnClick"
-                            Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
+                            Background="Transparent" HorizontalAlignment="Right"
                             Cursor="Hand">
                 <Svg Path="/Assets/Icons/download-outline.svg" Width="32" Height="32" />
             </Button>
