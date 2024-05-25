@@ -5,7 +5,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardToolbar">
 
-    <DockPanel Background="Transparent">
+    <DockPanel Background="White">
         <DockPanel.Styles>
             <Style Selector="TextBox:pointerover">
                 <Setter Property="Background" Value="Transparent"/>
@@ -17,15 +17,21 @@
                 <Setter Property="BorderThickness" Value="0" />
             </Style> 
         </DockPanel.Styles>
-        <TextBox Foreground="Black" Background="Transparent" FontSize="24" Width="600" x:Name="BoardNameTextBox" />
-        <Button DockPanel.Dock="Right" x:Name="ExportBoardButton" Click="ExportBoardButton_OnClick"
-                Background="Transparent" Foreground="GhostWhite">
-            <Svg Path="/Assets/Icons/save-outline.svg" Width="32" Height="32" />
-        </Button>
-        <Button DockPanel.Dock="Right" x:Name="ImportBoardButton" Click="ImportBoardButton_OnClick"
-                Background="Transparent" Foreground="GhostWhite">
-            <Svg Path="/Assets/Icons/download-outline.svg" Width="32" Height="32" />
-        </Button>
+        <StackPanel>
+            <TextBox DockPanel.Dock="Left" Foreground="Black" Background="Transparent" FontSize="24" Width="600" x:Name="BoardNameTextBox" />
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button DockPanel.Dock="Right" x:Name="ImportBoardButton" Click="ImportBoardButton_OnClick"
+                            Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
+                            Cursor="Hand">
+                <Svg Path="/Assets/Icons/download-outline.svg" Width="32" Height="32" />
+            </Button>
+            <Button x:Name="ExportBoardButton" Click="ExportBoardButton_OnClick"
+                    Background="Transparent" Foreground="GhostWhite" HorizontalAlignment="Right"
+                    Cursor="Hand">
+                <Svg Path="/Assets/Icons/save-outline.svg" Width="32" Height="32" />
+            </Button>
+        </StackPanel>
     </DockPanel>
     
 </UserControl>

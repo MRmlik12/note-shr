@@ -24,8 +24,8 @@
         <converters:ColorToHexConverter x:Key="ColorToHexConverter" />
     </UserControl.Resources>
 
-    <DockPanel>
-        <Canvas ZIndex="1000" HorizontalAlignment="Stretch">
+    <Grid RowDefinitions="Auto, 100*">
+        <Grid Grid.Row="0" ZIndex="1000" HorizontalAlignment="Stretch">
             <views:BoardToolbar Width="NaN" BoardName="{Binding Name}" HorizontalAlignment="Stretch">
                 <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="ExportBoard">
@@ -36,9 +36,9 @@
                     </ia:EventTriggerBehavior>
                 </i:Interaction.Behaviors>
             </views:BoardToolbar>
-        </Canvas>
+        </Grid>
 
-        <paz:ZoomBorder Name="ZoomBorder" Stretch="Fill" ZoomSpeed="1.2"
+        <paz:ZoomBorder Grid.Row="1" Name="ZoomBorder" Stretch="Fill" ZoomSpeed="1.2"
                         ClipToBounds="True" Focusable="True">
             <ItemsControl x:Name="NoteItemsControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
@@ -155,5 +155,5 @@
                 </ItemsControl.ItemContainerTheme>
             </ItemsControl>
         </paz:ZoomBorder>
-    </DockPanel>
+    </Grid>
 </UserControl>
