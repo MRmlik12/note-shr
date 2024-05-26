@@ -28,11 +28,11 @@ internal static class BoardConverter
         return false;
     }
     
-    internal static BoardScheme ConvertToScheme(string boardName, List<Note> notes)
+    internal static BoardScheme ConvertToScheme(Guid id, string boardName, List<Note> notes)
     {
         var scheme = new BoardScheme
         {
-            Id = Guid.NewGuid(),
+            Id = id,
             Name = boardName,
             LastModifiedAt = DateTime.Now
         };
@@ -47,25 +47,31 @@ internal static class BoardConverter
             Y = note.Y,
             Nodes = note.Nodes.Select(node =>
             {
-                object? data = null;
+                var data = new Dictionary<string, object>();
 
                 if (node.ViewModel is IDataPersistence)
                 {
-                    data = ((IDataPersistence)node.ViewModel).ExportValues();
-
-                    foreach (var property in data.GetType().GetProperties()
-                                 .Where(x => x.PropertyType == typeof(FileBlob)))
+                    var nodeViewModelData = ((IDataPersistence)node.ViewModel).ExportValues();
+                    
+                    foreach (var property in nodeViewModelData.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                     {
-                        var fileBlob = property.GetValue(data) as FileBlob;
+                        if (property.PropertyType == typeof(FileBlob))
+                        {
+                            var fileBlob = property.GetValue(nodeViewModelData) as FileBlob;
 
-                        if (fileBlob != null)
-                            Task.Run(async () =>
+                            if (fileBlob != null)
                             {
                                 var fileId = Guid.NewGuid();
+                                fileBlob.SetProjectId(scheme.Id);
+                                var uri = fileBlob.Write(fileId.ToString());
+                                                                    
+                                data.Add(property.Name, uri);
+                            }
+                            
+                            continue;
+                        }
 
-                                var path = await fileBlob.Write(fileId.ToString());
-                                property.SetValue(data, path);
-                            });
+                        data.Add(property.Name, property.GetValue(nodeViewModelData));
                     }
                 }
 
@@ -75,9 +81,7 @@ internal static class BoardConverter
                     Assembly = node.Type.Assembly.GetName().Name,
                     Component = node.Type.FullName,
                     ViewModelType = node.ViewModel.GetType().FullName,
-                    Data = data?.GetType()
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                        .ToDictionary(prop => prop.Name, prop => prop.GetValue(data)) 
+                    Data = data
                 };
             })
         });

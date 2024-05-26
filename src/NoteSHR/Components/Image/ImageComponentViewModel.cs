@@ -43,6 +43,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
             if (file.Count == 0) return;
 
             Image = await ImageHelper.LoadFromFileSystem(file[0]);
+            ImageSelected = true;
         });
 
         this.WhenAnyValue(vm => vm.Image)
@@ -62,7 +63,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
         var stream = new MemoryStream();
         Image?.Save(stream);
 
-        return new
+        return new 
         {
             Image = new FileBlob(stream)
         };

@@ -8,13 +8,17 @@ namespace NoteSHR.File;
 
 public static class BoardExporter
 {
-    public static async Task<string> ExportToFile(List<Note> notes, string name, string path)
+    public static async Task<string> ExportToFile(Guid id, List<Note> notes, string name, string path)
     {
-        var boardScheme = BoardConverter.ConvertToScheme(name, notes);
-        var json = JsonConvert.SerializeObject(boardScheme);
-
-        var tempFolder = PathUtils.GetTemporaryPath(boardScheme.Id);
+        var tempFolder = PathUtils.GetTemporaryPath(id);
+        if (Directory.Exists(tempFolder))
+        {
+            Directory.Delete(tempFolder, true); 
+        }
+        
         Directory.CreateDirectory(tempFolder);
+        var boardScheme = BoardConverter.ConvertToScheme(id, name, notes);
+        var json = JsonConvert.SerializeObject(boardScheme);
 
         var boardFile = System.IO.File.Create(Path.Combine(tempFolder, "board.json"));
         await boardFile.WriteAsync(Encoding.UTF8.GetBytes(json));

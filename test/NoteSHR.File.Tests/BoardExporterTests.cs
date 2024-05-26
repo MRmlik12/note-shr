@@ -36,7 +36,7 @@ public class BoardExporterTests
             Checked = true
         }));
 
-        var outputPath = await BoardExporter.ExportToFile(notes, BoardName, ".");
+        var outputPath = await BoardExporter.ExportToFile(Guid.NewGuid(), notes, BoardName, ".");
 
         var zip = ZipFile.Open(outputPath, ZipArchiveMode.Read);
         zip.Entries.Select(x => x.FullName).Count().Should().Be(1);

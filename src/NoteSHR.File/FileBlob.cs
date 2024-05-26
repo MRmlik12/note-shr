@@ -11,7 +11,7 @@ public class FileBlob(Stream? stream = null) : IDisposable, IAsyncDisposable
     }
 
     private Guid ProjectId { get; set; }
-    private Uri Uri { get; }
+    private Uri Uri { get; set; }
 
     public async ValueTask DisposeAsync()
     {
@@ -28,13 +28,22 @@ public class FileBlob(Stream? stream = null) : IDisposable, IAsyncDisposable
         ProjectId = projectId;
     }
 
-    internal async Task<string> Write(string filename)
+    internal string Write(string filename)
     {
-        var internalPath = $"/assets/{filename}";
-        await using var fileStream = System.IO.File.Create($"{PathUtils.GetTemporaryPath(ProjectId)}/{internalPath}");
-        await stream!.CopyToAsync(fileStream);
+        var tempPath = PathUtils.GetTemporaryPath(ProjectId);
+        if (!Directory.Exists(Path.Combine(tempPath, "assets")))
+        {
+            Directory.CreateDirectory(Path.Combine(tempPath, "assets"));
+        }
+        
+        var internalPath = $"assets/{filename}"; 
+        using var fileStream = new FileStream($"{tempPath}/{internalPath}", FileMode.Create, FileAccess.Write);
+        stream!.Position = 0;
+        stream!.CopyTo(fileStream);
+        
+        Uri = new Uri($"blob://{internalPath}");
 
-        return $"blob://{internalPath}";
+        return Uri.ToString();
     }
 
     public Stream Read()

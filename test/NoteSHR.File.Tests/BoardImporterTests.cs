@@ -34,7 +34,7 @@ public class BoardImporterTests
             Checked = true
         }));
 
-        var outputPath = await BoardExporter.ExportToFile(notes, BoardName, ".");
+        var outputPath = await BoardExporter.ExportToFile(Guid.NewGuid(), notes, BoardName, ".");
         var importedNotes = await BoardImporter.ImportFromFile(outputPath);
 
         importedNotes.Notes.Should().HaveCount(notes.Count);
