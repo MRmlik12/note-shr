@@ -28,7 +28,7 @@ public class BoardConverterTests
 
         const string boardName = "Hello";
 
-        var scheme = BoardConverter.ConvertToScheme(boardName, notes);
+        var scheme = BoardConverter.ConvertToScheme(Guid.NewGuid(), boardName, notes);
 
         scheme.LastModifiedAt.Should().BeSameDateAs(DateTime.Now);
         scheme.Name.Should().Be(boardName);
@@ -52,7 +52,7 @@ public class BoardConverterTests
         var notes = new List<Note>();
 
         const string boardName = "empty";
-        var scheme = BoardConverter.ConvertToScheme(boardName, notes);
+        var scheme = BoardConverter.ConvertToScheme(Guid.NewGuid(), boardName, notes);
 
         scheme.Name.Should().Be(boardName);
         scheme.LastModifiedAt.Should().BeSameDateAs(DateTime.Today);

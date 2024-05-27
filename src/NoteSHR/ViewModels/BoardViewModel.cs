@@ -24,27 +24,30 @@ namespace NoteSHR.ViewModels;
 public class BoardViewModel : ViewModelBase
 {
     private bool _noteMoveState;
+    private Point _initialPointerOffset;
 
     public BoardViewModel()
     {
         CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
         {
-            LastMousePosition = args.GetPosition(null);
+            LastMousePosition = args.GetPosition(args.Source as Canvas);
             if (args.Source is not Canvas)
             {
                 if (args.Source is not Grid header)
                     return;
 
-                if (header?.Name == "Header") _noteMoveState = true;
+                if (header?.Name == "Header")
+                {
+                    _noteMoveState = true;
+                    _initialPointerOffset = args.GetPosition(header);
+                }
 
                 return;
             }
 
-            ;
+            if (!args.GetCurrentPoint(args.Source as Canvas).Properties.IsLeftButtonPressed) return;
 
-            if (!args.GetCurrentPoint(null).Properties.IsLeftButtonPressed) return;
-
-            var position = args.GetPosition(null);
+            var position = args.GetPosition(args.Source as Canvas);
 
             var note = new Note(position.X, position.Y, ColorHelper.GenerateColor());
 
@@ -59,7 +62,7 @@ public class BoardViewModel : ViewModelBase
         MoveNoteCommand = ReactiveCommand.Create((PointerEventArgs args) =>
         {
             if (!_noteMoveState) return;
-
+            
             var noteHeader = (Grid)args.Source!;
             var noteComponent = (Grid)noteHeader.Parent;
             var p = args.GetPosition(null);
@@ -79,7 +82,7 @@ public class BoardViewModel : ViewModelBase
             var id = ((args.Source as Grid)?.DataContext as Note)?.Id;
             if (id == null) return;
 
-            var pointerPoint = args.GetCurrentPoint(null);
+            var pointerPoint = args.GetCurrentPoint(args.Source as Canvas);
             if (pointerPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonReleased) return;
 
             _noteMoveState = false;
