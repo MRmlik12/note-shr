@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
+using NoteSHR.Core.Utils;
 using NoteSHR.Core.ViewModel;
 using NoteSHR.File;
 using ReactiveUI;
@@ -25,7 +26,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
                 var url = await App.FilePicker.GetFileUrl();
                 if (string.IsNullOrEmpty(url)) return;
 
-                Image = await HttpHelper.GetBitmatFromUrl(url);
+                Image = await HttpUtils.GetBitmapFromUrl(url);
                 return;
             }
 

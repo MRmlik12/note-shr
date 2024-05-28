@@ -7,11 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.0.10" />
         <PackageReference Include="ReactiveUI.Fody" Version="19.5.41"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Helpers\"/>
     </ItemGroup>
 
 </Project>

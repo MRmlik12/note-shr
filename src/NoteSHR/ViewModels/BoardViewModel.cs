@@ -24,7 +24,6 @@ namespace NoteSHR.ViewModels;
 public class BoardViewModel : ViewModelBase
 {
     private bool _noteMoveState;
-    private Point _initialPointerOffset;
 
     public BoardViewModel()
     {
@@ -39,7 +38,6 @@ public class BoardViewModel : ViewModelBase
                 if (header?.Name == "Header")
                 {
                     _noteMoveState = true;
-                    _initialPointerOffset = args.GetPosition(header);
                 }
 
                 return;
@@ -153,17 +151,28 @@ public class BoardViewModel : ViewModelBase
 
         ImportBoardCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
         {
-            var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
-            var openFilePickerOptions = new FilePickerOpenOptions()
+            string path;
+            if (OperatingSystem.IsBrowser())
             {
-                Title = "Select file",
-                AllowMultiple = false
-            };
+                path = await App.FilePicker.GetFileUrl();
+                if (string.IsNullOrEmpty(path)) return;
+            }
+            else
+            {
+                var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
+                var openFilePickerOptions = new FilePickerOpenOptions()
+                {
+                    Title = "Select file",
+                    AllowMultiple = false
+                };
 
-            var selectedFiles = await topLevel.StorageProvider.OpenFilePickerAsync(openFilePickerOptions);
-            if (selectedFiles.Count == 0) return;
+                var selectedFiles = await topLevel.StorageProvider.OpenFilePickerAsync(openFilePickerOptions);
+                if (selectedFiles.Count == 0) return;
 
-            var importedBoard = await BoardImporter.ImportFromFile(selectedFiles[0].Path.AbsolutePath);
+                path = selectedFiles[0].Path.AbsolutePath;
+            }
+
+            var importedBoard = await BoardImporter.ImportFromFile(path);
 
             Name = importedBoard.Name;
             Notes = new ObservableCollection<Note>(importedBoard.Notes);

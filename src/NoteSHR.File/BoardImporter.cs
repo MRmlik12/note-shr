@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using NoteSHR.Core.Exceptions;
 using NoteSHR.Core.Models;
+using NoteSHR.Core.Utils;
 using NoteSHR.File.Schemes;
 
 namespace NoteSHR.File;
@@ -10,7 +11,16 @@ public static class BoardImporter
 {
     public static async Task<Board> ImportFromFile(string path)
     {
-        var zipFile = ZipFile.Open(path, ZipArchiveMode.Read);
+        ZipArchive zipFile;
+        if (OperatingSystem.IsBrowser())
+        {
+            var stream = await HttpUtils.GetStreamFromUrl(path);
+            zipFile = new ZipArchive(stream);
+        }
+        else
+        {
+            zipFile = ZipFile.Open(path, ZipArchiveMode.Read);
+        }
 
         var schemeFile = zipFile.Entries.First(e => e.Name == "board.json");
         await using var schemeStream = schemeFile.Open();
