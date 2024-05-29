@@ -135,6 +135,12 @@ public class BoardViewModel : ViewModelBase
 
         ExportBoardCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
         {
+            if (OperatingSystem.IsBrowser())
+            {
+                await BoardExporter.ExportToFile(Guid.NewGuid(), Notes.ToList(), Name, string.Empty, App.FileService);
+                return;
+            }
+            
             var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
             var saveFilePickerOptions = new FolderPickerOpenOptions
             {
@@ -154,7 +160,7 @@ public class BoardViewModel : ViewModelBase
             string path;
             if (OperatingSystem.IsBrowser())
             {
-                path = await App.FilePicker.GetFileUrl();
+                path = await App.FileService.GetFileUrl();
                 if (string.IsNullOrEmpty(path)) return;
             }
             else

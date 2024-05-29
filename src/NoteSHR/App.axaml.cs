@@ -9,7 +9,7 @@ namespace NoteSHR;
 
 public class App : Application
 {
-    public static IFilePicker FilePicker { get; set; }
+    public static IFileService FileService { get; set; }
 
     public override void Initialize()
     {

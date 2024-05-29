@@ -23,7 +23,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
         {
             if (OperatingSystem.IsBrowser())
             {
-                var url = await App.FilePicker.GetFileUrl();
+                var url = await App.FileService.GetFileUrl();
                 if (string.IsNullOrEmpty(url)) return;
 
                 Image = await HttpUtils.GetBitmapFromUrl(url);

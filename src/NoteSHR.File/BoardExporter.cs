@@ -2,13 +2,14 @@
 using System.Text;
 using Newtonsoft.Json;
 using NoteSHR.Core.Models;
+using NoteSHR.Core.Services;
 using NoteSHR.File.Utils;
 
 namespace NoteSHR.File;
 
 public static class BoardExporter
 {
-    public static async Task<string> ExportToFile(Guid id, List<Note> notes, string name, string path)
+    public static async Task<string> ExportToFile(Guid id, List<Note> notes, string name, string path, IFileService fileService = null)
     {
         var tempFolder = PathUtils.GetTemporaryPath(id);
         if (Directory.Exists(tempFolder))
@@ -24,6 +25,16 @@ public static class BoardExporter
         await boardFile.WriteAsync(Encoding.UTF8.GetBytes(json));
         boardFile.Close();
 
+        if (OperatingSystem.IsBrowser())
+        {
+            using var memoryStream = new MemoryStream();
+            ZipFile.CreateFromDirectory(tempFolder, memoryStream);
+            memoryStream.Position = 0;
+            await fileService.SaveFile($"{name}.zip", Encoding.ASCII.GetString(memoryStream.ToArray()));
+            
+            return string.Empty;
+        }
+        
         var destinationPath = $"{path}/{name}.zip";
         if (System.IO.File.Exists(destinationPath)) System.IO.File.Delete(destinationPath);
 
