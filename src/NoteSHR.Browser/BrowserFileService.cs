@@ -18,7 +18,7 @@ public class BrowserFileService : IFileService
         return url;
     }
     
-    public async Task SaveFile(string fileName, string content)
+    public async Task SaveFile(string fileName, byte[] content)
     {
         await FileUtilsEmbed.SaveFile(fileName, content);
     }
@@ -30,5 +30,5 @@ internal partial class FileUtilsEmbed
     public static partial Task<string?> OpenFilePicker();
     
     [JSImport("saveFile", "FileUtils")]
-    public static partial Task SaveFile(string fileName, string contents); 
+    public static partial Task SaveFile(string fileName, byte[] contents); 
 }

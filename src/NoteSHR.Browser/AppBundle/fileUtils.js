@@ -20,7 +20,7 @@ export function saveFile(fileName, content) {
     return new Promise(() => {
         const link = document.createElement('a');
         link.download = fileName;
-        link.href = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
+        link.href = URL.createObjectURL(new Blob([content], { type: 'application/octet-stream' }));
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link); 

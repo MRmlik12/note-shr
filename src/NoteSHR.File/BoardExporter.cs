@@ -30,7 +30,7 @@ public static class BoardExporter
             using var memoryStream = new MemoryStream();
             ZipFile.CreateFromDirectory(tempFolder, memoryStream);
             memoryStream.Position = 0;
-            await fileService.SaveFile($"{name}.zip", Encoding.ASCII.GetString(memoryStream.ToArray()));
+            await fileService.SaveFile($"{name}.zip", memoryStream.ToArray());
             
             return string.Empty;
         }
