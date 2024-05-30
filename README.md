@@ -16,7 +16,7 @@ A multi-platform application to effectively manage notes on a whiteboard.
 For more detailed plan of app development please look into [TODO board](https://dolczyk.notion.site/TODO-68c8d6e46fbe4519b3fb762d7469b6e6?pvs=4)
 
 - [x]  Proof of concept
-- [ ]  Save file scheme
+- [x]  Save file scheme
 - [ ]  Beautify app
 - [ ]  Share board with everyone
 - [ ]  Collaboration API
