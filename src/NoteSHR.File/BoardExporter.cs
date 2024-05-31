@@ -30,12 +30,12 @@ public static class BoardExporter
             using var memoryStream = new MemoryStream();
             ZipFile.CreateFromDirectory(tempFolder, memoryStream);
             memoryStream.Position = 0;
-            await fileService.SaveFile($"{name}.zip", memoryStream.ToArray());
+            await fileService.SaveFile($"{name}.shr", memoryStream.ToArray());
             
             return string.Empty;
         }
         
-        var destinationPath = $"{path}/{name}.zip";
+        var destinationPath = $"{path}/{name}.shr";
         if (System.IO.File.Exists(destinationPath)) System.IO.File.Delete(destinationPath);
 
         ZipFile.CreateFromDirectory(tempFolder, destinationPath);
