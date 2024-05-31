@@ -17,7 +17,7 @@
     
     <DockPanel Background="White">
         <StackPanel>
-            <TextBox x:Name="BoardNameTextBox" DockPanel.Dock="Left" Foreground="Black" Background="Transparent" Cursor="Ibeam" FontSize="24" MinWidth="200" MaxWidth="600" />
+            <TextBox x:Name="BoardNameTextBox" DockPanel.Dock="Left" Foreground="Black" Background="Transparent" Cursor="Ibeam" Watermark="Enter your own board name" FontSize="24" MinWidth="200" MaxWidth="600" />
         </StackPanel>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
             <Button DockPanel.Dock="Right" x:Name="ImportBoardButton" Click="ImportBoardButton_OnClick"
