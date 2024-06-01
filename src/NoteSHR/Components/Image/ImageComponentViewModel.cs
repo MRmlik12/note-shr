@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reactive;
 using Avalonia.Controls;
@@ -68,5 +69,13 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
         {
             Image = new FileBlob(stream)
         };
+    }
+
+    public void ConvertValues(Dictionary<string, object> data)
+    {
+        if (data.TryGetValue("Image", out var image))
+        {
+            Image = new Bitmap((image as FileBlob).Read());
+        }
     }
 }
