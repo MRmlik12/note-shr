@@ -7,26 +7,7 @@ namespace NoteSHR.File;
 
 internal static class BoardConverter
 {
-    private static bool FilterByBlobUrl(PropertyInfo property, object data)
-    {
-        object? value;
-
-        if (property.GetIndexParameters().Length == 0)
-        {
-            value = property.GetValue(data);
-        }
-        else
-        {
-            return false;
-        }
-
-        if (value is string str)
-        {
-            return str.Contains("blob://");
-        }
-
-        return false;
-    }
+    private const string BlobUrlPattern = "blob://";
     
     internal static BoardScheme ConvertToScheme(Guid id, string boardName, List<Note> notes)
     {
@@ -115,12 +96,10 @@ internal static class BoardConverter
                 var viewModel = (ViewModelBase)Activator.CreateInstance(viewModelType);
                 if (viewModel is IDataPersistence persistence)
                 {
-                    foreach (var properties in nodeScheme.Data.GetType().GetProperties()
-                                 .Where(x => FilterByBlobUrl(x, nodeScheme.Data)))
+                    foreach (var data in nodeScheme.Data.Where(x => x.Value is string str && str.Contains(BlobUrlPattern)))
                     {
-                        var path = properties.GetValue(nodeScheme.Data) as string;
-                        var blob = new FileBlob(scheme.Id, path);
-                        properties.SetValue(nodeScheme.Data, blob);
+                        var blob = new FileBlob(scheme.Id, data!.Value as string);
+                        nodeScheme.Data[data.Key] = blob;
                     }
 
                     persistence?.ConvertValues(nodeScheme.Data);
