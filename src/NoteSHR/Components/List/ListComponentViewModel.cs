@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using Avalonia.Input;
+using Newtonsoft.Json.Linq;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
 using ReactiveUI;
@@ -44,5 +45,21 @@ public class ListComponentViewModel : ViewModelBase, IDataPersistence
             Rows,
             PrefixType
         };
+    }
+
+    public void ConvertValues(Dictionary<string, object> data)
+    {
+        if (data.TryGetValue(nameof(PrefixType), out var prefixType))
+        {
+            PrefixType = Enum.Parse<PrefixType>(prefixType.ToString());
+        }
+        
+        foreach (var key in data.Keys.ToList())
+        {
+            if (data[key] is JArray jArray && key == nameof(Rows))
+            {
+                Rows = jArray.ToObject<List<ListItem>>();
+            }
+        } 
     }
 }
