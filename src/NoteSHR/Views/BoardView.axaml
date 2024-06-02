@@ -69,7 +69,7 @@
                                   RowDefinitions="5*,95*" x:Name="Note" Background="{Binding BackgroundColor}"
                                   ZIndex="5" MinWidth="200">
                                 <Grid Grid.Row="0" x:Name="Header" Background="{Binding HeaderColor}"
-                                      ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" RowDefinitions="*">
+                                      ColumnDefinitions="Auto,Auto,Auto,Auto,*" RowDefinitions="*">
                                     <Button Grid.Column="0" Background="Transparent" Foreground="Green"
                                             HorizontalAlignment="Right"
                                             Cursor="Hand">
