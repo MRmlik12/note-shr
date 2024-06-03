@@ -103,7 +103,7 @@ class Build : NukeBuild
                 DotNetTasks.DotNetWorkloadInstall(s => s
                     .SetWorkloadId("wasm-tools")
                     .SetSkipManifestUpdate(true));
-             
+            
             foreach (var platform in Platforms)
             {
                 DotNetTasks.DotNetRestore(_ => _.SetProjectFile(Solution.AllProjects.Single(x => x.Name == platform.Name).Path));
@@ -125,6 +125,8 @@ class Build : NukeBuild
         .OnlyWhenDynamic(() => !SkipTests)
         .Executes(() =>
         {
+            DotNetTasks.DotNetRestore(_ =>
+                _.SetProjectFile(Solution.AllProjects.Single(x => x.Name == "NoteSHR.File.Tests").Path));
             DotNetTasks.DotNetTest(_ => _.EnableNoRestore());
         });
     
