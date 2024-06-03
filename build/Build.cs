@@ -125,7 +125,7 @@ class Build : NukeBuild
         .OnlyWhenDynamic(() => !SkipTests)
         .Executes(() =>
         {
-            DotNetTasks.DotNetTest();
+            DotNetTasks.DotNetTest(_ => _.EnableNoRestore());
         });
     
     Target Compile => _ => _
