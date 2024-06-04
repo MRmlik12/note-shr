@@ -94,4 +94,7 @@ $ ./build.sh --configuration Release --allow-android-build
 
 - [Avalonia](https://avaloniaui.net/)
 - [ReactiveUI](https://www.reactiveui.net/)
+- [Avalonia.Xaml.Behaviors](https://github.com/AvaloniaUI/Avalonia.Xaml.Behaviors)
+- [Newtonsoft.Json](https://www.newtonsoft.com/json)
+- [Svg.Skia](https://github.com/wieslawsoltes/Svg.Skia)
 - [NUKE](https://nuke.build/)
