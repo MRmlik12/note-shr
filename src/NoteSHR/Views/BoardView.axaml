@@ -44,22 +44,7 @@
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch">
-                            <i:Interaction.Behaviors>
-                                <ia:EventTriggerBehavior EventName="PointerPressed" SourceObject="Board">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                            Command="{Binding CreateNoteCommand}" />
-                                </ia:EventTriggerBehavior>
-                                <ia:EventTriggerBehavior EventName="PointerMoved" SourceObject="Board">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                            Command="{Binding MoveNoteCommand}" />
-                                </ia:EventTriggerBehavior>
-                                <ia:EventTriggerBehavior EventName="PointerReleased" SourceObject="Board">
-                                    <ia:InvokeCommandAction PassEventArgsToCommand="True"
-                                                            Command="{Binding UpdateNoteLocation}" />
-                                </ia:EventTriggerBehavior>
-                            </i:Interaction.Behaviors>
-                        </Canvas>
+                                VerticalAlignment="Stretch" PointerPressed="Board_OnPointerPressed" PointerMoved="Board_OnPointerMoved" PointerReleased="Board_OnPointerReleased" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

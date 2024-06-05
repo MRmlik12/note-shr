@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.ReactiveUI;
+using NoteSHR.Core.EventArgs;
 using NoteSHR.Core.Models;
 using NoteSHR.ViewModels;
 using ReactiveUI;
@@ -58,5 +59,35 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
 
         var p = e.GetPosition(rectangle);
         grid!.Children[0].Width += p.X;
+    }
+
+    private void Board_OnPointerMoved(object? sender, PointerEventArgs e)
+    {
+        var args = new BoardPointerEventArgs
+        {
+            Args = e,
+            Source = (Canvas)sender!
+        };
+        ViewModel!.MoveNoteCommand.Execute(args).Subscribe();
+    }
+
+    private void Board_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        var args = new BoardPointerEventArgs
+        {
+            Args = e,
+            Source = (Canvas)sender!
+        };
+        ViewModel!.CreateNoteCommand.Execute(args).Subscribe();
+    }
+
+    private void Board_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        var args = new BoardPointerEventArgs
+        {
+            Args = e,
+            Source = (Canvas)sender!
+        };
+        ViewModel!.UpdateNoteLocation.Execute(args).Subscribe();
     }
 }

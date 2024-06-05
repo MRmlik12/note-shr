@@ -12,6 +12,7 @@ using NoteSHR.Components.Image;
 using NoteSHR.Components.List;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
+using NoteSHR.Core.EventArgs;
 using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
@@ -27,12 +28,12 @@ public class BoardViewModel : ViewModelBase
 
     public BoardViewModel()
     {
-        CreateNoteCommand = ReactiveCommand.Create((PointerPressedEventArgs args) =>
+        CreateNoteCommand = ReactiveCommand.Create((BoardPointerEventArgs e) =>
         {
-            LastMousePosition = args.GetPosition(args.Source as Canvas);
-            if (args.Source is not Canvas)
+            LastMousePosition = e.Args.GetPosition(e.Source);
+            if (e.Args.Source is not Canvas)
             {
-                if (args.Source is not Grid header)
+                if (e.Args.Source is not Grid header)
                     return;
 
                 if (header?.Name == "Header")
@@ -43,9 +44,9 @@ public class BoardViewModel : ViewModelBase
                 return;
             }
 
-            if (!args.GetCurrentPoint(args.Source as Canvas).Properties.IsLeftButtonPressed) return;
+            if (!e.Args.GetCurrentPoint(e.Source).Properties.IsLeftButtonPressed) return;
 
-            var position = args.GetPosition(args.Source as Canvas);
+            var position = e.Args.GetPosition(e.Source);
 
             var note = new Note(position.X, position.Y, ColorHelper.GenerateColor());
 
@@ -57,13 +58,13 @@ public class BoardViewModel : ViewModelBase
             Notes.Remove(Notes.Where(note => note.Id == id).Single());
         });
 
-        MoveNoteCommand = ReactiveCommand.Create((PointerEventArgs args) =>
+        MoveNoteCommand = ReactiveCommand.Create((BoardPointerEventArgs e) =>
         {
             if (!_noteMoveState) return;
             
-            var noteHeader = (Grid)args.Source!;
+            var noteHeader = (Grid)e.Args.Source!;
             var noteComponent = (Grid)noteHeader.Parent;
-            var p = args.GetPosition(null);
+            var p = e.Args.GetPosition(e.Source); 
             var note = Notes.SingleOrDefault(x => x.Id == ((Note)noteComponent.DataContext).Id);
 
             if (note != null)
@@ -73,14 +74,14 @@ public class BoardViewModel : ViewModelBase
             }
         });
 
-        UpdateNoteLocation = ReactiveCommand.Create((PointerReleasedEventArgs args) =>
+        UpdateNoteLocation = ReactiveCommand.Create((BoardPointerEventArgs e) =>
         {
             if (!_noteMoveState) return;
 
-            var id = ((args.Source as Grid)?.DataContext as Note)?.Id;
+            var id = ((e.Args.Source as Grid)?.DataContext as Note)?.Id;
             if (id == null) return;
 
-            var pointerPoint = args.GetCurrentPoint(args.Source as Canvas);
+            var pointerPoint = e.Args.GetCurrentPoint(e.Source);
             if (pointerPoint.Properties.PointerUpdateKind != PointerUpdateKind.LeftButtonReleased) return;
 
             _noteMoveState = false;
@@ -192,15 +193,15 @@ public class BoardViewModel : ViewModelBase
 
     private Point LastMousePosition { get; set; }
 
-    public ReactiveCommand<PointerPressedEventArgs, Unit> CreateNoteCommand { get; set; }
+    public ReactiveCommand<BoardPointerEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }
-    public ReactiveCommand<PointerReleasedEventArgs, Unit> UpdateNoteLocation { get; set; }
+    public ReactiveCommand<BoardPointerEventArgs, Unit> UpdateNoteLocation { get; set; }
     public ReactiveCommand<(Guid, NodeType), Unit> AddNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeDeleteModeStateCommand { get; set; }
     public ReactiveCommand<DeleteNodeEventArgs, Unit> DeleteNoteNodeCommand { get; set; }
     public ReactiveCommand<Unit, Unit> ChangeEditModeStateCommand { get; set; }
     public ReactiveCommand<MoveNodeEventArgs, Unit> MoveNoteNodeCommand { get; set; }
-    public ReactiveCommand<PointerEventArgs, Unit> MoveNoteCommand { get; set; }
+    public ReactiveCommand<BoardPointerEventArgs, Unit> MoveNoteCommand { get; set; }
     public ReactiveCommand<RoutedEventArgs, Unit> ExportBoardCommand { get; set; }
     public ReactiveCommand<RoutedEventArgs, Unit> ImportBoardCommand { get; set; }
 }
