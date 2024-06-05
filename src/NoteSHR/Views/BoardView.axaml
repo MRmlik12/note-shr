@@ -7,9 +7,9 @@
              xmlns:vm="clr-namespace:NoteSHR.ViewModels"
              xmlns:noteNode="clr-namespace:NoteSHR.Components.NoteNode"
              xmlns:paz="using:Avalonia.Controls.PanAndZoom"
-             xmlns:converters="clr-namespace:NoteSHR.Core.Converters"
              xmlns:models="clr-namespace:NoteSHR.Core.Models;assembly=NoteSHR.Core"
              xmlns:views="clr-namespace:NoteSHR.Views"
+             xmlns:converters="clr-namespace:NoteSHR.Core.Converters;assembly=NoteSHR.Core"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              VerticalAlignment="Stretch"
@@ -39,12 +39,15 @@
         </Grid>
 
         <paz:ZoomBorder Grid.Row="1" Name="ZoomBorder" Stretch="Fill" ZoomSpeed="1.2"
-                        ClipToBounds="True" Focusable="True">
+                        ClipToBounds="True" Focusable="True" EnableZoom="False" EnablePan="False">
             <ItemsControl x:Name="NoteItemsControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas x:Name="Board" Background="White" HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch" PointerPressed="Board_OnPointerPressed" PointerMoved="Board_OnPointerMoved" PointerReleased="Board_OnPointerReleased" />
+                                VerticalAlignment="Stretch"
+                                PointerPressed="Board_OnPointerPressed"
+                                PointerMoved="Board_OnPointerMoved"
+                                PointerReleased="Board_OnPointerReleased" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -59,7 +62,7 @@
                                             HorizontalAlignment="Right"
                                             Cursor="Hand">
                                         <Svg Path="/Assets/Icons/add-outline.svg" Width="16" Height="16"
-                                             Css=".foreground { stroke: #228B22; }" />
+                                             Css=".foreground { stroke: #30D95D; }" />
                                         <Button.Flyout>
                                             <MenuFlyout>
                                                 <MenuItem Header="Text" CommandParameter="Text"
