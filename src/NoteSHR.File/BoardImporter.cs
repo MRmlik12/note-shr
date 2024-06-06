@@ -4,6 +4,7 @@ using NoteSHR.Core.Exceptions;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.Utils;
 using NoteSHR.File.Schemes;
+using NoteSHR.File.Utils;
 
 namespace NoteSHR.File;
 
@@ -28,6 +29,8 @@ public static class BoardImporter
         var scheme = JsonConvert.DeserializeObject<BoardScheme>(jsonContent);
 
         if (scheme is null) throw new CorruptedBoardFileException("Cannot read board contents from file");
+
+        zipFile.ExtractToDirectory(PathUtils.GetTemporaryPath(scheme.Id)); 
 
         var board = BoardConverter.ConvertBack(scheme);
 

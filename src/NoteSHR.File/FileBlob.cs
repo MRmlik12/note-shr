@@ -47,8 +47,10 @@ public class FileBlob(Stream? stream = null) : IDisposable, IAsyncDisposable
     }
 
     public Stream Read()
-    {
-        return System.IO.File.OpenRead(GetFilePath(Uri.AbsolutePath));
+    { 
+        var filePath = GetFilePath(Uri.AbsolutePath);
+        
+        return System.IO.File.OpenRead(filePath);
     }
 
     private string GetFilePath(string filename)
