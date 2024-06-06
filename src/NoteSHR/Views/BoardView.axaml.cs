@@ -90,4 +90,14 @@ public partial class BoardView : ReactiveUserControl<BoardViewModel>
         };
         ViewModel!.UpdateNoteLocation.Execute(args).Subscribe();
     }
+
+    private void BoardToolbar_OnImportBoard(object? sender, RoutedEventArgs e)
+    {
+        ViewModel!.ImportBoardCommand.Execute(e).Subscribe();
+    }
+
+    private void BoardToolbar_OnExportBoard(object? sender, RoutedEventArgs e)
+    {
+        ViewModel!.ExportBoardCommand.Execute(e).Subscribe();
+    }
 }

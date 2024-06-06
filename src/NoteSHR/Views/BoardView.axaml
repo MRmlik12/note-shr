@@ -26,16 +26,7 @@
 
     <Grid RowDefinitions="Auto, 100*">
         <Grid Grid.Row="0" ZIndex="1000" HorizontalAlignment="Stretch">
-            <views:BoardToolbar Width="NaN" BoardName="{Binding Name}" HorizontalAlignment="Stretch">
-                <i:Interaction.Behaviors>
-                    <ia:EventTriggerBehavior EventName="ExportBoard">
-                        <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding ExportBoardCommand}" />
-                    </ia:EventTriggerBehavior>
-                    <ia:EventTriggerBehavior EventName="ImportBoard">
-                        <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding ImportBoardCommand}" />
-                    </ia:EventTriggerBehavior>
-                </i:Interaction.Behaviors>
-            </views:BoardToolbar>
+            <views:BoardToolbar Width="NaN" BoardName="{Binding Name}" HorizontalAlignment="Stretch" ImportBoard="BoardToolbar_OnImportBoard" ExportBoard="BoardToolbar_OnExportBoard" />
         </Grid>
 
         <paz:ZoomBorder Grid.Row="1" Name="ZoomBorder" Stretch="Fill" ZoomSpeed="1.2"
