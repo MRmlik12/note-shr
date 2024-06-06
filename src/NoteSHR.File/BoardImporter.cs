@@ -29,10 +29,8 @@ public static class BoardImporter
         var scheme = JsonConvert.DeserializeObject<BoardScheme>(jsonContent);
 
         if (scheme is null) throw new CorruptedBoardFileException("Cannot read board contents from file");
-
-        zipFile.ExtractToDirectory(PathUtils.GetTemporaryPath(scheme.Id)); 
-
-        var board = BoardConverter.ConvertBack(scheme);
+        
+        var board = BoardConverter.ConvertBack(scheme, zipFile);
 
         return board;
     }

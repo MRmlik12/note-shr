@@ -106,7 +106,7 @@ public class BoardConverterTests
             }
         };
 
-        var board = BoardConverter.ConvertBack(scheme);
+        var board = BoardConverter.ConvertBack(scheme, null);
 
         board.Name.Should().Be(scheme.Name);
         board.Id.Should().Be(scheme.Id);

@@ -1,13 +1,18 @@
-﻿using NoteSHR.File.Utils;
+﻿using System.IO.Compression;
+using NoteSHR.File.Utils;
 
 namespace NoteSHR.File;
 
 public class FileBlob(Stream? stream = null) : IDisposable, IAsyncDisposable
 {
-    internal FileBlob(Guid projectId, string blobUri) : this()
+    private readonly ZipArchive _zipArchive;
+    
+    internal FileBlob(Guid projectId, string blobUri, ZipArchive zipArchive) : this()
     {
         ProjectId = projectId;
         Uri = new Uri(blobUri);
+        
+        _zipArchive = zipArchive;
     }
 
     private Guid ProjectId { get; set; }
@@ -28,6 +33,28 @@ public class FileBlob(Stream? stream = null) : IDisposable, IAsyncDisposable
         ProjectId = projectId;
     }
 
+    public Stream Read()
+    { 
+        var filePath = GetFilePath(Uri.AbsolutePath);
+        var entry = _zipArchive.GetEntry(filePath);
+
+        if (entry == null)
+        {
+            throw new FileNotFoundException("File not found in archive");
+        }
+        
+        var deflateStream = entry.Open();
+        
+        var memoryStream = new MemoryStream();
+        
+        deflateStream.CopyTo(memoryStream);
+        deflateStream.Close();
+
+        memoryStream.Position = 0;
+        
+        return memoryStream;
+    }
+
     internal string Write(string filename)
     {
         var tempPath = PathUtils.GetTemporaryPath(ProjectId);
@@ -46,15 +73,8 @@ public class FileBlob(Stream? stream = null) : IDisposable, IAsyncDisposable
         return Uri.ToString();
     }
 
-    public Stream Read()
-    { 
-        var filePath = GetFilePath(Uri.AbsolutePath);
-        
-        return System.IO.File.OpenRead(filePath);
-    }
-
-    private string GetFilePath(string filename)
+    private static string GetFilePath(string filename)
     {
-        return $"{PathUtils.GetTemporaryPath(ProjectId)}/assets/{filename}";
+        return $"assets{filename}";
     }
 }

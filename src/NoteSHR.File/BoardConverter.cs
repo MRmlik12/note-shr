@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO.Compression;
+using System.Reflection;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
 using NoteSHR.File.Schemes;
@@ -70,7 +71,7 @@ internal static class BoardConverter
         return scheme;
     }
 
-    internal static Board ConvertBack(BoardScheme scheme)
+    internal static Board ConvertBack(BoardScheme scheme, ZipArchive zipArchive)
     {
         var notes = new List<Note>();
 
@@ -98,7 +99,7 @@ internal static class BoardConverter
                 {
                     foreach (var data in nodeScheme.Data.Where(x => x.Value is string str && str.Contains(BlobUrlPattern)))
                     {
-                        var blob = new FileBlob(scheme.Id, data!.Value as string);
+                        var blob = new FileBlob(scheme.Id, data!.Value as string, zipArchive);
                         nodeScheme.Data[data.Key] = blob;
                     }
 
