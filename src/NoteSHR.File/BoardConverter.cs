@@ -15,6 +15,7 @@ internal static class BoardConverter
         var scheme = new BoardScheme
         {
             Id = id,
+            Version = 1,
             Name = boardName,
             LastModifiedAt = DateTime.Now
         };
