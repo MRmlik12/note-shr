@@ -10,6 +10,7 @@
              xmlns:models="clr-namespace:NoteSHR.Core.Models;assembly=NoteSHR.Core"
              xmlns:views="clr-namespace:NoteSHR.Views"
              xmlns:converters="clr-namespace:NoteSHR.Core.Converters;assembly=NoteSHR.Core"
+             xmlns:i18n="clr-namespace:NoteSHR.i18n"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardView"
              VerticalAlignment="Stretch"
@@ -56,13 +57,13 @@
                                              Css=".foreground { stroke: #30D95D; }" />
                                         <Button.Flyout>
                                             <MenuFlyout>
-                                                <MenuItem Header="Text" CommandParameter="Text"
+                                                <MenuItem Header="{x:Static i18n:Translations.TextMenu}" CommandParameter="Text"
                                                           Click="MenuItem_OnClick" />
-                                                <MenuItem Header="Image" CommandParameter="Image"
+                                                <MenuItem Header="{x:Static i18n:Translations.ImageMenu}" CommandParameter="Image"
                                                           Click="MenuItem_OnClick" />
-                                                <MenuItem Header="Check" CommandParameter="Check"
+                                                <MenuItem Header="{x:Static i18n:Translations.CheckMenu}" CommandParameter="Check"
                                                           Click="MenuItem_OnClick" />
-                                                <MenuItem Header="List" CommandParameter="List"
+                                                <MenuItem Header="{x:Static i18n:Translations.ListMenu}" CommandParameter="List"
                                                           Click="MenuItem_OnClick" />
                                             </MenuFlyout>
                                         </Button.Flyout>

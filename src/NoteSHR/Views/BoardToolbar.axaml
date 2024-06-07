@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i18n="clr-namespace:NoteSHR.i18n"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Views.BoardToolbar">
     
@@ -17,7 +18,7 @@
     
     <DockPanel Background="White">
         <StackPanel>
-            <TextBox x:Name="BoardNameTextBox" DockPanel.Dock="Left" Foreground="Black" Background="Transparent" Cursor="Ibeam" Watermark="Enter your own board name" FontSize="24" MinWidth="200" MaxWidth="600" />
+            <TextBox x:Name="BoardNameTextBox" DockPanel.Dock="Left" Foreground="Black" Background="Transparent" Cursor="Ibeam" Watermark="{x:Static i18n:Translations.BoardNameWatermark}" FontSize="24" MinWidth="200" MaxWidth="600" />
         </StackPanel>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
             <Button DockPanel.Dock="Right" x:Name="ImportBoardButton" Click="ImportBoardButton_OnClick"

@@ -17,6 +17,7 @@ using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
 using NoteSHR.Core.ViewModel;
 using NoteSHR.File;
+using NoteSHR.i18n;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -145,7 +146,7 @@ public class BoardViewModel : ViewModelBase
             var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
             var saveFilePickerOptions = new FolderPickerOpenOptions
             {
-                Title = "Select path to export board",
+                Title = Translations.ExportBoardTitle, 
                 AllowMultiple = false
             };
 
@@ -169,7 +170,7 @@ public class BoardViewModel : ViewModelBase
                 var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
                 var openFilePickerOptions = new FilePickerOpenOptions()
                 {
-                    Title = "Select file",
+                    Title = Translations.SelectFile,
                     AllowMultiple = false
                 };
 

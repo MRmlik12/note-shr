@@ -6,6 +6,7 @@
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:vm="clr-namespace:NoteSHR.Components.List"
              xmlns:converters="clr-namespace:NoteSHR.Components.List.Converters"
+             xmlns:i18n="clr-namespace:NoteSHR.i18n"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.List.ListComponent"
              x:DataType="vm:ListComponentViewModel">
@@ -22,8 +23,8 @@
                            Content="{Binding ., Converter={StaticResource PrefixTypeToString}}">
                         <Label.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Bullet" CommandParameter="Bullet" Click="MenuItem_OnClick" />
-                                <MenuItem Header="Number" CommandParameter="Number" Click="MenuItem_OnClick" />
+                                <MenuItem Header="Bullet" CommandParameter="{x:Static i18n:Translations.BulletMenu}" Click="MenuItem_OnClick" />
+                                <MenuItem Header="Number" CommandParameter="{x:Static i18n:Translations.NumberMenu}" Click="MenuItem_OnClick" />
                             </ContextMenu>
                         </Label.ContextMenu>
                     </Label>

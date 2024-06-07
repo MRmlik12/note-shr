@@ -5,13 +5,13 @@
              xmlns:image="clr-namespace:NoteSHR.Components.Image"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:i18N="clr-namespace:NoteSHR.i18n"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NoteSHR.Components.Image.ImageComponent"
              x:DataType="image:ImageComponentViewModel">
 
     <StackPanel Orientation="Vertical">
-        <Button Name="AddImageButton" IsVisible="{Binding !ImageSelected}" Background="Black">
-            Add button
+        <Button Name="AddImageButton" IsVisible="{Binding !ImageSelected}" Background="Black" Content="{x:Static i18N:Translations.AddImage}">
             <i:Interaction.Behaviors>
                 <ia:EventTriggerBehavior EventName="Click">
                     <ia:InvokeCommandAction PassEventArgsToCommand="True" Command="{Binding SetImageCommand}" />
