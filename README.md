@@ -1,7 +1,9 @@
 ![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
 ![GitHub repo size](https://img.shields.io/github/repo-size/MRmlik12/note-shr?style=for-the-badge)
+![GitHub Repo Start](https://img.shields.io/github/stars/MRmlik12/note-shr?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/MRmlik12/note-shr?style=for-the-badge)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MRmlik12/note-shr/build.yml?style=for-the-badge)
+![GitHub Actions Workflow Build Status](https://img.shields.io/github/actions/workflow/status/MRmlik12/note-shr/build.yml?style=for-the-badge)
+![GitHub Actions Workflow Test Status](https://img.shields.io/github/actions/workflow/status/MRmlik12/note-shr/test.yml?style=for-the-badge&label=Test)
 
 # NoteSHR
 
@@ -9,7 +11,7 @@
     <img src="images/preview.png" alt="drawing" style="width:800px;"/>
 </div>
 
-A multi-platform application to effectively manage notes on a whiteboard.
+A cross-platform application to create own knowledge database, writing own thoughts, ideas and organize information in a creative way.
 
 ## Goals
 
@@ -25,7 +27,8 @@ For more detailed plan of app development please look into [TODO board](https://
 ## Try it out
 
 * [Web version](https://note-shr.dolczyk.rocks)
-* Desktop platforms (Windows, MacOS, Linux). Pick the latest build action from [here](https://github.com/MRmlik12/note-shr/actions/workflows/build.yml)
+* Desktop platforms (Windows, MacOS, Linux). Pick the latest build action from [here](https://github.com/MRmlik12/note-shr/actions/workflows/build.yml) (Requires .NET 8 runtime to run)
+* Mobile platforms (Android, iOS) not ready yet
 
 ## Build/Run process
 
@@ -38,7 +41,7 @@ $ dotnet restore
 # Install workloads
 $ dotnet workload install android
 $ dotnet workload install iOS
-$ dotnet workload install wasm-to
+$ dotnet workload install wasm-tools
 ```
 
 ### Run project
@@ -95,6 +98,7 @@ $ ./build.sh --configuration Release --allow-android-build
 - [Avalonia](https://avaloniaui.net/)
 - [ReactiveUI](https://www.reactiveui.net/)
 - [Avalonia.Xaml.Behaviors](https://github.com/AvaloniaUI/Avalonia.Xaml.Behaviors)
+- [PanAndZoom](https://github.com/wieslawsoltes/PanAndZoom)
 - [Newtonsoft.Json](https://www.newtonsoft.com/json)
 - [Svg.Skia](https://github.com/wieslawsoltes/Svg.Skia)
 - [NUKE](https://nuke.build/)
