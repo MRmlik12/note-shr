@@ -113,9 +113,25 @@ public class BoardViewModel : ViewModelBase
             note.Nodes.Add(new Node(Guid.NewGuid(), componentType, componentVm));
         });
 
-        ChangeDeleteModeStateCommand = ReactiveCommand.Create(() => { DeleteMode = !DeleteMode; });
+        ChangeDeleteModeStateCommand = ReactiveCommand.Create(() =>
+        {
+            if (EditMode)
+            {
+                EditMode = false;
+            }
+            
+            DeleteMode = !DeleteMode;
+        });
 
-        ChangeEditModeStateCommand = ReactiveCommand.Create(() => { EditMode = !EditMode; });
+        ChangeEditModeStateCommand = ReactiveCommand.Create(() =>
+        {
+            if (DeleteMode)
+            {
+                DeleteMode = false;
+            }
+            
+            EditMode = !EditMode;
+        });
 
         DeleteNoteNodeCommand = ReactiveCommand.Create((DeleteNodeEventArgs args) =>
         {
