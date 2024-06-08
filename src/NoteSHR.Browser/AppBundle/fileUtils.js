@@ -1,7 +1,8 @@
-export function openFilePicker() {
+export function openFilePicker(fileTypes) {
     return new Promise((resolve, reject) => {
         const input = document.createElement('input');
         input.type = 'file';
+        input.accept = fileTypes.join(',');
 
         input.addEventListener('change', () => {
             if (input.files.length > 0) {

@@ -12,6 +12,7 @@ using NoteSHR.Components.Image;
 using NoteSHR.Components.List;
 using NoteSHR.Components.NoteNode.EventArgs;
 using NoteSHR.Components.Text;
+using NoteSHR.Core;
 using NoteSHR.Core.EventArgs;
 using NoteSHR.Core.Helpers;
 using NoteSHR.Core.Models;
@@ -31,7 +32,6 @@ public class BoardViewModel : ViewModelBase
     {
         CreateNoteCommand = ReactiveCommand.Create((BoardPointerEventArgs e) =>
         {
-            LastMousePosition = e.Args.GetPosition(e.Source);
             if (e.Args.Source is not Canvas)
             {
                 if (e.Args.Source is not Grid header)
@@ -159,18 +159,19 @@ public class BoardViewModel : ViewModelBase
 
         ImportBoardCommand = ReactiveCommand.CreateFromTask(async (RoutedEventArgs args) =>
         {
-            string path;
-            if (OperatingSystem.IsBrowser())
+            string path; if (OperatingSystem.IsBrowser())
             {
-                path = await App.FileService.GetFileUrl();
+                path = await App.FileService.GetFileUrl(FileTypeFilters.Board.Patterns!.Select(x => x.Remove(0, 1)).ToArray());
                 if (string.IsNullOrEmpty(path)) return;
             }
             else
             {
                 var topLevel = TopLevel.GetTopLevel(args.Source as Visual);
+                
                 var openFilePickerOptions = new FilePickerOpenOptions()
                 {
                     Title = Translations.SelectFile,
+                    FileTypeFilter = new [] { FileTypeFilters.Board },
                     AllowMultiple = false
                 };
 
@@ -191,8 +192,6 @@ public class BoardViewModel : ViewModelBase
     [Reactive] public ObservableCollection<Note> Notes { get; set; } = [];
     [Reactive] public bool DeleteMode { get; set; }
     [Reactive] public bool EditMode { get; set; }
-
-    private Point LastMousePosition { get; set; }
 
     public ReactiveCommand<BoardPointerEventArgs, Unit> CreateNoteCommand { get; set; }
     public ReactiveCommand<Guid, Unit> RemoveNote { get; set; }

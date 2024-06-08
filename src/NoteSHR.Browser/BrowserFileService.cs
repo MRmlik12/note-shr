@@ -11,9 +11,9 @@ public class BrowserFileService : IFileService
         Task.Run(async () => await JSHost.ImportAsync("FileUtils", "./fileUtils.js"));
     }
 
-    public async Task<string?> GetFileUrl()
+    public async Task<string?> GetFileUrl(string[] fileTypes)
     {
-        var url = await FileUtilsEmbed.OpenFilePicker();
+        var url = await FileUtilsEmbed.OpenFilePicker(fileTypes);
 
         return url;
     }
@@ -27,7 +27,7 @@ public class BrowserFileService : IFileService
 internal partial class FileUtilsEmbed
 {
     [JSImport("openFilePicker", "FileUtils")]
-    public static partial Task<string?> OpenFilePicker();
+    public static partial Task<string?> OpenFilePicker(string[] fileTypes);
     
     [JSImport("saveFile", "FileUtils")]
     public static partial Task SaveFile(string fileName, byte[] contents); 

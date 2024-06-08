@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -24,7 +25,7 @@ public class ImageComponentViewModel : ViewModelBase, IDataPersistence
         {
             if (OperatingSystem.IsBrowser())
             {
-                var url = await App.FileService.GetFileUrl();
+                var url = await App.FileService.GetFileUrl(FilePickerFileTypes.ImageAll.Patterns!.Select(x => x.Remove(0, 1)).ToArray());
                 if (string.IsNullOrEmpty(url)) return;
 
                 Image = await HttpUtils.GetBitmapFromUrl(url);
