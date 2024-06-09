@@ -18,7 +18,7 @@
     <ItemsControl x:Name="RowItemsControl" ItemsSource="{Binding Rows, Mode=TwoWay}">
         <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="vm:ListItem">
-                <Grid ColumnDefinitions="5*,95*" RowDefinitions="*">
+                <Grid ColumnDefinitions="Auto,95*" RowDefinitions="*">
                     <Label Grid.Column="0" Foreground="White" VerticalAlignment="Center" Padding="4"
                            Content="{Binding ., Converter={StaticResource PrefixTypeToString}}">
                         <Label.ContextMenu>
