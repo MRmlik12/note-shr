@@ -13,16 +13,28 @@
 
 A cross-platform application to create own knowledge database, writing own thoughts, ideas and organize information in a creative way.
 
-## Goals
+## Development plan
+
+### Goals
 
 For more detailed plan of app development please look into [TODO board](https://dolczyk.notion.site/TODO-68c8d6e46fbe4519b3fb762d7469b6e6?pvs=4)
 
 - [x]  Proof of concept
-- [x]  Save file scheme
+- [x]  Import and export board
 - [ ]  Beautify app
+- [ ]  Zoom in/out board
 - [ ]  Share board with everyone
 - [ ]  Collaboration API
 - [ ]  Keep responsiveness and stability for web, desktop and mobile platforms
+
+### Implemented features
+
+- [x] Dragging and resizing notes across the board
+- [x] Adding nodes to note
+- [x] Edit and remove mode for note nodes
+- [x] Importing and exporting board
+- [x] Components in node: Text, List, Check and Image
+- [x] Fully working web and desktop version
 
 ## Try it out
 
